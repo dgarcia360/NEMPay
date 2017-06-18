@@ -1,16 +1,29 @@
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
-
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import { BalancePage } from '../pages/balance/balance';
+import { TransactionsPage } from '../pages/transactions/transactions';
+import { TransferPage } from '../pages/transfer/transfer';
+import { AccountPage } from '../pages/account/account';
+import { SignupPage } from '../pages/signup/signup';
+import { LoginPage } from '../pages/login/login';
+import { ConfirmTransactionPage } from '../pages/confirm-transaction/confirm-transaction';
+
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { NemProvider } from '../providers/nem/nem';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    BalancePage,
+    TransactionsPage,
+    TransferPage,
+    AccountPage,
+    SignupPage,
+    LoginPage,
+    ConfirmTransactionPage
   ],
   imports: [
     BrowserModule,
@@ -19,12 +32,19 @@ import { HomePage } from '../pages/home/home';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    BalancePage,
+    TransactionsPage,
+    TransferPage,
+    AccountPage,
+    SignupPage,
+    LoginPage,
+    ConfirmTransactionPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    NemProvider
   ]
 })
 export class AppModule {}

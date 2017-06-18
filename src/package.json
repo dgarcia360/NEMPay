@@ -1,0 +1,16 @@
+{
+  "name": "nempay_ionic_2",
+  "version": "1.0.0",
+  "description": " ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "repository": {},
+  "dependencies": {
+    "nem-sdk": "^1.2.3"
+  }
+}
