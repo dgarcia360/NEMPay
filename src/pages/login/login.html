@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-navbar>
+<!--   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
       Login
     </ion-title>
-  </ion-navbar>
+  </ion-navbar> -->
 </ion-header>
 <ion-content padding id="page6">
   <div class="spacer" style="height:40px;" id="login-spacer4"></div>
@@ -20,17 +20,20 @@
         <ion-label>
           Account
         </ion-label>
-        <ion-select name=""></ion-select>
+
+        <ion-select [(ngModel)]="selectedWallet" [compareWith]="compareFn" name="selected_wallet">
+          <ion-option *ngFor="let selectedWallet of wallets" [value]="selectedWallet">{{selectedWallet.name}}</ion-option>
+        </ion-select>
       </ion-item>
       <ion-item id="login-input12">
         <ion-label>
           Password
         </ion-label>
-        <ion-input type="password" placeholder=""></ion-input>
+        <ion-input [(ngModel)]="common.password" type="password" name="password" placeholder=""></ion-input>
       </ion-item>
     </ion-list>
     <div class="spacer" style="height:40px;" id="login-spacer2"></div>
-    <button id="login-button7" ion-button color="stable" block on-click="goToBalance()">
+    <button id="login-button7" ion-button color="stable" block on-click="login()"  [disabled]="!selectedWallet || !common.password">
       Log in
     </button>
     <button id="login-button8" ion-button clear color="positive" block on-click="goToSignup()">

@@ -6,8 +6,8 @@ import { TransferPage } from '../pages/transfer/transfer';
 import { AccountPage } from '../pages/account/account';
 import { TransactionsPage } from '../pages/transactions/transactions';
 import { ConfirmTransactionPage } from '../pages/confirm-transaction/confirm-transaction';
-
 import { BalancePage } from '../pages/balance/balance';
+import { LoginPage } from '../pages/login/login';
 
 
 
@@ -16,7 +16,7 @@ import { BalancePage } from '../pages/balance/balance';
 })
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
-    rootPage:any = BalancePage;
+    rootPage:any = LoginPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {

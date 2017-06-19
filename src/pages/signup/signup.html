@@ -1,8 +1,5 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-title>
       Signup
     </ion-title>
@@ -15,24 +12,24 @@
         <ion-label>
           Account Name
         </ion-label>
-        <ion-input type="text" placeholder=""></ion-input>
+        <ion-input [(ngModel)]="newAccount.name" name="name" type="text" placeholder=""></ion-input>
       </ion-item>
-      <ion-item id="signup-select2">
+<!--       <ion-item id="signup-select2">
         <ion-label>
           Network
         </ion-label>
         <ion-select name=""></ion-select>
       </ion-item>
-      <ion-item id="signup-input9">
+ -->      <ion-item  [(ngModel)]="newAccount.passphrase" name="passphrase" id="signup-input9">
         <ion-label>
           Passphrase
         </ion-label>
         <ion-input type="text" placeholder=""></ion-input>
       </ion-item>
     </ion-list>
-    <ion-item id="signup-input10">
+    <ion-item [(ngModel)]="newAccount.repeat_passphrase" name="repeat_passphrase" id="signup-input10">
       <ion-label>
-        Passphrase
+        Repeat Passphrase
       </ion-label>
       <ion-input type="text" placeholder=""></ion-input>
     </ion-item>
@@ -44,7 +41,7 @@
         </strong>
       </p>
     </div>
-    <button id="signup-button6" ion-button color="stable" block on-click="createBrainWallet()">
+    <button id="signup-button6" ion-button color="stable" block on-click="createBrainWallet()" [disabled]="!newAccount.passphrase || !newAccount.repeat_passphrase || !newAccount.name">
       Sign up
     </button>
   </form>
