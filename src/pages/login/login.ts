@@ -51,32 +51,34 @@ export class LoginPage {
       content: "Please wait..."
     });
 
-    loader.present();
-
-    if (!this.selectedWallet) {
-      loader.dismiss();
-      let alert = this.alertCtrl.create({
-        title: 'Wallet not selected',
-        subTitle: '',
-        buttons: ['OK']
-      });
-      alert.present();
-    }
-    // Decrypt/generate private key and check it. Returned private key is contained into this.common
-    if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
-      loader.dismiss();
-      let alert = this.alertCtrl.create({
-        title: 'Invalid password',
-        subTitle: '',
-        buttons: ['OK']
-      });
-      alert.present();
-    }
-    else {
-      this.nem.setSelectedWallet(this.selectedWallet);
-      loader.dismiss();
-      this.navCtrl.push(BalancePage);
-    }
+    loader.present().then(
+      _ => {
+      
+      if (!this.selectedWallet) {
+        loader.dismiss();
+        let alert = this.alertCtrl.create({
+          title: 'Wallet not selected',
+          subTitle: '',
+          buttons: ['OK']
+        });
+        alert.present();
+      }
+      // Decrypt/generate private key and check it. Returned private key is contained into this.common
+      if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
+        loader.dismiss();
+        let alert = this.alertCtrl.create({
+          title: 'Invalid password',
+          subTitle: '',
+          buttons: ['OK']
+        });
+        alert.present();
+      }
+      else {
+        this.nem.setSelectedWallet(this.selectedWallet);
+        loader.dismiss();
+        this.navCtrl.push(BalancePage);
+      }
+    })
   }
 
   goToSignup(params){

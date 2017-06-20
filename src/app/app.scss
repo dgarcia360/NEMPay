@@ -14,3 +14,37 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.bottom {
+  padding: $content-padding;
+  position: fixed;
+  bottom:0;
+  left: 0;
+  right: 0;
+}
+
+
+.toolbar-background-md{
+	
+	background-color: #3a455b;
+}
+
+.toolbar-title-md{
+	color: #fff;
+}
+
+ion-header .button-inner{
+	color: #fff;
+}
+
+.button-md-positive{
+	background-color: #3a455b;
+}
+
+.button-md-positive:hover:not(.disable-hover) {
+    background-color: #677ba5;
+}
+
+#side-menu21 ion-icon{
+	color: #3a455b;
+}

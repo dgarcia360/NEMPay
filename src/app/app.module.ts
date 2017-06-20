@@ -2,6 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 import { MyApp } from './app.component';
 import { BalancePage } from '../pages/balance/balance';
@@ -10,7 +11,6 @@ import { TransferPage } from '../pages/transfer/transfer';
 import { AccountPage } from '../pages/account/account';
 import { SignupPage } from '../pages/signup/signup';
 import { LoginPage } from '../pages/login/login';
-import { ConfirmTransactionPage } from '../pages/confirm-transaction/confirm-transaction';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -24,8 +24,7 @@ import { NemProvider } from '../providers/nem/nem';
     TransferPage,
     AccountPage,
     SignupPage,
-    LoginPage,
-    ConfirmTransactionPage
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -40,14 +39,14 @@ import { NemProvider } from '../providers/nem/nem';
     TransferPage,
     AccountPage,
     SignupPage,
-    LoginPage,
-    ConfirmTransactionPage
+    LoginPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    NemProvider
+    NemProvider,
+    SocialSharing
   ]
 })
 export class AppModule {}

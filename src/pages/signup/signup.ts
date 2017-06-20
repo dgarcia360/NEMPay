@@ -36,25 +36,25 @@ export class SignupPage {
         content: "Please wait..."
       });
 
-      loader.present();
-
-      this.nem.createBrainWallet(this.newAccount.name, this.newAccount.passphrase, -140).then(
-        value =>{
-          if(value){
-           this.navCtrl.push(LoginPage);
-           loader.dismiss();
-          }
-          else{
-              loader.dismiss();
-              let alert = this.alertCtrl.create({
-                title: 'Wallet name already exists',
-                subTitle: '',
-                buttons: ['OK']
-              });
-              alert.present();
-          }
-        }
-      )
+      loader.present().then(_ =>{
+         this.nem.createBrainWallet(this.newAccount.name, this.newAccount.passphrase, -140).then(
+              value =>{
+                if(value){
+                 this.navCtrl.push(LoginPage);
+                 loader.dismiss();
+                }
+                else{
+                    loader.dismiss();
+                    let alert = this.alertCtrl.create({
+                      title: 'Wallet name already exists',
+                      subTitle: '',
+                      buttons: ['OK']
+                    });
+                    alert.present();
+                }
+              }
+            )
+      })
     }
   }
 

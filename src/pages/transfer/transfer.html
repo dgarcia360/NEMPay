@@ -14,28 +14,28 @@
       <ion-label stacked>
         Recipient Address
       </ion-label>
-      <ion-input type="text" placeholder=""></ion-input>
+      <ion-input type="text" name="recipient" placeholder="" [(ngModel)]="formData.rawRecipient"></ion-input>
     </ion-item>
     <ion-item id="transfer-input2" class="col-6">
       <ion-label>
         Amount
       </ion-label>
-      <ion-input type="number" placeholder=""></ion-input>
+      <ion-input type="number" min="0" name="amount" [(ngModel)]="amount" placeholder=""></ion-input>
     </ion-item>
-    <ion-item id="transfer-select1">
+    <ion-item id="transfer-select1" class="col-6">
       <ion-label>
         Asset
       </ion-label>
-      <ion-select name=""></ion-select>
+      <p>{{selectedMosaic}}</p>
     </ion-item>
     <ion-item id="transfer-textarea1">
       <ion-label>
         Message
       </ion-label>
-      <ion-textarea placeholder=""></ion-textarea>
+      <ion-textarea name="message" placeholder="" [(ngModel)]="formData.message"></ion-textarea>
     </ion-item>
   </form>
-  <button id="transfer-button2" ion-button color="positive" block>
+  <button id="transfer-button2" ion-button color="positive" block on-click="startTransaction()">
     Transfer
   </button>
 </ion-content>

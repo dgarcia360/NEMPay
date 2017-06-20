@@ -9,30 +9,23 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page3">
-  <button id="account-button5" ion-button color="positive" block small class="col col-50 col-offset-50">
+  <button id="account-button5" ion-button color="positive" block class="col col-50 col-offset-50">
     View private key
   </button>
   <form id="account-form6">
-    <div style="width:100%;height:220px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
-      <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-    </div>
+  <div id="accountInfoQR"><img [src]="qrCode.src" style="height: 200px;margin: 0 auto;
+    display: block;
+    margin-top: 20px;"> </div>
     <h1 id="account-heading1" style="color:#000000;">
       Your Address
     </h1>
   </form>
   <div id="account-markdown1" class="show-list-numbers-and-dots">
     <p style="color:#000000;">
-      XX
-      <em>
-        TT
-      </em>
-      BB
+    {{address}}
     </p>
   </div>
-  <div style="width:100%;height:220px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
-    <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-  </div>
-  <button id="account-button3" ion-button color="positive" block>
+  <button id="account-button3" ion-button color="positive" block on-click="addressSocialSharing()">
     Share Address
   </button>
   <div class="spacer" style="width:300px;height:74px;" id="account-spacer1"></div>

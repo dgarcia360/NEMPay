@@ -5,7 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { TransferPage } from '../pages/transfer/transfer';
 import { AccountPage } from '../pages/account/account';
 import { TransactionsPage } from '../pages/transactions/transactions';
-import { ConfirmTransactionPage } from '../pages/confirm-transaction/confirm-transaction';
 import { BalancePage } from '../pages/balance/balance';
 import { LoginPage } from '../pages/login/login';
 
@@ -29,13 +28,6 @@ export class MyApp {
   goToBalance(params){
     if (!params) params = {};
     this.navCtrl.setRoot(BalancePage);
-  }goToTransfer(params){
-    if (!params) params = {};
-    this.navCtrl.setRoot(TransferPage);
-  }
-  goToConfirmTransaction(params){
-    if (!params) params = {};
-    this.navCtrl.setRoot(ConfirmTransactionPage);
   }
   goToAccount(params){
     if (!params) params = {};
