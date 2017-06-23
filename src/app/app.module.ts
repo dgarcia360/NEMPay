@@ -9,12 +9,18 @@ import { BalancePage } from '../pages/balance/balance';
 import { TransactionsPage } from '../pages/transactions/transactions';
 import { TransferPage } from '../pages/transfer/transfer';
 import { AccountPage } from '../pages/account/account';
-import { SignupPage } from '../pages/signup/signup';
 import { LoginPage } from '../pages/login/login';
+import { SignupPage } from '../pages/signup/signup';
+import { SignupBrainWalletPage } from '../pages/signup_brainwallet/signup';
+import { SignupSimpleWalletPage } from '../pages/signup_simplewallet/signup';
+import { SignupPrivateKeyPage } from '../pages/signup_privatekey/signup';
+import { TransactionsConfirmedPage } from '../pages/transactions_confirmed/transactions';
+import { TransactionsUnconfirmedPage } from '../pages/transactions_unconfirmed/transactions';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NemProvider } from '../providers/nem/nem';
+import { DivideByExponentialBaseTenPipe } from '../pipes/divide-by-exponential-base-ten.pipe';
 
 @NgModule({
   declarations: [
@@ -23,8 +29,14 @@ import { NemProvider } from '../providers/nem/nem';
     TransactionsPage,
     TransferPage,
     AccountPage,
+    LoginPage,
     SignupPage,
-    LoginPage
+    SignupBrainWalletPage,
+    SignupSimpleWalletPage,
+    SignupPrivateKeyPage,
+    TransactionsConfirmedPage,
+    TransactionsUnconfirmedPage,
+    DivideByExponentialBaseTenPipe
   ],
   imports: [
     BrowserModule,
@@ -38,9 +50,14 @@ import { NemProvider } from '../providers/nem/nem';
     TransactionsPage,
     TransferPage,
     AccountPage,
+    LoginPage,
     SignupPage,
-    LoginPage
-  ],
+    SignupBrainWalletPage,
+    SignupSimpleWalletPage,
+    SignupPrivateKeyPage,
+    TransactionsConfirmedPage,
+    TransactionsUnconfirmedPage
+      ],
   providers: [
     StatusBar,
     SplashScreen,

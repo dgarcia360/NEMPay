@@ -14,7 +14,6 @@ export class TransferPage {
     selectedMosaic: any;
     divisibility: any;
     levy: any;
-    mosaicsMetaData: any;
     common: any;
     amount: number;
     selectedWallet: any;
@@ -32,8 +31,7 @@ export class TransferPage {
 	    this.formData.innerFee = 0;
 	    this.formData.isMultisig = false;
 	   	this.formData.isMosaicTransfer = false;
-
-	    this.mosaicsMetaData = undefined;
+	   	this.formData.message = '';
 	    this.selectedMosaicDefinitionMetaDataPair = undefined;
 	    this.levy = undefined;
 	    this.divisibility = undefined;
@@ -46,10 +44,12 @@ export class TransferPage {
 	    if (this.selectedMosaic != 'nem:xem'){
 		    this.nem.getMosaicsMetaDataPair(this.selectedMosaic.split(":")[0],  this.selectedMosaic.split(":")[1]).then(
 		    	value =>{
-		          	this.mosaicsMetaData = value;
-		          	this.selectedMosaicDefinitionMetaDataPair =  this.mosaicsMetaData[this.selectedMosaic];
-		   			this.levy = this.selectedMosaicDefinitionMetaDataPair.mosaicDefinition.levy;
-		    		this.divisibility = this.selectedMosaicDefinitionMetaDataPair.mosaicDefinition.properties[0].value;
+		          	this.selectedMosaicDefinitionMetaDataPair =  value;
+		   			this.levy = value.levy;
+		    		this.divisibility = value.properties[0].value;
+		    		if (this.divisibility == 0){
+		    			this.divisibility = 1;
+		    		}
 		    		this.formData.isMosaicTransfer = true;
 		    	}
 		    )
@@ -58,12 +58,16 @@ export class TransferPage {
 
 	updateFees() {
 	    let entity = this.nem.prepareTransaction(this.common, this.formData);
+	   console.log("ENTITY");
+	   console.log(entity);
+	    console.log(this.formData);
 	    if (this.formData.isMultisig) {
 	        this.formData.innerFee = entity.otherTrans.fee;
 	    } else {
 	        this.formData.innerFee = 0;
 	    }
 	    this.formData.fee = entity.fee;
+	    console.log(entity.fee + "FEE");
 	}
 
 
@@ -80,16 +84,16 @@ export class TransferPage {
 	}
 
 	checkAddress(address){
-		var has_error = false;
+		var success = true;
         // Check if address is from network
         if (this.nem.isFromNetwork(address, -104)){
 	   		this.formData.recipient = address;
         } 
         else {
             this.resetRecipientData();
-            has_error = true;
+            success = false;
         }
-        return has_error;
+        return success;
     }
 
 	/**
@@ -101,20 +105,19 @@ export class TransferPage {
 	processRecipientInput() {
 	    // Reset recipient data
 	    this.resetRecipientData();
-	    var has_error = false;
+	    var success = true;
 	    // return if no value or address length < to min address length
 	    if (!this.formData.rawRecipient || this.formData.rawRecipient.length < 40) {
-	        has_error = true;
+	        success = false;
 	    }
 
 	    // Get recipient data depending of address
 	    // Clean address
-	    if(!has_error){
+	    if(success){
 	    	let recipientAddress = this.formData.rawRecipient.toUpperCase().replace(/-/g, '');
-	    	has_error = this.checkAddress(recipientAddress);
-
+	    	success = this.checkAddress(recipientAddress);
 	    }
-	    return has_error;
+	    return success;
 	}
 
 	startTransaction(){
@@ -124,8 +127,7 @@ export class TransferPage {
 	    	this.formData.amount = this.amount;
 		}
 		else {
-		    this.formData.amount = 1; // Always send 1, this represents the amount of mosaics send
-
+		    this.formData.amount = 1; // Always send 1
 		    var namespace_mosaic = this.selectedMosaic.split(":");
 		    this.formData.mosaics = [{
 		        'mosaicId': {
@@ -139,84 +141,90 @@ export class TransferPage {
 		this.presentPrompt();
 	}
 
+	canSendTransaction(){
+		return this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
+	}
 
 	confirmTransaction(){
 		let entity = this.nem.prepareTransaction(this.common, this.formData);
-
-		if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo)) {
-			  let alert = this.alertCtrl.create({
-			    title: 'Invalid password',
-			    subTitle: '',
-			    buttons: ['OK']
-			  });
-			  alert.present();
-			  return false;
-    	}
-    	else{
-    		this.nem.confirmTransaction(this.common, entity);
-    		return true;
-    	}
-
+    	return this.nem.confirmTransaction(this.common, entity);
 	}
 
+	subtitleBuilder(){
+		var subtitle = 'You are going to send: <br/><br/> ';
+		var currency = '';
+		if (this.selectedMosaic == 'nem:xem'){
+			currency = "<b>Amount:</b> " + this.amount + " nem:xem";
+		}
+		else{
+			currency = "<b>Amount:</b> " + this.amount + " " + this.selectedMosaic;
+		}
+		subtitle += currency;
+
+		var _fee = this.formData.fee/1000000;
+		//Todo levy
+		subtitle += '<br/><br/>  <b>Fee:</b> ' + _fee + ' xem';
+		return subtitle;
+
+	}
 	presentPrompt() {
 		if(!this.processRecipientInput()){
-			var subtitle = 'You are going to send: <br/><br/> ';
-			var currency = '';
-			if (this.selectedMosaic == 'nem:xem'){
-				currency = "<b>Amount:</b> " + this.amount + " nem:xem";
-			}
-			else{
-				currency = "<b>Amount:</b> " + this.amount + " " + this.selectedMosaic;
-			}
-			subtitle += currency;
-
-			var _fee = this.formData.fee/1000000;
-			if (this.formData.isMosaicTransfer) _fee +1;
-			subtitle += '<br/><br/>  <b>Fee:</b> ' + _fee + ' xem';
-
-		  let alert = this.alertCtrl.create({
-		    title: 'Confirm Transaction',
-		    subTitle: subtitle,
-		    inputs: [
-		      {
-		        name: 'passphrase',
-		        placeholder: 'Passphrase'
-		      },
-		    ],
-		    buttons: [
-		      {
-		        text: 'Cancel',
-		        role: 'cancel',
-		        handler: data => {
-		          console.log('Cancel clicked');
-		        }
-		      },
-		      {
-		        text: 'Confirm Transaction',
-		        handler: data => {
-		        	this.common.password = data.passphrase;
-		          if (this.confirmTransaction()) {
-		           	this.navCtrl.push(BalancePage, {sendSuccess:true});
-		          } else {
-		            // invalid login
-		            return false;
-		          }
-		        }
-		      }
-		    ]
-		  });
-	  		alert.present();
+			let alert = this.alertCtrl.create({
+		        title: 'Address is not valid for this network',
+		        subTitle: 'Remember that at the moment only works on testnet',
+		        buttons: ['OK']
+		      });
+		      alert.present();
 		}
 		else{
 
-		let alert = this.alertCtrl.create({
-	        title: 'Address is not valid for this network',
-	        subTitle: 'Remember that at the moment only works on testnet',
-	        buttons: ['OK']
-	      });
-	      alert.present();
-
+			let alert = this.alertCtrl.create({
+			    title: 'Confirm Transaction',
+			    subTitle: this.subtitleBuilder(),
+			    inputs: [
+			      {
+			        name: 'passphrase',
+			        placeholder: 'Passphrase/Password'
+			      },
+			    ],
+			    buttons: [
+			      {
+			        text: 'Cancel',
+			        role: 'cancel',
+			        handler: data => {
+			          console.log('Cancel clicked');
+			        }
+			      },
+			      {
+			        text: 'Confirm Transaction',
+			        handler: data => {
+			        	this.common.password = data.passphrase;
+			        	if(this.canSendTransaction())
+			        	{
+			        		this.confirmTransaction().then(_ => {
+			        			console.log("Transaction confirmed");
+			        			this.navCtrl.push(BalancePage, {sendSuccess:true});
+			        		}).catch(error => {
+					    		let alert = this.alertCtrl.create({
+							        title: error,
+							        buttons: ['OK']
+							      });
+							      alert.present();
+								});
+			        	}
+			        	else{
+		        			let alert = this.alertCtrl.create({
+							    title: 'Invalid password',
+							    subTitle: '',
+							    buttons: ['OK']
+							  });
+							  alert.present();
+			        	}
+			        }
+			      }
+			    ]
+			  });
+		  	alert.present();
 		}
 	}
 

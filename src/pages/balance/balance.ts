@@ -37,6 +37,7 @@ export class BalancePage {
 	        		this.nem.getBalance(value.accounts[0].address).then(
 		           		value =>{
 		           			this.balance = value.data;
+		           			console.log(this.balance);
 		       			loader.dismiss();
 		       		})
 	        	}
@@ -48,6 +49,7 @@ export class BalancePage {
 	if (!params) params = {};
 	this.navCtrl.push(TransferPage, {
     	selectedMosaic: this.selectedMosaic.mosaicId.namespaceId+':'+this.selectedMosaic.mosaicId.name,
+		quantity: this.selectedMosaic.quantity,
 	});
 	}
 

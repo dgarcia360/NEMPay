@@ -19,7 +19,6 @@ export class NemProvider {
   wallets : any;
 
   constructor(private storage: Storage) {
-    console.log('Hello NemSdkProvider Provider');
     this.nem = nemSdk;
     this._storage = storage;
   }
@@ -45,8 +44,6 @@ export class NemProvider {
           var result = value || [];
 
           for (var i = 0; i < result.length; i++) {
-              console.log(walletName);
-              console.log(result[i].name);
               if(result[i].name == walletName){
                 exists = true;
                 break;
@@ -93,6 +90,23 @@ export class NemProvider {
     this._storage.set('selectedWallet', null);
   }
 
+  public createSimpleWallet(walletName,password, network){
+    let wallet = this.nem.default.model.wallet.createPRNG(walletName, password, this.nem.default.model.network.data.testnet.id);
+    return this._checkIfWalletNameExists(walletName).then(
+      value =>{
+        if(value){
+          return null;
+        }
+        else{
+          return this._storeWallet(wallet).then(
+            value => {
+              return value;
+            }
+          )
+        }
+      }
+    )
+  }
 
   public createBrainWallet(walletName, password, network){
     //TODO: make able to choose netwok
@@ -114,15 +128,91 @@ export class NemProvider {
     )
   }
 
+  public createPrivateKeyWallet(walletName, password, privateKey, network){
+    //TODO: make able to choose netwok
+    let wallet = this.nem.default.model.wallet.importPrivateKey(walletName, password, privateKey, this.nem.default.model.network.data.testnet.id);
+    return this._checkIfWalletNameExists(walletName).then(
+      value =>{
+        if(value){
+          return null;
+        }
+        else{
+          return this._storeWallet(wallet).then(
+            value => {
+              return value;
+            }
+          )
+        }
+      }
+    )
+  }
+
   /* Balance */
+
+  public getMosaicsMetaDataPair(mosaicNamespaceId, mosaicId, original){
+
+        // init endpoint
+      var endpoint = this.nem.default.model.objects.create("endpoint")(this.nem.default.model.nodes.defaultTestnet, this.nem.default.model.nodes.defaultPort);
+      
+      var mosaicDefinitionMetaDataPair = this.nem.default.model.objects.get("mosaicDefinitionMetaDataPair");
+
+       return this.nem.default.com.requests.namespace.mosaicDefinitions(endpoint, mosaicNamespaceId).then(
+          value => {
+              // Look for the mosaic definition(s) we want in the request response (Could use ["eur", "usd"] to return eur and usd mosaicDefinitionMetaDataPairs)
+              var neededDefinition = this.nem.default.utils.helpers.searchMosaicDefinitionArray(value, [mosaicId]);
+
+              // Get full name of mosaic to use as object key
+              var fullMosaicName  = mosaicNamespaceId+ ':' + mosaicId;
+
+              // Check if the mosaic was found
+              if(undefined === neededDefinition[fullMosaicName]) return console.error("Mosaic not found !");
+
+              // Set mosaic definition into mosaicDefinitionMetaDataPair
+              
+              if(!original){
+                 //Fix, transform divisibility if 0
+                 mosaicDefinitionMetaDataPair = neededDefinition[fullMosaicName];
+               }
+              else{
+
+                mosaicDefinitionMetaDataPair[fullMosaicName] = {};
+                mosaicDefinitionMetaDataPair[fullMosaicName].mosaicDefinition = neededDefinition[fullMosaicName];
+              }
+     
+          return mosaicDefinitionMetaDataPair;
+      }
+    );
+  }
+
+
+  private _addDivisibilityToBalance(balance){
+    var promises = [];
+    
+    for (let mosaic of balance.data) {
+          if(mosaic.mosaicId.namespaceId != 'nem'){
+            promises.push(this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name, false));
+          }
+    }
+
+    return Promise.all(promises).then(values =>{
+      var i = 0;
+        for (let mosaic of balance.data) {
+          if(mosaic.mosaicId.namespaceId != 'nem'){
+           mosaic.definition = values[i];
+           ++i;
+          }
+        }
+        return balance;
+       }
+     );
+   }
 
   public getBalance(address){
      var endpoint = this.nem.default.model.objects.create("endpoint")(this.nem.default.model.nodes.defaultTestnet, this.nem.default.model.nodes.defaultPort);
     // Gets account data
     return this.nem.default.com.requests.account.mosaics(endpoint, address).then(
       value => {
-        console.log(value);
-        return value;
+        return this._addDivisibilityToBalance(value);
       }
     ).catch(error => {
       return false;
@@ -134,51 +224,87 @@ export class NemProvider {
     return this.nem.default.model.address.isFromNetwork(address,  this.nem.default.model.network.data.testnet.id);
   }
 
-  public getMosaicsMetaDataPair(mosaicNamespaceId, mosaicId){
-        // init endpoint
-      var endpoint = this.nem.default.model.objects.create("endpoint")(this.nem.default.model.nodes.defaultTestnet, this.nem.default.model.nodes.defaultPort);
-      
-      var mosaicDefinitionMetaDataPair = this.nem.default.model.objects.get("mosaicDefinitionMetaDataPair");
-
-       return this.nem.default.com.requests.namespace.mosaicDefinitions(endpoint, mosaicNamespaceId).then(
-          value => {
-              console.log(value);
-              // Look for the mosaic definition(s) we want in the request response (Could use ["eur", "usd"] to return eur and usd mosaicDefinitionMetaDataPairs)
-              var neededDefinition = this.nem.default.utils.helpers.searchMosaicDefinitionArray(value, [mosaicId]);
-              console.log(neededDefinition);
-
-              // Get full name of mosaic to use as object key
-              var fullMosaicName  = mosaicNamespaceId+ ':' + mosaicId;
-
-              // Check if the mosaic was found
-              if(undefined === neededDefinition[fullMosaicName]) return console.error("Mosaic not found !");
-
-              // Set eur mosaic definition into mosaicDefinitionMetaDataPair
-              mosaicDefinitionMetaDataPair[fullMosaicName] = {};
-              mosaicDefinitionMetaDataPair[fullMosaicName].mosaicDefinition = neededDefinition[fullMosaicName];
-          
-          return mosaicDefinitionMetaDataPair;
-      }
-    );
-  }
-
 
   public prepareTransaction(common, formData){
     // Create transfer transaction
     var transferTransaction = this.nem.default.model.objects.create("transferTransaction")(formData.recipient, formData.amount, formData.message);
    
     if(formData.isMosaicTransfer){
-      var mosaicAttachment = this.nem.default.model.objects.create("mosaicAttachment")(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name, formData.mosaics[0].quantity);
-      transferTransaction.mosaics.push(mosaicAttachment);
+      var promise = undefined;
+      promise = this.getMosaicsMetaDataPair(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name,true).then(value =>{
+          return this.nem.default.model.transactions.prepare("mosaicTransferTransaction")(common, transferTransaction, value, this.nem.default.model.network.data.testnet.id);
+      })
     }
-
-    return this.nem.default.model.transactions.prepare("transferTransaction")(common, transferTransaction, this.nem.default.model.network.data.testnet.id);
+    else{
+      promise = this.nem.default.model.transactions.prepare("transferTransaction")(common, transferTransaction, this.nem.default.model.network.data.testnet.id);
+    }
+    return promise;
   }
 
 
   public confirmTransaction(common, transactionEntity){
     var endpoint = this.nem.default.model.objects.create("endpoint")(this.nem.default.model.nodes.defaultTestnet, this.nem.default.model.nodes.defaultPort);
-    this.nem.default.model.transactions.send(common, transactionEntity, endpoint);
+    return this.nem.default.model.transactions.send(common, transactionEntity, endpoint);
   }
+    private _addDivisibilityToTransaction(mosaics){
+      var promises = [];
+      
+      for (let mosaic of mosaics) {
+            if(mosaic.mosaicId.namespaceId != 'nem'){
+              promises.push(this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name, false));
+            }
+      }
+
+      return Promise.all(promises).then(values =>{
+        var i = 0;
+          for (let mosaic of mosaics) {
+            if(mosaic.mosaicId.namespaceId != 'nem'){
+             mosaic.definition = values[i];
+             ++i;
+            }
+          }
+          return mosaics;
+         }
+       );
+     }
+
+    private _adaptTransactions(transactions){
+      var promises = [];
+      
+      for (let tx of transactions) {
+        if(tx.transaction.mosaics){
+          promises.push(this._addDivisibilityToTransaction(tx.transaction.mosaics));
+        }
+      }
+
+    return Promise.all(promises).then(values =>{
+      var i = 0;
+
+      for (let tx of transactions) {
+        if(tx.transaction.mosaics){
+           tx.transactionmosaics = values[i];
+           ++i;
+        }
+      }
+      return transactions;
+    });
+   }
+
+
+ public getAllTransactionsFromAnAccount(address){
+    var endpoint = this.nem.default.model.objects.create("endpoint")(this.nem.default.model.nodes.defaultTestnet, this.nem.default.model.nodes.defaultPort);
+
+    return this.nem.default.com.requests.account.allTransactions(endpoint, address).then(value =>{
+        return this._adaptTransactions(value);
+    });
+  }
+
+  public getUnconfirmedTransactionsFromAnAccount(address){
+    var endpoint = this.nem.default.model.objects.create("endpoint")(this.nem.default.model.nodes.defaultTestnet, this.nem.default.model.nodes.defaultPort);
+    return this.nem.default.com.requests.account.unconfirmedTransactions(endpoint, address).then(value =>{
+        return this._adaptTransactions(value);
+    });
+  }
+
 
 }

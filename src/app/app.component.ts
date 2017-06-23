@@ -9,7 +9,6 @@ import { BalancePage } from '../pages/balance/balance';
 import { LoginPage } from '../pages/login/login';
 
 
-
 @Component({
   templateUrl: 'app.html'
 })
