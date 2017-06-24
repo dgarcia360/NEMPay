@@ -21,6 +21,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NemProvider } from '../providers/nem/nem';
 import { DivideByExponentialBaseTenPipe } from '../pipes/divide-by-exponential-base-ten.pipe';
+import { MessagePipe } from '../pipes/message.pipe';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { DivideByExponentialBaseTenPipe } from '../pipes/divide-by-exponential-b
     SignupPrivateKeyPage,
     TransactionsConfirmedPage,
     TransactionsUnconfirmedPage,
-    DivideByExponentialBaseTenPipe
+    DivideByExponentialBaseTenPipe,
+    MessagePipe
   ],
   imports: [
     BrowserModule,

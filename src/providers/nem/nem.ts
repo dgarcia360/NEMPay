@@ -229,16 +229,22 @@ export class NemProvider {
     // Create transfer transaction
     var transferTransaction = this.nem.default.model.objects.create("transferTransaction")(formData.recipient, formData.amount, formData.message);
    
-    if(formData.isMosaicTransfer){
-      var promise = undefined;
-      promise = this.getMosaicsMetaDataPair(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name,true).then(value =>{
+      
+    return this.nem.default.model.transactions.prepare("transferTransaction")(common, transferTransaction, this.nem.default.model.network.data.testnet.id);
+    
+  }
+
+
+  public prepareMosaicTransaction(common, formData){
+    // Create transfer transaction
+    var transferTransaction = this.nem.default.model.objects.create("transferTransaction")(formData.recipient, formData.amount, formData.message);
+    
+    let mosaicAttachment = this.nem.default.model.objects.create("mosaicAttachment")(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name, formData.mosaics[0].quantity);
+    transferTransaction.mosaics.push(mosaicAttachment);
+
+    return this.getMosaicsMetaDataPair(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name,true).then(value =>{
           return this.nem.default.model.transactions.prepare("mosaicTransferTransaction")(common, transferTransaction, value, this.nem.default.model.network.data.testnet.id);
       })
-    }
-    else{
-      promise = this.nem.default.model.transactions.prepare("transferTransaction")(common, transferTransaction, this.nem.default.model.network.data.testnet.id);
-    }
-    return promise;
   }
 
 

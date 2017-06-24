@@ -16,18 +16,23 @@
       </ion-label>
       <ion-input type="text" name="recipient" placeholder="" [(ngModel)]="formData.rawRecipient"></ion-input>
     </ion-item>
-    <ion-item id="transfer-input2" class="col-6">
+    <ion-row>
+    <ion-col class="width-50">
+    <ion-item id="transfer-input2" >
       <ion-label>
         Amount
       </ion-label>
       <ion-input type="number" min="0" name="amount" [(ngModel)]="amount" placeholder=""></ion-input>
     </ion-item>
-    <ion-item id="transfer-select1" class="col-6">
-      <ion-label>
-        Asset
-      </ion-label>
-      <p>{{selectedMosaic}}</p>
-    </ion-item>
+    </ion-col>
+    <ion-col class="width-50">
+      <ion-item id="transfer-select1" class="width-50">
+        <ion-label>
+          {{selectedMosaic}}
+        </ion-label>
+      </ion-item>
+      </ion-col>
+    </ion-row>
     <ion-item id="transfer-textarea1">
       <ion-label>
         Message

@@ -47,9 +47,6 @@ export class TransferPage {
 		          	this.selectedMosaicDefinitionMetaDataPair =  value;
 		   			this.levy = value.levy;
 		    		this.divisibility = value.properties[0].value;
-		    		if (this.divisibility == 0){
-		    			this.divisibility = 1;
-		    		}
 		    		this.formData.isMosaicTransfer = true;
 		    	}
 		    )
@@ -57,17 +54,19 @@ export class TransferPage {
 	}
 
 	updateFees() {
-	    let entity = this.nem.prepareTransaction(this.common, this.formData);
-	   console.log("ENTITY");
-	   console.log(entity);
-	    console.log(this.formData);
-	    if (this.formData.isMultisig) {
-	        this.formData.innerFee = entity.otherTrans.fee;
-	    } else {
-	        this.formData.innerFee = 0;
-	    }
-	    this.formData.fee = entity.fee;
-	    console.log(entity.fee + "FEE");
+
+	    if(this.formData.isMosaicTransfer){
+			   this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
+			    this.formData.innerFee = 0;
+			    this.formData.fee = entity.fee;
+			   });
+	      }
+
+	      else {
+   			var entity = this.nem.prepareTransaction(this.common, this.formData);
+			this.formData.innerFee = 0;
+			this.formData.fee = entity.fee;
+	      }
 	}
 
 
@@ -146,11 +145,20 @@ export class TransferPage {
 	}
 
 	confirmTransaction(){
-		let entity = this.nem.prepareTransaction(this.common, this.formData);
-    	return this.nem.confirmTransaction(this.common, entity);
+
+		if(this.formData.isMosaicTransfer){
+			   return this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
+			   		 return this.nem.confirmTransaction(this.common, entity);
+			   });
+	      }
+
+	      else {
+   			var entity = this.nem.prepareTransaction(this.common, this.formData);
+    		return this.nem.confirmTransaction(this.common, entity);
+	      }
 	}
 
-	subtitleBuilder(){
+	private _subtitleBuilder():string{
 		var subtitle = 'You are going to send: <br/><br/> ';
 		var currency = '';
 		if (this.selectedMosaic == 'nem:xem'){
@@ -162,11 +170,13 @@ export class TransferPage {
 		subtitle += currency;
 
 		var _fee = this.formData.fee/1000000;
+		
 		//Todo levy
 		subtitle += '<br/><br/>  <b>Fee:</b> ' + _fee + ' xem';
 		return subtitle;
 
 	}
+
 	presentPrompt() {
 		if(!this.processRecipientInput()){
 			let alert = this.alertCtrl.create({
@@ -180,7 +190,7 @@ export class TransferPage {
 
 			let alert = this.alertCtrl.create({
 			    title: 'Confirm Transaction',
-			    subTitle: this.subtitleBuilder(),
+			    subTitle: this._subtitleBuilder(),
 			    inputs: [
 			      {
 			        name: 'passphrase',
@@ -199,6 +209,7 @@ export class TransferPage {
 			        text: 'Confirm Transaction',
 			        handler: data => {
 			        	this.common.password = data.passphrase;
+			        	
 			        	if(this.canSendTransaction())
 			        	{
 			        		this.confirmTransaction().then(_ => {

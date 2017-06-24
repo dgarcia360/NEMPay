@@ -18,7 +18,7 @@
         <p><b>To:</b> {{tx.transaction.recipient}}</p>
       </span>
       <p><b>Fee:</b> {{tx.transaction.fee/1000000}}</p>
-      <p><b> Message:</b> {{tx.transaction.message}}</p>
+      <p><b> Message:</b> {{tx.transaction.message.payload | message}}</p>
     </ion-item>
     
   </ion-list>
