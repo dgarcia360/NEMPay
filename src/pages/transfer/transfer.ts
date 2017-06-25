@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController,NavParams, AlertController } from 'ionic-angular';
+import { NavController,NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { NemProvider } from '../../providers/nem/nem.provider';
 import { AlertProvider } from '../../providers/alert/alert.provider';
@@ -22,7 +22,7 @@ export class TransferPage {
     selectedWallet: any;
 	selectedMosaicDefinitionMetaDataPair: any;
 
-    constructor(public navCtrl: NavController,private navParams: NavParams, private nem: NemProvider,private alert: AlertProvider, private barcodeScanner: BarcodeScanner,private alertCtrl: AlertController) {
+    constructor(public navCtrl: NavController,private navParams: NavParams, private nem: NemProvider,private alert: AlertProvider, private barcodeScanner: BarcodeScanner,private alertCtrl: AlertController, private loading: LoadingController) {
 	    
 	    this.formData = {};
 	    this.amount = 0;
@@ -130,6 +130,10 @@ export class TransferPage {
 	}
 
 	presentPrompt() {
+		let loader = this.loading.create({
+			content: "Please wait..."
+		});
+
 			this._subtitleBuilder().then(subitle => {
 			let alert = this.alertCtrl.create({
 			    title: 'Confirm Transaction',
@@ -150,31 +154,39 @@ export class TransferPage {
 			        text: 'Confirm Transaction',
 			        handler: data => {
 			        	this.common.password = data.passphrase;
-			        	
-			        	if(this.canSendTransaction())
-			        	{
+			        	loader.present().then(_ => {
+						if(this.canSendTransaction())
+			        		{
 			        		this.confirmTransaction().then(value => {
 			        			if(value.message == 'SUCCESS'){
+			        				loader.dismiss();
 				        			console.log("Transactions confirmed");
 				        			this.alert.showTransactionConfirmed();
 				        			this.navCtrl.push(BalancePage, {});
 				        			this.cleanCommon();
 			        			}
 			        			else if(value.message == 'FAILURE_INSUFFICIENT_BALANCE'){
+			        				loader.dismiss();
 			        				this.alert.showDoesNotHaveEnoughFunds();
 			        			}
 			        			else if(value.message == 'FAILURE_MESSAGE_TOO_LARGE'){
+			        				loader.dismiss();
 			        				this.alert.showMessageTooLarge();
 			        			}
 			        			else{
+			        				loader.dismiss();
 			        				this.alert.showError(value.message);
 			        			}
 			        		});
 			        	}
 			        	else{
 			        		this.common.privateKey = '';
+			        		loader.dismiss();
 		        			this.alert.showInvalidPasswordAlert();
 			        	}
+
+			        	});
+			        	
 			        }
 			      }
 			    ]

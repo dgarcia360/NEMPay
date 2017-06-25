@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { App, MenuController, LoadingController } from 'ionic-angular';
+import { App, LoadingController } from 'ionic-angular';
 import { NemProvider } from '../../providers/nem/nem.provider';
 import { AlertProvider } from '../../providers/alert/alert.provider';
 

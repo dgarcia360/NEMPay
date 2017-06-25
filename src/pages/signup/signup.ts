@@ -11,14 +11,13 @@ import { SignupPrivateKeyPage } from '../signup_privatekey/signup';
 
 export class SignupPage {
   
-  tab1Root = SignupBrainWalletPage;
-  tab2Root = SignupSimpleWalletPage;
+  tab1Root = SignupSimpleWalletPage;
+  tab2Root = SignupBrainWalletPage;
   tab3Root = SignupPrivateKeyPage;
   
   constructor(public navCtrl: NavController,  private menu: MenuController) {
 
   }
-
 
   ionViewWillEnter() {
     // the left menu should be disabled on the login page
