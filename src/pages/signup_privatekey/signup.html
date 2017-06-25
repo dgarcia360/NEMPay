@@ -7,14 +7,7 @@
           Account Name
         </ion-label>
         <ion-input [(ngModel)]="newAccount.name" name="name" type="text" placeholder=""></ion-input>
-      </ion-item>
-<!--       <ion-item id="signup-select2">
-        <ion-label>
-          Network
-        </ion-label>
-        <ion-select name=""></ion-select>
-      </ion-item>
-       -->      
+      </ion-item>   
        <ion-item  type="text" [(ngModel)]="newAccount.private_key" name="private_key" id="signup-input8">
         <ion-label>
           Private Key
@@ -22,25 +15,22 @@
         <ion-input type="text" placeholder=""></ion-input>
       </ion-item>
 
-     <ion-item  type="password" [(ngModel)]="newAccount.passphrase" name="passphrase" id="signup-input9">
+     <ion-item id="signup-input9">
         <ion-label>
           Password
         </ion-label>
-        <ion-input type="text" placeholder=""></ion-input>
+        <ion-input type="password" [(ngModel)]="newAccount.passphrase" name="passphrase"></ion-input>
       </ion-item>
     </ion-list>
-    <ion-item type="password" [(ngModel)]="newAccount.repeat_passphrase" name="repeat_passphrase" id="signup-input10">
+    <ion-item  id="signup-input10">
       <ion-label>
         Repeat Password
       </ion-label>
-      <ion-input type="text" placeholder=""></ion-input>
+      <ion-input type="password" [(ngModel)]="newAccount.repeat_passphrase" name="repeat_passphrase"></ion-input>
     </ion-item>
     <div id="signup-markdown2" class="show-list-numbers-and-dots">
       <p style="color:#000000;">
-        Some friendly
-        <strong>
-          markdown
-        </strong>
+        Private key wallets use ONLY a password to encrypt the imported private key. Therefore it's crucial to select a SAFE password.
       </p>
     </div>
     <button id="signup-button6" ion-button color="stable" block on-click="createPrivateKeyWallet()" [disabled]="!newAccount.passphrase || !newAccount.repeat_passphrase || !newAccount.name">

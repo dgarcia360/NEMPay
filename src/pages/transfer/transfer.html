@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -9,6 +9,13 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page2">
+    <ion-row>
+    <ion-col>
+    <span style="float:right" on-click="scanQR()">
+        <ion-icon name="qr-scanner"></ion-icon> Scan QR
+    </span>
+    </ion-col>
+    </ion-row>
   <form id="transfer-form4">
     <ion-item id="transfer-input1">
       <ion-label stacked>

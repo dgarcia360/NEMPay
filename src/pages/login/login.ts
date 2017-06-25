@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { MenuController,NavController, AlertController, LoadingController } from 'ionic-angular';
 import { BalancePage } from '../balance/balance';
 import { SignupPage } from '../signup/signup';
-import { NemProvider } from '../../providers/nem/nem';
+import { NemProvider } from '../../providers/nem/nem.provider';
 
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
 export class LoginPage {
-  
+
   nem: any;
   wallets: any;
   selectedWallet: any;
@@ -19,7 +19,7 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController,  nemProvider: NemProvider, public alertCtrl: AlertController, public loading: LoadingController, menu: MenuController) {
 
-     this.menu = menu;
+    this.menu = menu;
 
     this.nem = nemProvider;
     this.wallets = [];
@@ -51,40 +51,49 @@ export class LoginPage {
       content: "Please wait..."
     });
 
-    loader.present().then(
-      _ => {
-      
-      if (!this.selectedWallet) {
-        loader.dismiss();
-        let alert = this.alertCtrl.create({
+   let notWalletSelectedAlert = this.alertCtrl.create({
           title: 'Wallet not selected',
           subTitle: '',
           buttons: ['OK']
         });
-        alert.present();
-      }
-      // Decrypt/generate private key and check it. Returned private key is contained into this.common
-      if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
-        loader.dismiss();
-        let alert = this.alertCtrl.create({
-          title: 'Invalid password',
-          subTitle: '',
-          buttons: ['OK']
-        });
-        alert.present();
-      }
-      else {
-        this.nem.setSelectedWallet(this.selectedWallet);
-        loader.dismiss();
-        this.navCtrl.push(BalancePage);
-      }
-    })
+    
+    let invalidPasswordAlert = this.alertCtrl.create({
+      title: 'Invalid password',
+      subTitle: '',
+      buttons: ['OK']
+    });
+
+    loader.present().then(
+        _ => {
+
+          if (!this.selectedWallet) {
+            loader.dismiss();
+            notWalletSelectedAlert.present();
+          }
+
+          // Decrypt/generate private key and check it. Returned private key is contained into this.common
+          if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
+            loader.dismiss();
+            invalidPasswordAlert.present();
+          }
+          else {
+            this.nem.setSelectedWallet(this.selectedWallet);
+            loader.dismiss();
+            this.navCtrl.push(BalancePage);
+          }
+        })
   }
 
   goToSignup(params){
     if (!params) params = {};
     this.navCtrl.push(SignupPage);
   }
+
+   onPressEnter(keyEvent) {
+        if (keyEvent.which === 13){
+           this.login();
+        }
+    }
 
   ionViewWillEnter() {
     // the left menu should be disabled on the login page

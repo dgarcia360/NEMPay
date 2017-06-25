@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, MenuController } from 'ionic-angular';
-
-import { LoginPage } from '../login/login';
 import { SignupBrainWalletPage } from '../signup_brainwallet/signup';
 import { SignupSimpleWalletPage } from '../signup_simplewallet/signup';
 import { SignupPrivateKeyPage } from '../signup_privatekey/signup';

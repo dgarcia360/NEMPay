@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController,LoadingController  } from 'ionic-angular';
-import { NemProvider } from '../../providers/nem/nem';
+import { NemProvider } from '../../providers/nem/nem.provider';
 import { LoginPage } from '../login/login';
 
 @Component({
@@ -31,6 +31,7 @@ export class TransactionsUnconfirmedPage {
 	        		this.nem.getUnconfirmedTransactionsFromAnAccount(value.accounts[0].address).then(
 		           		value =>{
 		           			this.transactions = value;
+		           			console.log(value);
 		       			loader.dismiss();
 		       		})
 	        	}

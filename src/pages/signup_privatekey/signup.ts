@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, AlertController } from 'ionic-angular';
-import { NemProvider } from '../../providers/nem/nem';
+import { App, LoadingController, AlertController } from 'ionic-angular';
+import { NemProvider } from '../../providers/nem/nem.provider';
 import { LoginPage } from '../login/login';
 
 @Component({
@@ -11,7 +11,7 @@ export class SignupPrivateKeyPage {
   nem :any;
   newAccount: any;
 
-  constructor(public navCtrl: NavController, private nemProvider: NemProvider,  public loading: LoadingController, public alertCtrl: AlertController) {
+  constructor(public app: App, private nemProvider: NemProvider,  public loading: LoadingController, public alertCtrl: AlertController) {
     this.nem = nemProvider;
     this.newAccount = {
       'name': '',
@@ -39,7 +39,7 @@ export class SignupPrivateKeyPage {
          this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.passphrase, this.newAccount.private_key, -104).then(
               value =>{
                 if(value){
-                 this.navCtrl.push(LoginPage);
+                 this.app.getRootNav().push(LoginPage);
                  loader.dismiss();
                 }
                 else{

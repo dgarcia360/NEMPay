@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController,NavParams,AlertController } from 'ionic-angular';
-import { NemProvider } from '../../providers/nem/nem';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { NemProvider } from '../../providers/nem/nem.provider';
 import { BalancePage } from '../balance/balance';
 import { LoginPage } from '../login/login';
 
@@ -10,6 +11,7 @@ import { LoginPage } from '../login/login';
 })
 export class TransferPage {
 	nem: any;
+	barcodeScanner: any;
     formData: any;
     selectedMosaic: any;
     divisibility: any;
@@ -18,9 +20,9 @@ export class TransferPage {
     amount: number;
     selectedWallet: any;
 	selectedMosaicDefinitionMetaDataPair: any;
-    
-    constructor(public navCtrl: NavController,private navParams: NavParams, nemProvider: NemProvider,public alertCtrl: AlertController,) {
+    constructor(public navCtrl: NavController,private navParams: NavParams, nemProvider: NemProvider,public alertCtrl: AlertController, barcodeScannerProvider: BarcodeScanner) {
 	    this.nem = nemProvider;
+	    this.barcodeScanner = barcodeScannerProvider;
 	    this.formData = {};
 	    this.amount = 0;
 	    this.formData.recipientPubKey = '';
@@ -194,7 +196,8 @@ export class TransferPage {
 			    inputs: [
 			      {
 			        name: 'passphrase',
-			        placeholder: 'Passphrase/Password'
+			        placeholder: 'Passphrase/Password',
+			        type: 'password'
 			      },
 			    ],
 			    buttons: [
@@ -237,6 +240,16 @@ export class TransferPage {
 			  });
 		  	alert.present();
 		}
+	}
+
+	scanQR(){
+
+		this.barcodeScanner.scan().then((barcodeData) => {
+            var addresObject = JSON.parse(barcodeData.text);
+            this.formData.rawRecipient = addresObject.data.addr;
+		}, (err) => {
+    		console.log("Error on scan");
+		});
 	}
 
 	ionViewWillEnter() {

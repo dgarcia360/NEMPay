@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController, MenuController } from 'ionic-angular';
 import { TransferPage } from '../transfer/transfer';
-import { NemProvider } from '../../providers/nem/nem';
+import { NemProvider } from '../../providers/nem/nem.provider';
 import { LoginPage } from '../login/login';
 
 @Component({

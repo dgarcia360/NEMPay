@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController,  LoadingController } from 'ionic-angular';
-import { NemProvider } from '../../providers/nem/nem';
+import { NemProvider } from '../../providers/nem/nem.provider';
 import { LoginPage } from '../login/login';
 
 @Component({
@@ -11,10 +11,10 @@ export class TransactionsConfirmedPage {
 	nem: any;
 	transactions: any;
 	address: any;
-
+	
   constructor(public navCtrl: NavController, private nemProvider: NemProvider,  public loading: LoadingController) {
   	this.nem = nemProvider;
-  	this.transactions = undefined;
+  	this.transactions = [];
   	this.address = '';
   }
 

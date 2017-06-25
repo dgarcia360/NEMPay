@@ -2,24 +2,26 @@
   <ion-list id="transactions-list6">
     <ion-item  color="none"  *ngFor="let tx of transactions">
       <span *ngIf="address == tx.transaction.recipient">
-          <h2> <span *ngIf='tx.transaction.amount != 0'>-{{tx.transaction.amount/1000000}} xem</span>     <span *ngFor="let mos of mosaics">
-              -  {{ mos.quantity |  exponentialStrength:(mis.definition.properties[0].value)}} {{mos.mosaicId.name}}
+          <h2> <span *ngIf='tx.transaction.amount != 0'>+{{tx.transaction.amount/1000000}} xem</span>     <span *ngFor="let mos of tx.transaction.mosaics">
+              + {{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
           </span>
         </h2>
-          <p><b>From:</b> {{tx.transaction.signer}}</p>
+          <p><b>From:</b> {{tx.transaction.signer | pubToAddress}}</p>
 
       </span>
       <span *ngIf="address != tx.transaction.recipient">
-<h2> <span *ngIf='tx.transaction.amount != 0'>+{{tx.transaction.amount/1000000}} xem</span>     
-      <span *ngFor="let mos of mosaics">
-              + {{ mos.quantity |  exponentialStrength:(mis.definition.properties[0].value)}} {{mos.mosaicId.name}}
+<h2> <span *ngIf='tx.transaction.amount != 0'>-{{tx.transaction.amount/1000000}} xem</span>     
+      <span *ngFor="let mos of tx.transaction.mosaics">
+              - {{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
           </span>
         </h2>
-        <p><b>To:</b> {{tx.transaction.recipient}}</p>
+        <p><b>To:</b> {{tx.transaction.recipient | formatAddress }}</p>
       </span>
-      <p><b>Fee:</b> {{tx.transaction.fee/100000}}</p>
-      <p><b> Message:</b>  {{tx.transaction.message.payload | message}}</p>
+      <p> <b>Date:</b> {{tx.transaction.timeStamp | nemDate}}</p>
+      <p *ngIf="tx.transaction.fee"><b>Fee:</b> {{tx.transaction.fee/1000000}} xem</p>
+      <p *ngIf="tx.transaction.message.length"><b> Message:</b> {{tx.transaction.message | hexMessageToString}}</p>
     </ion-item>
     
   </ion-list>
+
 </ion-content>
