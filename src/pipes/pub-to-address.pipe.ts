@@ -14,10 +14,7 @@ import { NemProvider } from '../providers/nem/nem.provider';
 
 @Pipe({name: 'pubToAddress'})
 export class PubToAddressPipe implements PipeTransform {
-   nem : any;
-   constructor(nemProvider: NemProvider) {
-          this.nem = nemProvider;
-    }
+   constructor(public nem: NemProvider) {}
   transform(value: any): string {
       return this.nem.formatAddress(this.nem.pubToAddress(value));
     }

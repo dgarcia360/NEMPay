@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { App, MenuController, LoadingController, AlertController } from 'ionic-angular';
+import { App, MenuController, LoadingController } from 'ionic-angular';
 import { NemProvider } from '../../providers/nem/nem.provider';
+import { AlertProvider } from '../../providers/alert/alert.provider';
+
 import { LoginPage } from '../login/login';
 
 @Component({
@@ -8,11 +10,9 @@ import { LoginPage } from '../login/login';
   templateUrl: 'signup.html'
 })
 export class SignupSimpleWalletPage {
-  nem :any;
   newAccount: any;
 
-  constructor(public app: App, private nemProvider: NemProvider,  public loading: LoadingController, public alertCtrl: AlertController) {
-    this.nem = nemProvider;
+  constructor(public app: App, private nem: NemProvider,  private loading: LoadingController, private alert: AlertProvider) {
     this.newAccount = {
       'name': '',
       'passphrase': '',
@@ -22,12 +22,7 @@ export class SignupSimpleWalletPage {
 
   public createSimpleWallet(){
     if (this.newAccount.passphrase != this.newAccount.repeat_passphrase){
-         let alert = this.alertCtrl.create({
-            title: 'Passphrase do not match',
-            subTitle: '',
-            buttons: ['OK']
-          });
-          alert.present();
+         this.alert.showPasswordDoNotMatch();
     }
     else{
       let loader = this.loading.create({
@@ -35,20 +30,15 @@ export class SignupSimpleWalletPage {
       });
 
       loader.present().then(_ =>{
-         this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.passphrase, -140).then(
+         this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.passphrase, -104).then(
               value =>{
                 if(value){
-                 this.app.getRootNav().push(LoginPage);
                  loader.dismiss();
+                 this.app.getRootNav().push(LoginPage);
                 }
                 else{
                     loader.dismiss();
-                    let alert = this.alertCtrl.create({
-                      title: 'Wallet name already exists',
-                      subTitle: '',
-                      buttons: ['OK']
-                    });
-                    alert.present();
+                    this.alert.showWalletNameAlreadyExists();
                 }
               }
             )

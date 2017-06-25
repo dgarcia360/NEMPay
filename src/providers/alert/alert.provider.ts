@@ -29,7 +29,7 @@ export class AlertProvider {
      alert.present()
      return alert;
   }
-  
+
   showInvalidPasswordAlert(){
     let alert = this.alertCtrl.create({
       title: 'Provided password or passphrase is invalid',
@@ -40,12 +40,49 @@ export class AlertProvider {
      return alert;
   }
 
-  showNoInternetConnectionAlert(){
+ showPasswordDoNotMatch(){
+     let alert = this.alertCtrl.create({
+        title: 'Introduced Passwords or Passphrases are different',
+        subTitle: '',
+        buttons: ['OK']
+      });
 
+     alert.present()
+     return alert;
+  }
 
+  showWalletNameAlreadyExists(){
+      let alert = this.alertCtrl.create({
+        title: 'Wallet Name already exists',
+        subTitle: '',
+        buttons: ['OK']
+      });
+
+     alert.present()
+     return alert;
   }
 
 
+  showAlertDoesNotBelongToNetwork(){
+      let alert = this.alertCtrl.create({
+        title: 'Address is not valid for this network',
+        subTitle: 'Remember that at the moment only works on testnet',
+        buttons: ['OK']
+      });
+      alert.present();
+      return alert;
+  }
+
+  showError(error){
+        console.log(error);
+
+       let alert = this.alertCtrl.create({
+        title: error,
+        buttons: ['OK']
+      });
+      alert.present();
+      return alert;
+  }
     
 
 }

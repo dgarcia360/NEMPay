@@ -13,15 +13,14 @@ import {LoginPage} from "../login/login";
     templateUrl: 'account.html'
 })
 export class AccountPage {
-    nem: any;
     common: any;
     selectedWallet: any;
     address: any;
     name: any;
     qrCode: any;
 
-    constructor(public navCtrl: NavController, private nemProvider: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert:AlertProvider) {
-        this.selectedWallet = null;
+    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert:AlertProvider) {
+        this.selectedWallet = {accounts:[{'address': ''}]};
 
         // Object to contain our password & private key data.
         this.common = {};
@@ -33,11 +32,7 @@ export class AccountPage {
 
     ionViewWillEnter() {
         
-        let loader = this.loading.create({
-            content: "Please wait..."
-        });
-
-        this.nemProvider.getSelectedWallet().then(
+        this.nem.getSelectedWallet().then(
             value =>{
                 if(!value){
                     this.navCtrl.push(LoginPage);
@@ -53,7 +48,6 @@ export class AccountPage {
                         }
                     });
                     this.encodeQrCode(infoQR);
-                    loader.dismiss();
                 }
             }
         )
@@ -82,7 +76,7 @@ export class AccountPage {
 
         loader.present().then(
             _ => {
-                if (!this.nemProvider.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nemProvider.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
+                if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
                     loader.dismiss();
                     this.alert.showInvalidPasswordAlert();
                 }
@@ -101,7 +95,8 @@ export class AccountPage {
 
 
     logout(){
-        this.nemProvider.unsetSelectedWallet();
+        this.nem.unsetSelectedWallet();
+        this.cleanCommon();
         this.navCtrl.push(LoginPage);
     }
 }

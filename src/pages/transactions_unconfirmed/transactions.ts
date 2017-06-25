@@ -8,12 +8,13 @@ import { LoginPage } from '../login/login';
   templateUrl: 'transactions.html'
 })
 export class TransactionsUnconfirmedPage {
-	nem: any;
 	transactions: any;
-
-  constructor(public navCtrl: NavController, private nemProvider: NemProvider,  public loading: LoadingController) {
-  	this.nem = nemProvider;
+	address: any;
+	
+  constructor(public navCtrl: NavController, private nem: NemProvider,  private loading: LoadingController) {
   	this.transactions = undefined;
+  	this.address = '';
+
   }
 
 	ionViewWillEnter() {
@@ -23,6 +24,7 @@ export class TransactionsUnconfirmedPage {
 
 	  	this.nem.getSelectedWallet().then(
 	        value =>{
+	        	this.address = value.accounts[0].address;
 	          	if(!value){
 	           		this.navCtrl.push(LoginPage);
 	        	}

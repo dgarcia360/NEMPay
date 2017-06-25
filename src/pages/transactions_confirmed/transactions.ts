@@ -8,12 +8,10 @@ import { LoginPage } from '../login/login';
   templateUrl: 'transactions.html'
 })
 export class TransactionsConfirmedPage {
-	nem: any;
 	transactions: any;
 	address: any;
 	
-  constructor(public navCtrl: NavController, private nemProvider: NemProvider,  public loading: LoadingController) {
-  	this.nem = nemProvider;
+  constructor(public navCtrl: NavController, private nem: NemProvider,  private loading: LoadingController) {
   	this.transactions = [];
   	this.address = '';
   }

@@ -13,10 +13,7 @@ import { NemProvider } from '../providers/nem/nem.provider';
 
 @Pipe({name: 'hexMessageToString'})
 export class HexMessageToStringPipe implements PipeTransform {
-   nem : any;
-   constructor(nemProvider: NemProvider) {
-          this.nem = nemProvider;
-    }
+   constructor(public nem: NemProvider) {}
   transform(value: any): string {
   	return this.nem.hexMessage(value);
     }

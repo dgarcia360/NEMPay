@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController,NavParams,AlertController } from 'ionic-angular';
+import { NavController,NavParams, AlertController } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { NemProvider } from '../../providers/nem/nem.provider';
+import { AlertProvider } from '../../providers/alert/alert.provider';
+
 import { BalancePage } from '../balance/balance';
 import { LoginPage } from '../login/login';
 
@@ -10,8 +12,7 @@ import { LoginPage } from '../login/login';
     templateUrl: 'transfer.html'
 })
 export class TransferPage {
-	nem: any;
-	barcodeScanner: any;
+	
     formData: any;
     selectedMosaic: any;
     divisibility: any;
@@ -20,9 +21,9 @@ export class TransferPage {
     amount: number;
     selectedWallet: any;
 	selectedMosaicDefinitionMetaDataPair: any;
-    constructor(public navCtrl: NavController,private navParams: NavParams, nemProvider: NemProvider,public alertCtrl: AlertController, barcodeScannerProvider: BarcodeScanner) {
-	    this.nem = nemProvider;
-	    this.barcodeScanner = barcodeScannerProvider;
+
+    constructor(public navCtrl: NavController,private navParams: NavParams, private nem: NemProvider,private alert: AlertProvider, private barcodeScanner: BarcodeScanner,private alertCtrl: AlertController) {
+	    
 	    this.formData = {};
 	    this.amount = 0;
 	    this.formData.recipientPubKey = '';
@@ -44,7 +45,7 @@ export class TransferPage {
 		};
 	    
 	    if (this.selectedMosaic != 'nem:xem'){
-		    this.nem.getMosaicsMetaDataPair(this.selectedMosaic.split(":")[0],  this.selectedMosaic.split(":")[1]).then(
+		    this.nem.getMosaicsMetaDataPair(this.selectedMosaic.split(":")[0],  this.selectedMosaic.split(":")[1], false).then(
 		    	value =>{
 		          	this.selectedMosaicDefinitionMetaDataPair =  value;
 		   			this.levy = value.levy;
@@ -55,24 +56,29 @@ export class TransferPage {
 		}
 	}
 
-	updateFees() {
 
-	    if(this.formData.isMosaicTransfer){
-			   this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
-			    this.formData.innerFee = 0;
-			    this.formData.fee = entity.fee;
-			   });
-	      }
+	ionViewWillEnter() {
+	  	this.nem.getSelectedWallet().then(
+	        value =>{
+	          	if(!value){
+	           		this.navCtrl.push(LoginPage);
+	        	}
+	        	else{
+	        		this.selectedWallet = value;
+	        	}
+	    	}
+	    )
+ 	}
 
-	      else {
-   			var entity = this.nem.prepareTransaction(this.common, this.formData);
-			this.formData.innerFee = 0;
-			this.formData.fee = entity.fee;
-	      }
-	}
+	cleanCommon(){
+        this.common = {
+            'password': '',
+            'privateKey': ''
+        };
+    }
 
 
-	/**
+/**
 	 * resetRecipientData() Reset data stored for recipient
 	 */
 	resetRecipientData() {
@@ -83,6 +89,7 @@ export class TransferPage {
 	    // Encrypt message set to false
 	    this.formData.encryptMessage = false;
 	}
+
 
 	checkAddress(address){
 		var success = true;
@@ -96,6 +103,7 @@ export class TransferPage {
         }
         return success;
     }
+
 
 	/**
 	 * processRecipientInput() Process recipient input and get data from network
@@ -121,6 +129,67 @@ export class TransferPage {
 	    return success;
 	}
 
+	presentPrompt() {
+
+			let alert = this.alertCtrl.create({
+			    title: 'Confirm Transaction',
+			    subTitle: this._subtitleBuilder(),
+			    inputs: [
+			      {
+			        name: 'passphrase',
+			        placeholder: 'Passphrase/Password',
+			        type: 'password'
+			      },
+			    ],
+			    buttons: [
+			      {
+			        text: 'Cancel',
+			        role: 'cancel'
+			      },
+			      {
+			        text: 'Confirm Transaction',
+			        handler: data => {
+			        	this.common.password = data.passphrase;
+			        	
+			        	if(this.canSendTransaction())
+			        	{
+			        		this.confirmTransaction().then(_ => {
+			        			this.navCtrl.push(BalancePage, {sendSuccess:true});
+			        			this.cleanCommon();
+			        		}).catch(error => {
+					    		this.alert.showError(error);
+					    		this.cleanCommon();
+					    	});
+			        	}
+			        	else{
+		        			this.alert.showInvalidPasswordAlert();
+			        	}
+			        }
+			      }
+			    ]
+			  });
+		  	alert.present();
+	}
+
+
+	updateFees() {
+	    if(this.formData.isMosaicTransfer){
+			    this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
+				   	console.log(entity);
+				    this.formData.innerFee = 0;
+				    this.formData.fee = entity.fee;
+					this.presentPrompt();
+			   });
+	    }
+	    else {
+			var entity = this.nem.prepareTransaction(this.common, this.formData);
+			this.formData.innerFee = 0;
+			this.formData.fee = entity.fee;
+			this.presentPrompt();
+	    }
+	}
+
+
 	startTransaction(){
 		//if is nem:xem, set amount
 	   if(this.selectedMosaic == 'nem:xem'){
@@ -138,8 +207,30 @@ export class TransferPage {
 		        'quantity': this.amount * Math.pow(10, this.divisibility)
 		    }];
 		}
-		this.updateFees();
-		this.presentPrompt();
+		if(!this.processRecipientInput()){
+			this.alert.showAlertDoesNotBelongToNetwork();
+		}
+		else{
+			this.updateFees();
+		}
+	}
+	
+	private _subtitleBuilder():string{
+		var subtitle = 'You are going to send: <br/><br/> ';
+		var currency = '';
+		if (this.selectedMosaic == 'nem:xem'){
+			currency = "<b>Amount:</b> " + this.amount + " nem:xem";
+		}
+		else{
+			currency = "<b>Amount:</b> " + this.amount + " " + this.selectedMosaic;
+		}
+		subtitle += currency;
+
+		var _fee = this.formData.fee/1000000;
+		
+		subtitle += '<br/><br/>  <b>Fee:</b> ' + _fee + ' xem';
+		return subtitle;
+
 	}
 
 	canSendTransaction(){
@@ -160,90 +251,7 @@ export class TransferPage {
 	      }
 	}
 
-	private _subtitleBuilder():string{
-		var subtitle = 'You are going to send: <br/><br/> ';
-		var currency = '';
-		if (this.selectedMosaic == 'nem:xem'){
-			currency = "<b>Amount:</b> " + this.amount + " nem:xem";
-		}
-		else{
-			currency = "<b>Amount:</b> " + this.amount + " " + this.selectedMosaic;
-		}
-		subtitle += currency;
-
-		var _fee = this.formData.fee/1000000;
-		
-		//Todo levy
-		subtitle += '<br/><br/>  <b>Fee:</b> ' + _fee + ' xem';
-		return subtitle;
-
-	}
-
-	presentPrompt() {
-		if(!this.processRecipientInput()){
-			let alert = this.alertCtrl.create({
-		        title: 'Address is not valid for this network',
-		        subTitle: 'Remember that at the moment only works on testnet',
-		        buttons: ['OK']
-		      });
-		      alert.present();
-		}
-		else{
-
-			let alert = this.alertCtrl.create({
-			    title: 'Confirm Transaction',
-			    subTitle: this._subtitleBuilder(),
-			    inputs: [
-			      {
-			        name: 'passphrase',
-			        placeholder: 'Passphrase/Password',
-			        type: 'password'
-			      },
-			    ],
-			    buttons: [
-			      {
-			        text: 'Cancel',
-			        role: 'cancel',
-			        handler: data => {
-			          console.log('Cancel clicked');
-			        }
-			      },
-			      {
-			        text: 'Confirm Transaction',
-			        handler: data => {
-			        	this.common.password = data.passphrase;
-			        	
-			        	if(this.canSendTransaction())
-			        	{
-			        		this.confirmTransaction().then(_ => {
-			        			console.log("Transaction confirmed");
-			        			this.navCtrl.push(BalancePage, {sendSuccess:true});
-			        		}).catch(error => {
-					    		let alert = this.alertCtrl.create({
-							        title: error,
-							        buttons: ['OK']
-							      });
-							      alert.present();
-								});
-			        	}
-			        	else{
-		        			let alert = this.alertCtrl.create({
-							    title: 'Invalid password',
-							    subTitle: '',
-							    buttons: ['OK']
-							  });
-							  alert.present();
-			        	}
-			        }
-			      }
-			    ]
-			  });
-		  	alert.present();
-		}
-	}
-
 	scanQR(){
-
 		this.barcodeScanner.scan().then((barcodeData) => {
             var addresObject = JSON.parse(barcodeData.text);
             this.formData.rawRecipient = addresObject.data.addr;
@@ -251,17 +259,4 @@ export class TransferPage {
     		console.log("Error on scan");
 		});
 	}
-
-	ionViewWillEnter() {
-	  	this.nem.getSelectedWallet().then(
-	        value =>{
-	          	if(!value){
-	           		this.navCtrl.push(LoginPage);
-	        	}
-	        	else{
-	        		this.selectedWallet = value;
-	        	}
-	    	}
-	    )
- 	}
 }

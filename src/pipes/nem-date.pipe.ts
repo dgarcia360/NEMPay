@@ -14,10 +14,7 @@ import { NemProvider } from '../providers/nem/nem.provider';
 
 @Pipe({name: 'nemDate'})
 export class NemDatePipe implements PipeTransform {
-   nem : any;
-   constructor(nemProvider: NemProvider) {
-          this.nem = nemProvider;
-    }
+   constructor(public nem: NemProvider) {}
   transform(value: any): string {
       return this.nem.nemDate(value);
     }

@@ -10,12 +10,13 @@ import { SignupPrivateKeyPage } from '../signup_privatekey/signup';
 })
 
 export class SignupPage {
-  menu: MenuController;
+  
   tab1Root = SignupBrainWalletPage;
   tab2Root = SignupSimpleWalletPage;
   tab3Root = SignupPrivateKeyPage;
-  constructor(public navCtrl: NavController,  menu: MenuController) {
-    this.menu = menu;
+  
+  constructor(public navCtrl: NavController,  private menu: MenuController) {
+
   }
 
 

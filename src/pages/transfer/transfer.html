@@ -40,13 +40,16 @@
       </ion-item>
       </ion-col>
     </ion-row>
+
     <ion-item id="transfer-textarea1">
-      <ion-label>
+      <ion-label stacked>
         Message
       </ion-label>
-      <ion-textarea name="message" placeholder="" [(ngModel)]="formData.message"></ion-textarea>
+      <ion-textarea rows="8" name="message" placeholder="" [(ngModel)]="formData.message"></ion-textarea>
     </ion-item>
   </form>
+  <div class="spacer" style="height:10px;" id="login-spacer2"></div>
+
   <button id="transfer-button2" ion-button color="positive" block on-click="startTransaction()">
     Continue
   </button>

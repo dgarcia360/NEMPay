@@ -2,20 +2,20 @@
   <ion-list id="transactions-list6">
     <ion-item  color="none"  *ngFor="let tx of transactions">
       <span *ngIf="address == tx.transaction.recipient">
-          <h2> <span *ngIf='tx.transaction.amount != 0'>+{{tx.transaction.amount/1000000}} xem</span>     <span *ngFor="let mos of tx.transaction.mosaics">
-              + {{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
+          <h2> <span *ngIf='tx.transaction.amount != 0'><span style="color: #87D37C"> +</span>{{tx.transaction.amount/1000000}} xem</span>     <span *ngFor="let mos of tx.transaction.mosaics">
+              <span style="color: #87D37C">+</span>{{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
           </span>
         </h2>
-          <p><b>From:</b> {{tx.transaction.signer | pubToAddress}}</p>
+          <p><b>From:</b> <input style="max-width: 100%; width: calc(100% - 40px);" [value]="tx.transaction.signer | pubToAddress" disabled="true" /></p>
 
       </span>
       <span *ngIf="address != tx.transaction.recipient">
-<h2> <span *ngIf='tx.transaction.amount != 0'>-{{tx.transaction.amount/1000000}} xem</span>     
+<h2> <span *ngIf='tx.transaction.amount != 0'><span style="color: #f53d3d"> +</span>{{tx.transaction.amount/1000000}} xem</span>     
       <span *ngFor="let mos of tx.transaction.mosaics">
-              - {{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
+              <span style="color: #f53d3d">-</span>{{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
           </span>
         </h2>
-        <p><b>To:</b> {{tx.transaction.recipient | formatAddress }}</p>
+        <p><b>To:</b> <input style="max-width: 100%; width: calc(100% - 40px);" [value]="tx.transaction.recipient | formatAddress" disabled="true" /></p>
       </span>
       <p> <b>Date:</b> {{tx.transaction.timeStamp | nemDate}}</p>
       <p *ngIf="tx.transaction.fee"><b>Fee:</b> {{tx.transaction.fee/1000000}} xem</p>

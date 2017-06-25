@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { MenuController,NavController, AlertController, LoadingController } from 'ionic-angular';
+import { MenuController,NavController, LoadingController } from 'ionic-angular';
+
+import { NemProvider } from '../../providers/nem/nem.provider';
+import { AlertProvider } from '../../providers/alert/alert.provider';
+
 import { BalancePage } from '../balance/balance';
 import { SignupPage } from '../signup/signup';
-import { NemProvider } from '../../providers/nem/nem.provider';
 
 @Component({
   selector: 'page-login',
@@ -10,18 +13,13 @@ import { NemProvider } from '../../providers/nem/nem.provider';
 })
 export class LoginPage {
 
-  nem: any;
   wallets: any;
   selectedWallet: any;
   common: any;
-  menu: MenuController;
 
 
-  constructor(public navCtrl: NavController,  nemProvider: NemProvider, public alertCtrl: AlertController, public loading: LoadingController, menu: MenuController) {
+  constructor(public navCtrl: NavController,  private nem: NemProvider, private alert: AlertProvider, private loading: LoadingController, private menu: MenuController) {
 
-    this.menu = menu;
-
-    this.nem = nemProvider;
     this.wallets = [];
     this.selectedWallet = null;
 
@@ -34,11 +32,20 @@ export class LoginPage {
     this.nem.getWallets().then(
         value => {
           this.wallets = value;
-          if(this.wallets.length > 0){
-            console.log(this.selectedWallet);
-          }
         }
     );
+  
+  }
+
+
+  ionViewWillEnter() {
+    // the left menu should be disabled on the login page
+    this.menu.enable(false);
+  }
+
+  ionViewWillLeave() {
+    // enable the left menu when leaving the login page
+    this.menu.enable(true);
   }
 
   compareFn(e1: any, e2: any): boolean {
@@ -51,30 +58,19 @@ export class LoginPage {
       content: "Please wait..."
     });
 
-   let notWalletSelectedAlert = this.alertCtrl.create({
-          title: 'Wallet not selected',
-          subTitle: '',
-          buttons: ['OK']
-        });
-    
-    let invalidPasswordAlert = this.alertCtrl.create({
-      title: 'Invalid password',
-      subTitle: '',
-      buttons: ['OK']
-    });
 
     loader.present().then(
         _ => {
 
           if (!this.selectedWallet) {
             loader.dismiss();
-            notWalletSelectedAlert.present();
+            this.alert.showWalletNotSelectedAlert();
           }
 
           // Decrypt/generate private key and check it. Returned private key is contained into this.common
           if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
             loader.dismiss();
-            invalidPasswordAlert.present();
+            this.alert.showInvalidPasswordAlert();
           }
           else {
             this.nem.setSelectedWallet(this.selectedWallet);
@@ -87,22 +83,6 @@ export class LoginPage {
   goToSignup(params){
     if (!params) params = {};
     this.navCtrl.push(SignupPage);
-  }
-
-   onPressEnter(keyEvent) {
-        if (keyEvent.which === 13){
-           this.login();
-        }
-    }
-
-  ionViewWillEnter() {
-    // the left menu should be disabled on the login page
-    this.menu.enable(false);
-  }
-
-  ionViewWillLeave() {
-    // enable the left menu when leaving the login page
-    this.menu.enable(true);
   }
 
 }

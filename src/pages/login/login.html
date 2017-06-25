@@ -1,13 +1,13 @@
 <ion-header>
 </ion-header>
 <ion-content padding id="page6">
-  <div class="spacer" style="height:40px;" id="login-spacer4"></div>
+  <div class="spacer" style="height:80px;" id="login-spacer4"></div>
   <div>
-    <img src="assets/img/xg0CfSgTSYWnIwzKb6ZI_nem_pay.png" style="display:block;width:30%;height:auto;margin-left:auto;margin-right:auto;" />
+    <img src="assets/img/xg0CfSgTSYWnIwzKb6ZI_nem_pay.png" style="display:block;width:40%;height:auto;margin-left:auto;margin-right:auto;" />
   </div>
   <div class="spacer" style="height:40px;" id="login-spacer3"></div>
-  <form id="login-form8">
     <ion-list id="login-list8">
+      
       <ion-item id="login-select3">
         <ion-label>
           Account
@@ -17,20 +17,27 @@
           <ion-option *ngFor="let selectedWallet of wallets" [value]="selectedWallet">{{selectedWallet.name}}</ion-option>
         </ion-select>
       </ion-item>
-      
+          </ion-list>
+
+        <form id="login-form8" (ngSubmit)="login()">
+    <ion-list id="login-list9">
+
       <ion-item id="login-input12">
         <ion-label>
           Password
         </ion-label>
-        <ion-input [(ngModel)]="common.password" type="password" name="password" placeholder="" (keypress)="onPressEnter($event.keyCode)"></ion-input>
+        <ion-input [(ngModel)]="common.password" type="password" name="password" placeholder=""></ion-input>
       </ion-item>
     </ion-list>
-    <div class="spacer" style="height:40px;" id="login-spacer2"></div>
-    <button id="login-button7" ion-button color="positive" block on-click="login()" type="submit"  [disabled]="!selectedWallet || !common.password">
+    <div class="spacer" style="height:10px;" id="login-spacer2"></div>
+    <button id="login-button7" ion-button color="positive" block  type="submit" [disabled]="!selectedWallet || !common.password">
       Log in
     </button>
+  </form>
+      <div class="spacer" style="height:10px;" id="login-spacer2"></div>
+
     <button id="login-button8" ion-button clear color="positive" block on-click="goToSignup()">
       Or create an account
     </button>
-  </form>
+
 </ion-content>

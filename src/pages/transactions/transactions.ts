@@ -8,6 +8,7 @@ import { TransactionsUnconfirmedPage } from '../transactions_unconfirmed/transac
   templateUrl: 'transactions.html'
 })
 export class TransactionsPage {
+  
   tab1Root = TransactionsConfirmedPage;
   tab2Root = TransactionsUnconfirmedPage;
 
