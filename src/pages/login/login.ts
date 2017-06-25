@@ -66,17 +66,33 @@ export class LoginPage {
             loader.dismiss();
             this.alert.showWalletNotSelectedAlert();
           }
-
+          var invalidPassword = false;
           // Decrypt/generate private key and check it. Returned private key is contained into this.common
-          if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
-            loader.dismiss();
-            this.alert.showInvalidPasswordAlert();
+          if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo)) {
+            invalidPassword = true;
+          }
+          
+          if(!invalidPassword && (this.common.privateKey.length === 64 || this.common.privateKey.length === 66) ){
+     
+              if(!this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)){
+                    invalidPassword = true;
+                }
           }
           else {
-            this.nem.setSelectedWallet(this.selectedWallet);
-            loader.dismiss();
-            this.navCtrl.push(BalancePage);
+            invalidPassword = true;
+            this.common.privateKey = '';
           }
+
+          if (invalidPassword){
+              loader.dismiss();
+               this.alert.showInvalidPasswordAlert();
+          }
+           else{
+              this.nem.setSelectedWallet(this.selectedWallet);
+              loader.dismiss();
+              this.navCtrl.push(BalancePage);
+           
+           }
         })
   }
 

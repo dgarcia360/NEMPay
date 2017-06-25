@@ -19,6 +19,3 @@ export class PubToAddressPipe implements PipeTransform {
       return this.nem.formatAddress(this.nem.pubToAddress(value));
     }
 }
-
-
-

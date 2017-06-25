@@ -45,11 +45,11 @@ export class TransferPage {
 		};
 	    
 	    if (this.selectedMosaic != 'nem:xem'){
-		    this.nem.getMosaicsMetaDataPair(this.selectedMosaic.split(":")[0],  this.selectedMosaic.split(":")[1], false).then(
+		    this.nem.getMosaicsMetaDataPair(this.selectedMosaic.split(":")[0],  this.selectedMosaic.split(":")[1]).then(
 		    	value =>{
-		          	this.selectedMosaicDefinitionMetaDataPair =  value;
-		   			this.levy = value.levy;
-		    		this.divisibility = value.properties[0].value;
+		          	this.selectedMosaicDefinitionMetaDataPair =  value[this.selectedMosaic];
+		   			this.levy =  value[this.selectedMosaic].mosaicDefinition.levy;
+		    		this.divisibility = value[this.selectedMosaic].mosaicDefinition.properties[0].value;
 		    		this.formData.isMosaicTransfer = true;
 		    	}
 		    )
@@ -130,10 +130,10 @@ export class TransferPage {
 	}
 
 	presentPrompt() {
-
+			this._subtitleBuilder().then(subitle => {
 			let alert = this.alertCtrl.create({
 			    title: 'Confirm Transaction',
-			    subTitle: this._subtitleBuilder(),
+			    subTitle: subitle,
 			    inputs: [
 			      {
 			        name: 'passphrase',
@@ -153,15 +153,26 @@ export class TransferPage {
 			        	
 			        	if(this.canSendTransaction())
 			        	{
-			        		this.confirmTransaction().then(_ => {
-			        			this.navCtrl.push(BalancePage, {sendSuccess:true});
-			        			this.cleanCommon();
-			        		}).catch(error => {
-					    		this.alert.showError(error);
-					    		this.cleanCommon();
-					    	});
+			        		this.confirmTransaction().then(value => {
+			        			if(value.message == 'SUCCESS'){
+				        			console.log("Transactions confirmed");
+				        			this.alert.showTransactionConfirmed();
+				        			this.navCtrl.push(BalancePage, {});
+				        			this.cleanCommon();
+			        			}
+			        			else if(value.message == 'FAILURE_INSUFFICIENT_BALANCE'){
+			        				this.alert.showDoesNotHaveEnoughFunds();
+			        			}
+			        			else if(value.message == 'FAILURE_MESSAGE_TOO_LARGE'){
+			        				this.alert.showMessageTooLarge();
+			        			}
+			        			else{
+			        				this.alert.showError(value.message);
+			        			}
+			        		});
 			        	}
 			        	else{
+			        		this.common.privateKey = '';
 		        			this.alert.showInvalidPasswordAlert();
 			        	}
 			        }
@@ -169,13 +180,13 @@ export class TransferPage {
 			    ]
 			  });
 		  	alert.present();
+		  	});
 	}
 
 
 	updateFees() {
 	    if(this.formData.isMosaicTransfer){
 			    this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
-				   	console.log(entity);
 				    this.formData.innerFee = 0;
 				    this.formData.fee = entity.fee;
 					this.presentPrompt();
@@ -215,26 +226,39 @@ export class TransferPage {
 		}
 	}
 	
-	private _subtitleBuilder():string{
+	private _subtitleBuilder(): Promise<string>{
 		var subtitle = 'You are going to send: <br/><br/> ';
 		var currency = '';
 		if (this.selectedMosaic == 'nem:xem'){
-			currency = "<b>Amount:</b> " + this.amount + " nem:xem";
+			currency = "<b>Amount:</b> " + this.amount + " xem";
 		}
 		else{
-			currency = "<b>Amount:</b> " + this.amount + " " + this.selectedMosaic;
+			currency = "<b>Amount:</b> " + this.amount + " " + this.selectedMosaic +" + " + 1 +" xem";
 		}
 		subtitle += currency;
 
 		var _fee = this.formData.fee/1000000;
 		
 		subtitle += '<br/><br/>  <b>Fee:</b> ' + _fee + ' xem';
-		return subtitle;
+		
+		if (this.levy != undefined && 'mosaicId' in this.levy){
+			var _levy = 0;
+			return this.nem.formatLevy(this.formData.mosaics[0],1, this.levy).then(value => {
+				_levy = value
+				subtitle += "<br/><br/> <b>Levy:</b> " + _levy + " " + this.levy.mosaicId.name;
+				return subtitle;
+			});
+		}
+		else{
+			return Promise.resolve(subtitle);
+		}
 
 	}
 
 	canSendTransaction(){
-		return this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
+		var result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
+		if(!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
+		return result;
 	}
 
 	confirmTransaction(){

@@ -32,7 +32,7 @@ export class TransactionsConfirmedPage {
 	        		this.nem.getAllTransactionsFromAnAccount(this.address).then(
 		           		value =>{
 		           			this.transactions = value;
-		           			console.log(value);
+		           			console.log(this.transactions);
 		       			loader.dismiss();
 		       		})
 	        	}

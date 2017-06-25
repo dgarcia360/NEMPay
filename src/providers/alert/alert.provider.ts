@@ -73,9 +73,34 @@ export class AlertProvider {
       return alert;
   }
 
-  showError(error){
-        console.log(error);
 
+  showTransactionConfirmed(){
+     let alert = this.alertCtrl.create({
+      title: 'Transaction successfully sent !',
+      buttons: ['OK']
+    });
+    alert.present();
+    return alert;
+  }
+
+  showDoesNotHaveEnoughFunds(){
+     let alert = this.alertCtrl.create({
+      title: 'Your account has insufficient funds',
+      buttons: ['OK']
+    });
+    alert.present();
+    return alert;
+  }
+  
+showMessageTooLarge(){
+  let alert = this.alertCtrl.create({
+        title: 'Attached message is too large.',
+        buttons: ['OK']
+      });
+      alert.present();
+      return alert;
+}
+  showError(error){
        let alert = this.alertCtrl.create({
         title: error,
         buttons: ['OK']

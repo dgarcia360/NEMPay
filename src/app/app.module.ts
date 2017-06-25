@@ -20,7 +20,7 @@ import { HexMessageToStringPipe } from '../pipes/hex-message-to-string.pipe';
 import { PubToAddressPipe } from '../pipes/pub-to-address.pipe';
 import { NemDatePipe } from '../pipes/nem-date.pipe';
 import { FormatAddressPipe } from '../pipes/format-address.pipe';
-
+import { FormatLevyPipe } from '../pipes/format-levy.pipe';
 import { MyApp } from './app.component';
 import { BalancePage } from '../pages/balance/balance';
 import { TransactionsPage } from '../pages/transactions/transactions';
@@ -54,8 +54,8 @@ import { SignupPrivateKeyPage } from '../pages/signup_privatekey/signup';
     HexMessageToStringPipe,
     PubToAddressPipe,
     NemDatePipe,
-    FormatAddressPipe
-
+    FormatAddressPipe,
+    FormatLevyPipe,
   ],
   imports: [
     BrowserModule,

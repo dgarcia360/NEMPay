@@ -10,7 +10,7 @@
 
       </span>
       <span *ngIf="address != tx.transaction.recipient">
-<h2> <span *ngIf='tx.transaction.amount != 0'><span style="color: #f53d3d"> +</span>{{tx.transaction.amount/1000000}} xem</span>     
+<h2> <span *ngIf='tx.transaction.amount != 0'><span style="color: #f53d3d">-</span>{{tx.transaction.amount/1000000}} xem</span>     
       <span *ngFor="let mos of tx.transaction.mosaics">
               <span style="color: #f53d3d">-</span>{{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
           </span>
@@ -19,7 +19,7 @@
       </span>
       <p> <b>Date:</b> {{tx.transaction.timeStamp | nemDate}}</p>
       <p *ngIf="tx.transaction.fee"><b>Fee:</b> {{tx.transaction.fee/1000000}} xem</p>
-      <p *ngIf="tx.transaction.message.length"><b> Message:</b> {{tx.transaction.message | hexMessageToString}}</p>
+      <p *ngIf="tx.transaction.message.payload"><b> Message:</b> {{tx.transaction.message | hexMessageToString}}</p>
     </ion-item>
     
   </ion-list>

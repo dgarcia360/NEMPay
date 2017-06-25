@@ -33,7 +33,6 @@ export class TransactionsUnconfirmedPage {
 	        		this.nem.getUnconfirmedTransactionsFromAnAccount(value.accounts[0].address).then(
 		           		value =>{
 		           			this.transactions = value;
-		           			console.log(value);
 		       			loader.dismiss();
 		       		})
 	        	}

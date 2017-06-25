@@ -16,8 +16,7 @@
     <ion-item *ngFor="let mosaic of balance">
       <ion-radio [value]="mosaic"></ion-radio>
 
-      <ion-label *ngIf="mosaic.mosaicId.namespaceId == 'nem'" ><b>{{mosaic.quantity/1000000}}</b> {{mosaic.mosaicId.namespaceId}}:{{mosaic.mosaicId.name}}</ion-label>
-      <ion-label *ngIf="mosaic.mosaicId.namespaceId != 'nem'" ><b>
+      <ion-label><b>
        {{ mosaic.quantity |  exponentialStrength:(mosaic.definition.properties[0].value)}}</b> {{mosaic.mosaicId.namespaceId}}:{{mosaic.mosaicId.name}}</ion-label>
 
     </ion-item>

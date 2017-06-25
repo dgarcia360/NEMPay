@@ -8016,7 +8016,7 @@ var supply = function supply(data, mosaicId, mosaics) {
         return ['unknown mosaic divisibility', data];
     }
     var mosaicDefinitionMetaDataPair = mosaics[mosaicName];
-    var divisibilityProperties = $.grep(mosaicDefinitionMetaDataPair.mosaicDefinition.properties, function (w) {
+    var divisibilityProperties = _helpers2.default.grep(mosaicDefinitionMetaDataPair.mosaicDefinition.properties, function (w) {
         return w.name === "divisibility";
     });
     var divisibility = divisibilityProperties.length === 1 ? ~~divisibilityProperties[0].value : 0;

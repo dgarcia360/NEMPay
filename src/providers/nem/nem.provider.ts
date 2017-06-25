@@ -14,13 +14,10 @@ import * as nemSdk from "nem-sdk";
 @Injectable()
 export class NemProvider {
   nem: any;
-  _storage: any;
-  //todo: type array of wallet
   wallets : any;
 
   constructor(private storage: Storage) {
     this.nem = nemSdk;
-    this._storage = storage;
   }
 
 
@@ -31,7 +28,7 @@ export class NemProvider {
   }
 
  public pubToAddress(pub){
-    return this.nem.default.utils.format.pubToAddress(pub);
+    return this.nem.default.utils.format.pubToAddress(pub, this.nem.default.model.network.data.testnet.id);
   }
 
   public nemDate(nemDate){
@@ -42,6 +39,8 @@ export class NemProvider {
     return this.nem.default.utils.format.address(address);
   }
 
+
+
   /* Wallet */
   private _storeWallet(wallet) : any{
     var result = [];
@@ -49,7 +48,7 @@ export class NemProvider {
         value => {
           result = value;
           result.push(wallet);
-          this._storage.set('wallets', JSON.stringify(result));
+          this.storage.set('wallets', JSON.stringify(result));
           return wallet;
         }
     )
@@ -82,7 +81,7 @@ export class NemProvider {
   }
 
   public getSelectedWallet(): any{
-    return this._storage.get('selectedWallet').then(data => {
+    return this.storage.get('selectedWallet').then(data => {
       var result = null;
       if(data){
         result = JSON.parse(data);
@@ -92,7 +91,7 @@ export class NemProvider {
   }
 
   public getWallets(): any{
-    return this._storage.get('wallets').then(data => {
+    return this.storage.get('wallets').then(data => {
       var result = [];
       if(data){
         result = JSON.parse(data);
@@ -102,11 +101,11 @@ export class NemProvider {
   }
   
   public setSelectedWallet(wallet){
-    this._storage.set('selectedWallet', JSON.stringify(wallet));
+    this.storage.set('selectedWallet', JSON.stringify(wallet));
   }
 
    public unsetSelectedWallet(){
-    this._storage.set('selectedWallet', null);
+    this.storage.set('selectedWallet', null);
   }
 
   public createSimpleWallet(walletName,password, network){
@@ -168,7 +167,7 @@ export class NemProvider {
 
   /* Balance */
 
-  public getMosaicsMetaDataPair(mosaicNamespaceId, mosaicId, original){
+  public getMosaicsMetaDataPair(mosaicNamespaceId, mosaicId){
 
         // init endpoint
       var endpoint = this.nem.default.model.objects.create("endpoint")(this.nem.default.model.nodes.defaultTestnet, this.nem.default.model.nodes.defaultPort);
@@ -184,19 +183,13 @@ export class NemProvider {
               var fullMosaicName  = mosaicNamespaceId+ ':' + mosaicId;
 
               // Check if the mosaic was found
-              if(undefined === neededDefinition[fullMosaicName]) return console.error("Mosaic not found !");
-
+              if(undefined === neededDefinition[fullMosaicName]) {
+                console.error("Mosaic not found !");
+                  return mosaicDefinitionMetaDataPair;
+                }
               // Set mosaic definition into mosaicDefinitionMetaDataPair
-              
-              if(!original){
-                 //Fix, transform divisibility if 0
-                 mosaicDefinitionMetaDataPair = neededDefinition[fullMosaicName];
-               }
-              else{
-
                 mosaicDefinitionMetaDataPair[fullMosaicName] = {};
                 mosaicDefinitionMetaDataPair[fullMosaicName].mosaicDefinition = neededDefinition[fullMosaicName];
-              }
      
           return mosaicDefinitionMetaDataPair;
       }
@@ -204,22 +197,19 @@ export class NemProvider {
   }
 
 
+
   private _addDivisibilityToBalance(balance){
     var promises = [];
     
     for (let mosaic of balance.data) {
-          if(mosaic.mosaicId.namespaceId != 'nem'){
-            promises.push(this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name, false));
-          }
+            promises.push(this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name));
     }
 
     return Promise.all(promises).then(values =>{
       var i = 0;
         for (let mosaic of balance.data) {
-          if(mosaic.mosaicId.namespaceId != 'nem'){
-           mosaic.definition = values[i];
+           mosaic.definition = values[i][mosaic.mosaicId.namespaceId+':'+mosaic.mosaicId.name].mosaicDefinition;
            ++i;
-          }
         }
         return balance;
        }
@@ -239,6 +229,18 @@ export class NemProvider {
   }
 
   /* Transfer */
+
+     public formatLevy(mosaic, multiplier, levy){
+
+     this.nem.default.model.objects.get("mosaicDefinitionMetaDataPair");
+    return Promise.all([this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name), this.getMosaicsMetaDataPair(levy.mosaicId.namespaceId, levy.mosaicId.name)]).then(values =>{
+      var mosaicDefinitionMetaDataPair = values[0];
+        mosaicDefinitionMetaDataPair[levy.mosaicId.namespaceId+':'+levy.mosaicId.name] = values[1][levy.mosaicId.namespaceId+':'+levy.mosaicId.name];
+      return this.nem.default.utils.format.levyFee(mosaic, multiplier, levy, mosaicDefinitionMetaDataPair);
+
+   });
+  }
+
   public isFromNetwork (address, isFromNetwork){
     return this.nem.default.model.address.isFromNetwork(address,  this.nem.default.model.network.data.testnet.id);
   }
@@ -261,7 +263,7 @@ export class NemProvider {
     let mosaicAttachment = this.nem.default.model.objects.create("mosaicAttachment")(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name, formData.mosaics[0].quantity);
     transferTransaction.mosaics.push(mosaicAttachment);
 
-    return this.getMosaicsMetaDataPair(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name,true).then(value =>{
+    return this.getMosaicsMetaDataPair(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name).then(value =>{
           return this.nem.default.model.transactions.prepare("mosaicTransferTransaction")(common, transferTransaction, value, this.nem.default.model.network.data.testnet.id);
       })
   }
@@ -275,25 +277,14 @@ export class NemProvider {
       var promises = [];
       
       for (let mosaic of mosaics) {
-            if(mosaic.mosaicId.namespaceId != 'nem'){
-              promises.push(this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name, false));
-            }
+        promises.push(this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name));
       }
 
       return Promise.all(promises).then(values =>{
         var i = 0;
           for (let mosaic of mosaics) {
-            if(mosaic.mosaicId.namespaceId != 'nem'){
-             mosaic.definition = values[i];
+             mosaic.definition = values[i][mosaic.mosaicId.namespaceId+':'+mosaic.mosaicId.name].mosaicDefinition;
              ++i;
-            }
-            else{
-              mosaic.definition = {
-                properties: [
-                  {value: 6}
-                ]  
-              }
-            }
           }
           return mosaics;
          }

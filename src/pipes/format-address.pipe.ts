@@ -9,6 +9,3 @@ export class FormatAddressPipe implements PipeTransform {
       return this.nem.formatAddress(value);
     }
 }
-
-
-
