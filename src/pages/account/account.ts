@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
-import { SocialSharing } from '@ionic-native/social-sharing';
+import {Component} from '@angular/core';
+import {NavController, LoadingController} from 'ionic-angular';
+import {SocialSharing} from '@ionic-native/social-sharing';
 import * as kjua from "kjua";
 
-import { NemProvider } from '../../providers/nem/nem.provider';
-import { AlertProvider } from '../../providers/alert/alert.provider';
+import {NemProvider} from '../../providers/nem/nem.provider';
+import {AlertProvider} from '../../providers/alert/alert.provider';
 
 import {LoginPage} from "../login/login";
 
@@ -15,29 +15,28 @@ import {LoginPage} from "../login/login";
 export class AccountPage {
     common: any;
     selectedWallet: any;
-    address: any;
     name: any;
     qrCode: any;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert:AlertProvider) {
-        this.selectedWallet = {accounts:[{'address': ''}]};
+    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider) {
+        this.selectedWallet = {accounts: [{'address': ''}]};
 
         // Object to contain our password & private key data.
         this.common = {};
         this.cleanCommon();
-        this.qrCode = {'src' : ''};
+        this.qrCode = {'src': ''};
 
 
     }
 
     ionViewWillEnter() {
-        
+
         this.nem.getSelectedWallet().then(
-            value =>{
-                if(!value){
+            value => {
+                if (!value) {
                     this.navCtrl.push(LoginPage);
                 }
-                else{
+                else {
                     this.selectedWallet = value;
                     let infoQR = JSON.stringify({
                         "v": -104,
@@ -64,11 +63,12 @@ export class AccountPage {
     }
 
 
-    shareAddress(){
-        this.socialSharing.share(this.address, "My NEM Address").then(() => {});
+    shareAddress() {
+        this.socialSharing.share(this.selectedWallet.accounts[0].address, "My NEM Address").then(() => {
+        });
     }
 
-        showPrivateKey(){
+    showPrivateKey() {
 
         let loader = this.loading.create({
             content: "Please wait..."
@@ -86,7 +86,7 @@ export class AccountPage {
             })
     }
 
-    cleanCommon(){
+    cleanCommon() {
         this.common = {
             'password': '',
             'privateKey': ''
@@ -94,7 +94,7 @@ export class AccountPage {
     }
 
 
-    logout(){
+    logout() {
         this.nem.unsetSelectedWallet();
         this.cleanCommon();
         this.navCtrl.push(LoginPage);

@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController,  LoadingController } from 'ionic-angular';
+import { Clipboard } from '@ionic-native/clipboard';
+import { ToastProvider } from '../../providers/toast/toast.provider';
 import { NemProvider } from '../../providers/nem/nem.provider';
+
 import { LoginPage } from '../login/login';
 
 @Component({
@@ -11,7 +14,7 @@ export class TransactionsConfirmedPage {
 	transactions: any;
 	address: any;
 	
-  constructor(public navCtrl: NavController, private nem: NemProvider,  private loading: LoadingController) {
+  constructor(public navCtrl: NavController, private nem: NemProvider,  private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard) {
   	this.transactions = [];
   	this.address = '';
   }
@@ -38,6 +41,20 @@ export class TransactionsConfirmedPage {
 	        	}
 	    	}
 	    )
+ 	}
+
+ 	copyTransactionAddress(transaction, isAccountRecipient){
+ 		var address;
+ 		if (this.address == transaction.recipient){
+ 			address = this.nem.pubToAddress(transaction.signer);
+ 		}
+ 		else{
+ 			address = transaction.recipient;
+ 		}
+
+ 		this.clipboard.copy(address).then(_=>{
+ 			this.toast.showCopyCorrect();
+ 		});
  	}
 
 }

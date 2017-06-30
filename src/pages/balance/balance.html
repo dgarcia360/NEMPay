@@ -1,33 +1,36 @@
 <ion-header>
-  <ion-navbar color="primary"  hideBackButton="true">
-    <button ion-button menuToggle style="display:block !important;">
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>
-      Balance
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary" hideBackButton="true">
+        <button ion-button menuToggle style="display:block !important;">
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>
+            Balance
+        </ion-title>
+    </ion-navbar>
 </ion-header>
 <ion-content padding id="page1">
-  <form id="balance-form1" style="padding-bottom: 50px;">
+    <form id="balance-form1" style="padding-bottom: 50px;">
 
 
-  <ion-list radio-group [(ngModel)]="selectedMosaic" name="selected_mosaic">
-    <ion-item *ngFor="let mosaic of balance">
-      <ion-radio [value]="mosaic"></ion-radio>
+        <ion-list radio-group [(ngModel)]="selectedMosaic" name="selected_mosaic">
+            <ion-item *ngFor="let mosaic of balance">
+                <ion-radio [value]="mosaic"></ion-radio>
 
-      <ion-label><b>
-       {{ mosaic.quantity |  exponentialStrength:(mosaic.definition.properties[0].value)}}</b> {{mosaic.mosaicId.namespaceId}}:{{mosaic.mosaicId.name}}</ion-label>
+                <ion-label><b>
+                    {{ mosaic.quantity | exponentialStrength:(mosaic.definition.properties[0].value)}}</b>
+                    {{mosaic.mosaicId.namespaceId}}:{{mosaic.mosaicId.name}}
+                </ion-label>
 
-    </ion-item>
-  </ion-list>
+            </ion-item>
+        </ion-list>
 
-  </form>
+    </form>
     <div class="bottom" text-center>
 
-  <button id="balance-button1" ion-button color="positive" block style="border-radius:1px 1px 1px 1px;" on-click="goToTransfer()" [disabled]="!selectedMosaic">
-    Transfer
-  </button>
+        <button id="balance-button1" ion-button color="positive" block style="border-radius:1px 1px 1px 1px;"
+                on-click="goToTransfer()" [disabled]="!selectedMosaic">
+            Transfer
+        </button>
 
-  </div>
+    </div>
 </ion-content>

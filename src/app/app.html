@@ -1,24 +1,24 @@
 <ion-menu [content]="mainContent" type="overlay">
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>
-        Menu
-      </ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content id="side-menu21" style="background-color:Default;">
-    <ion-list id="menu-list1">
-      <ion-item color="none" menuClose="" on-click="goToBalance()" id="menu-list-item1">
-        Balance
-      </ion-item>
-      <ion-item color="none" menuClose="" on-click="goToTransactions()" id="menu-list-item3">
-        Transactions
-      </ion-item>
-      <ion-item color="none" menuClose="" on-click="goToAccount()" id="menu-list-item4">
-        Account
-      </ion-item>
-    </ion-list>
-  </ion-content>
+    <ion-header>
+        <ion-toolbar color="primary">
+            <ion-title>
+                Menu
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content id="side-menu21" style="background-color:Default;">
+        <ion-list id="menu-list1">
+            <ion-item color="none" menuClose="" on-click="goToBalance()" id="menu-list-item1">
+                Balance
+            </ion-item>
+            <ion-item color="none" menuClose="" on-click="goToTransactions()" id="menu-list-item3">
+                Transactions
+            </ion-item>
+            <ion-item color="none" menuClose="" on-click="goToAccount()" id="menu-list-item4">
+                Account
+            </ion-item>
+        </ion-list>
+    </ion-content>
 </ion-menu>
 
 <ion-nav #mainContent [root]="rootPage"></ion-nav>
