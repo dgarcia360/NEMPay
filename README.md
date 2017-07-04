@@ -1,26 +1,29 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+## NEMPay
 
-## How to use this template
+*NEMPay at the moment only works in the test net*.
 
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
+NEMPay is an app developed by Atraura Blockchain to transfer assets in an easy way, directly from mobile devices, using NEM Blockchain.  Just selecting the asset to be sent from your balance, typing recipient address and amount to be sent, you can make a quick transaction in just few seconds.
 
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
+Companies and individuals can take advantage of NEMPay in order to make an app for their own mosaic and namespace. The cost of acquisition it is lower, as there is no need to code a new app.
 
-### With the Ionic CLI:
+Currently, the app is available for Android and iOS.
 
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
+### Provided functionality
 
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myBlank blank
-```
+---
 
-Then, to run it, cd into `myBlank` and run:
+* Wallet creation
+* View balance
+* View transactions
+* Send assets
+* Send xem
+* Send assets
+* Scan QR
+* Share Address
+* Mijin Integration
 
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
-```
+### Stay tuned
+In the following days, we will open the first private beta, and publish the roadmap of the projects.
 
-Substitute ios for android if not on a Mac.
 
+Special thanks to QuantumMechanics, for inspiring the project developing NanoWallet and nem-sdk, guillemsole, for providing support in the development of NEMPay, Jeff McDonald & Albert Castellana, for all the feedback provided previous to the app testing period and aleixmp, for creating solid guidelines when releasing an Open Source product.
