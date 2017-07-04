@@ -9,8 +9,17 @@
     </ion-navbar>
 </ion-header>
 <ion-content padding id="page1">
-    <form id="balance-form1" style="padding-bottom: 50px;">
 
+    <ion-refresher (ionRefresh)="getBalance($event)">
+        <ion-refresher-content
+                pullingIcon="arrow-dropdown"
+                pullingText="Pull to refresh"
+                refreshingSpinner="circles"
+                refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <form id="balance-form1" style="padding-bottom: 50px;">
 
         <ion-list radio-group [(ngModel)]="selectedMosaic" name="selected_mosaic">
             <ion-item *ngFor="let mosaic of balance">

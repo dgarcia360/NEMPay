@@ -20,6 +20,18 @@ export class SignupPrivateKeyPage {
         };
     }
 
+    /**
+     * Clears sensitive data
+     */
+    cleanNewAccount() {
+        this.newAccount = {
+            'privateKey': ''
+        };
+    }
+
+    /**
+     * Creates Wallet from this.newAccount.private_key
+     */
     public createPrivateKeyWallet() {
         if (this.newAccount.passphrase != this.newAccount.repeat_passphrase) {
             this.alert.showPasswordDoNotMatch();
@@ -34,6 +46,7 @@ export class SignupPrivateKeyPage {
                     value => {
                         if (value) {
                             loader.dismiss();
+                            this.cleanNewAccount();
                             this.app.getRootNav().push(LoginPage);
                         }
                         else {
@@ -45,4 +58,6 @@ export class SignupPrivateKeyPage {
             })
         }
     }
+
+
 }

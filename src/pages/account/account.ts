@@ -15,26 +15,28 @@ import {LoginPage} from "../login/login";
 export class AccountPage {
     common: any;
     selectedWallet: any;
-    name: any;
     qrCode: any;
 
     constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider) {
         this.selectedWallet = {accounts: [{'address': ''}]};
 
-        // Object to contain our password & private key data.
+        //Stores sensitive data.
         this.common = {};
+        //Initialize common
         this.cleanCommon();
+
         this.qrCode = {'src': ''};
-
-
     }
 
+    /**
+     * Init view with QR and current wallet info
+     * @param transaction  transaction object
+     */
     ionViewWillEnter() {
-
         this.nem.getSelectedWallet().then(
             value => {
                 if (!value) {
-                    this.navCtrl.push(LoginPage);
+                    this.navCtrl.setRoot(LoginPage);
                 }
                 else {
                     this.selectedWallet = value;
@@ -52,22 +54,54 @@ export class AccountPage {
         )
     }
 
-    encodeQrCode(text) {
+    /**
+     * Clears sensitive data
+     */
+    cleanCommon() {
+        this.common = {
+            'password': '',
+            'privateKey': ''
+        };
+    }
+
+    /**
+     * Encodes infoQR json into an image
+     * @param infoQR  Object containing account information
+     */
+    encodeQrCode(infoQR) {
         this.qrCode = kjua({
             size: 256,
-            text: text,
+            text: infoQR,
             fill: '#000',
             quiet: 0,
             ratio: 2,
         });
     }
 
-
+    /**
+     * Share current account through apps installed on the phone
+     */
     shareAddress() {
-        this.socialSharing.share(this.selectedWallet.accounts[0].address, "My NEM Address").then(() => {
+        var textToShare = this.selectedWallet.accounts[0].address;
+        this.socialSharing.share(textToShare, "My NEM Address", null, null).then(_ => {
+
         });
     }
 
+    /**
+     * Determines if private key can be shown, if it is correct
+     * @param transaction  transaction object
+     */
+    canShowPrivateKey() {
+        var result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address);
+        if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
+        return result;
+    }
+
+    /**
+     * Shows private key if private key is correct
+     * @param transaction  transaction object
+     */
     showPrivateKey() {
 
         let loader = this.loading.create({
@@ -76,8 +110,9 @@ export class AccountPage {
 
         loader.present().then(
             _ => {
-                if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
+                if (!this.canShowPrivateKey()) {
                     loader.dismiss();
+                    this.cleanCommon();
                     this.alert.showInvalidPasswordAlert();
                 }
                 else {
@@ -86,18 +121,14 @@ export class AccountPage {
             })
     }
 
-    cleanCommon() {
-        this.common = {
-            'password': '',
-            'privateKey': ''
-        };
-    }
-
-
+    /**
+     * Clears data and moves to login screen
+     * @param transaction  transaction object
+     */
     logout() {
         this.nem.unsetSelectedWallet();
         this.cleanCommon();
-        this.navCtrl.push(LoginPage);
+        this.navCtrl.setRoot(LoginPage);
     }
 }
 

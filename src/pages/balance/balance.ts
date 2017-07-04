@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, LoadingController} from 'ionic-angular';
+import {MenuController, NavController, LoadingController} from 'ionic-angular';
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 
@@ -15,11 +15,21 @@ export class BalancePage {
     balance: any;
     selectedMosaic: any;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private menu: MenuController) {
 
     }
 
+
     ionViewWillEnter() {
+        this.getBalance(false);
+    }
+
+    /**
+     * Retrieves current account owned mosaics  into this.balance
+     * @param refresher  Ionic refresher or false, if called on View Enter
+     */
+    getBalance(refresher) {
+        this.menu.enable(true);
 
         let loader = this.loading.create({
             content: "Please wait..."
@@ -28,12 +38,14 @@ export class BalancePage {
         this.nem.getSelectedWallet().then(
             value => {
                 if (!value) {
-                    this.navCtrl.push(LoginPage);
+                    if (refresher) refresher.complete();
+                    this.navCtrl.setRoot(LoginPage);
                 }
                 else {
                     loader.present();
                     this.nem.getBalance(value.accounts[0].address).then(
                         value => {
+                            if (refresher) refresher.complete();
                             this.balance = value.data;
                             loader.dismiss();
                         })
@@ -42,7 +54,10 @@ export class BalancePage {
         )
     }
 
-    goToTransfer(params) {
+    /**
+     * Moves to transfer, by default with mosaic selected
+     */
+    goToTransfer() {
         this.navCtrl.push(TransferPage, {
             selectedMosaic: this.selectedMosaic.mosaicId.namespaceId + ':' + this.selectedMosaic.mosaicId.name,
             quantity: this.selectedMosaic.quantity,

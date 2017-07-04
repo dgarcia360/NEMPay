@@ -43,13 +43,9 @@
                     </ion-label>
                     <ion-input type="password" [(ngModel)]="common.password" name="password"></ion-input>
                 </ion-item>
-                <ion-item id="private-key-input" *ngIf='common.privateKey'>
-                    <ion-label>
-                        Private Key
-                    </ion-label>
-                    <ion-input type="text" [(ngModel)]="common.privateKey" name="private-key"
-                               disabled="true"></ion-input>
-                </ion-item>
+                <p>Your private key holds all the power of your account. It is a priority to make sure it is stored
+                    safely somewhere offline.</p>
+                <p>{{ common.privateKey}}</p>
             </ion-list>
 
             <button id="signup-button6" ion-button color="stable" block on-click="showPrivateKey()"

@@ -20,6 +20,14 @@ export class TransactionsUnconfirmedPage {
     }
 
     ionViewWillEnter() {
+        this.getTransactions(false);
+    }
+
+    /**
+     * Retrieves current account unconfirmed transactions into this.transactions
+     * @param refresher  Ionic refresher or false, if called on View Enter
+     */
+    getTransactions(refresher) {
         let loader = this.loading.create({
             content: "Please wait..."
         });
@@ -28,9 +36,11 @@ export class TransactionsUnconfirmedPage {
             value => {
                 this.address = value.accounts[0].address;
                 if (!value) {
+                    if (refresher) refresher.complete();
                     this.navCtrl.push(LoginPage);
                 }
                 else {
+                    if (refresher) refresher.complete();
                     loader.present();
                     this.nem.getUnconfirmedTransactionsFromAnAccount(value.accounts[0].address).then(
                         value => {
@@ -42,7 +52,11 @@ export class TransactionsUnconfirmedPage {
         )
     }
 
-    copyTransactionAddress(transaction, isAccountRecipient) {
+    /**
+     * Copies into clipboard recipient or sender address
+     * @param transaction  transaction object
+     */
+    copyTransactionAddress(transaction) {
         var address;
         if (this.address == transaction.recipient) {
             address = this.nem.pubToAddress(transaction.signer);

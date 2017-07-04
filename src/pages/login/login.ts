@@ -37,7 +37,6 @@ export class LoginPage {
 
     }
 
-
     ionViewWillEnter() {
         // the left menu should be disabled on the login page
         this.menu.enable(false);
@@ -52,6 +51,9 @@ export class LoginPage {
         return e1 && e2 ? e1.name === e2.name : e1 === e2;
     }
 
+    /**
+     * Enters into the app with the selected wallet
+     */
     login() {
 
         let loader = this.loading.create({
@@ -90,14 +92,16 @@ export class LoginPage {
                 else {
                     this.nem.setSelectedWallet(this.selectedWallet);
                     loader.dismiss();
-                    this.navCtrl.push(BalancePage);
+                    this.navCtrl.setRoot(BalancePage);
 
                 }
             })
     }
 
-    goToSignup(params) {
-        if (!params) params = {};
+    /**
+     * Moves to Signup Page
+     */
+    goToSignup() {
         this.navCtrl.push(SignupPage);
     }
 

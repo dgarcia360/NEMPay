@@ -1,8 +1,20 @@
 <ion-content padding id="page4">
+    <ion-refresher (ionRefresh)="getTransactions($event)">
+        <ion-refresher-content
+                pullingIcon="arrow-dropdown"
+                pullingText="Pull to refresh"
+                refreshingSpinner="circles"
+                refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+
     <ion-list id="transactions-list6">
-        <ion-item  color="none"  *ngFor="let tx of transactions"  (tap)="copyTransactionAddress(tx.transaction)">
+        <ion-item color="none" *ngFor="let tx of transactions" (tap)="copyTransactionAddress(tx.transaction)">
       <span *ngIf="address == tx.transaction.recipient">
-          <h2> <span *ngIf='tx.transaction.amount != 0'><span style="color: #87D37C"> +</span>{{tx.transaction.amount/1000000}} xem</span>     <span *ngFor="let mos of tx.transaction.mosaics">
+          <h2> <span *ngIf='tx.transaction.amount != 0 && !tx.transaction.mosaics'><span
+                  style="color: #87D37C"> +</span>{{tx.transaction.amount/1000000}} xem</span>     <span
+                  *ngFor="let mos of tx.transaction.mosaics">
               <span style="color: #87D37C">+</span>{{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
           </span>
         </h2>
@@ -12,7 +24,7 @@
 
       </span>
             <span *ngIf="address != tx.transaction.recipient">
-        <h2><span *ngIf='tx.transaction.amount != 0'><span style="color: #f53d3d">-</span>{{tx.transaction.amount/1000000}} xem</span>
+<h2> <span *ngIf='tx.transaction.amount != 0 && !tx.transaction.mosaics'><span style="color: #f53d3d">-</span>{{tx.transaction.amount/1000000}} xem</span>     
       <span *ngFor="let mos of tx.transaction.mosaics">
               <span style="color: #f53d3d">-</span>{{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
           </span>
@@ -21,14 +33,17 @@
     white-space:nowrap;
     text-overflow: ellipsis;"><b>To:</b> {{tx.transaction.recipient | formatAddress}}</p>
       </span>
-            <p> <b>Date:</b> {{tx.transaction.timeStamp | nemDate}}</p>
+            <p><b>Date:</b> {{tx.transaction.timeStamp | nemDate}}</p>
             <p *ngIf="tx.transaction.fee"><b>Fee:</b> {{tx.transaction.fee/1000000}} xem</p>
-            <p> <span  *ngFor="let mos of tx.transaction.mosaics;let firstItem = first;">
+            <p> <span *ngFor="let mos of tx.transaction.mosaics;let firstItem = first;">
       <span *ngIf='firstItem'><b>Levy</b>:</span>
       <span *ngIf="mos.definition.levy.mosaicId"> {{mos | formatLevy:(mos.definition.levy) | async}} {{mos.definition.levy.mosaicId.name}} </span></span>
-            <p *ngIf="tx.transaction.message.payload"><b> Message:</b> {{tx.transaction.message | hexMessageToString}}</p>
+            <p *ngIf="tx.transaction.message.payload"><b> Message:</b> {{tx.transaction.message | hexMessageToString}}
+            </p>
         </ion-item>
 
     </ion-list>
-
+    <div *ngIf="transactions.length == 0">
+        <h5>Nothing to show</h5>
+    </div>
 </ion-content>

@@ -1,4 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
+
 /*
  * Raise the value exponentially
  * Takes an exponent argument that defaults to 1.

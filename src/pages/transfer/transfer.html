@@ -16,7 +16,7 @@
     </span>
         </ion-col>
     </ion-row>
-    <form id="transfer-form4">
+    <form id="transfer-form4" (ngSubmit)="startTransaction()">
         <ion-item id="transfer-input1">
             <ion-label stacked>
                 Recipient Address
@@ -41,10 +41,11 @@
             </ion-label>
             <ion-textarea rows="8" name="message" placeholder="" [(ngModel)]="formData.message"></ion-textarea>
         </ion-item>
-    </form>
-    <div class="spacer" style="height:10px;" id="login-spacer2"></div>
+        <div class="spacer" style="height:10px;" id="login-spacer2"></div>
 
-    <button id="transfer-button2" ion-button color="positive" block on-click="startTransaction()">
-        Continue
-    </button>
+        <button id="transfer-button2" ion-button color="positive" block>
+            Continue
+        </button>
+    </form>
+
 </ion-content>

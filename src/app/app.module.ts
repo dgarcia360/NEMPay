@@ -15,6 +15,7 @@ import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 
 
 import {AlertProvider} from '../providers/alert/alert.provider';
+import {ConfigProvider} from '../providers/config/config.provider';
 import {ToastProvider} from '../providers/toast/toast.provider';
 import {NemProvider} from '../providers/nem/nem.provider';
 
@@ -91,6 +92,7 @@ import {SignupPrivateKeyPage} from '../pages/signup_privatekey/signup';
         Network,
         BarcodeScanner,
         NemProvider,
+        ConfigProvider,
         AlertProvider,
         ToastProvider
     ]

@@ -7,10 +7,9 @@ import {NemProvider} from '../providers/nem/nem.provider';
  *   public | pubToAdress
  * Example:
  *   {{ public |  pubToAdress}}
- *   formats to: FE10DEC2...
+ *   formats to: TE10DEC2...
  */
-
-
+ 
 @Pipe({name: 'pubToAddress'})
 export class PubToAddressPipe implements PipeTransform {
     constructor(public nem: NemProvider) {

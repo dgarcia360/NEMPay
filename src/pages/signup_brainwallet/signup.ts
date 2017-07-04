@@ -20,6 +20,9 @@ export class SignupBrainWalletPage {
         };
     }
 
+    /**
+     * Creates Brain Wallet with this.newAccount.passphrase
+     */
     public createBrainWallet() {
 
         if (this.newAccount.passphrase != this.newAccount.repeat_passphrase) {

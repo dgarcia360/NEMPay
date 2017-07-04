@@ -15,7 +15,6 @@ import {LoginPage} from '../login/login';
     templateUrl: 'transfer.html'
 })
 export class TransferPage {
-
     formData: any;
     selectedMosaic: any;
     divisibility: any;
@@ -35,6 +34,7 @@ export class TransferPage {
         this.formData.fee = 0;
         this.formData.encryptMessage = false;
         this.formData.innerFee = 0;
+        this.formData.encryptMessage = false;
         this.formData.isMultisig = false;
         this.formData.isMosaicTransfer = false;
         this.formData.message = '';
@@ -42,11 +42,13 @@ export class TransferPage {
         this.levy = undefined;
         this.divisibility = undefined;
 
-        this.common = {
-            'password': '',
-            'privateKey': '',
-        };
+        //Stores sensitive data.
+        this.common = {};
 
+        //Initializes sensitive data.
+        this.cleanCommon();
+
+        //Gets mosaic to transfer definition
         if (this.selectedMosaic != 'nem:xem') {
             this.nem.getMosaicsMetaDataPair(this.selectedMosaic.split(":")[0], this.selectedMosaic.split(":")[1]).then(
                 value => {
@@ -59,12 +61,11 @@ export class TransferPage {
         }
     }
 
-
     ionViewWillEnter() {
         this.nem.getSelectedWallet().then(
             value => {
                 if (!value) {
-                    this.navCtrl.push(LoginPage);
+                    this.navCtrl.setRoot(LoginPage);
                 }
                 else {
                     this.selectedWallet = value;
@@ -73,6 +74,9 @@ export class TransferPage {
         )
     }
 
+    /**
+     * Clears sensitive data
+     */
     cleanCommon() {
         this.common = {
             'password': '',
@@ -82,22 +86,23 @@ export class TransferPage {
 
 
     /**
-     * resetRecipientData() Reset data stored for recipient
+     * Resets recipient data
      */
     resetRecipientData() {
         // Reset public key data
         this.formData.recipientPubKey = '';
         // Reset cleaned recipient address
         this.formData.recipient = '';
-        // Encrypt message set to false
-        this.formData.encryptMessage = false;
     }
 
 
+    /**
+     * check if address is from network
+     * @param address Adrress to check
+     */
     checkAddress(address) {
         var success = true;
-        // Check if address is from network
-        if (this.nem.isFromNetwork(address, -104)) {
+        if (this.nem.isFromNetwork(address)) {
             this.formData.recipient = address;
         }
         else {
@@ -107,12 +112,8 @@ export class TransferPage {
         return success;
     }
 
-
     /**
-     * processRecipientInput() Process recipient input and get data from network
-     *
-     * @note: I'm using debounce in view to get data typed with a bit of delay,
-     * it limits network requests
+     * Cleans this.fromData.rawRecipient and check if account belongs to network
      */
     processRecipientInput() {
         // Reset recipient data
@@ -122,9 +123,7 @@ export class TransferPage {
         if (!this.formData.rawRecipient || this.formData.rawRecipient.length < 40) {
             success = false;
         }
-
-        // Get recipient data depending of address
-        // Clean address
+        //if raw data, clean address and check if it is from network
         if (success) {
             let recipientAddress = this.formData.rawRecipient.toUpperCase().replace(/-/g, '');
             success = this.checkAddress(recipientAddress);
@@ -132,6 +131,67 @@ export class TransferPage {
         return success;
     }
 
+    /**
+     * Check if user can send tranaction
+     * TODO: encapsulate in a service, implememntation it is duplicatedin other controllers too
+     */
+    canSendTransaction() {
+        var result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
+        if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
+        return result;
+    }
+
+    /**
+     * Confirms transaction form xem and mosaicsTransactions
+     */
+    confirmTransaction() {
+
+        if (this.formData.isMosaicTransfer) {
+            return this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
+                return this.nem.confirmTransaction(this.common, entity);
+            });
+        }
+
+        else {
+            var entity = this.nem.prepareTransaction(this.common, this.formData);
+            return this.nem.confirmTransaction(this.common, entity);
+        }
+    }
+
+    /**
+     * alert Confirmation subtitle builder
+     */
+    private _subtitleBuilder(): Promise<string> {
+        var subtitle = 'You are going to send: <br/><br/> ';
+        var currency = '';
+        if (this.selectedMosaic == 'nem:xem') {
+            currency = "<b>Amount:</b> " + this.amount + " xem";
+        }
+        else {
+            currency = "<b>Amount:</b> " + this.amount + " " + this.selectedMosaic;
+        }
+        subtitle += currency;
+
+        var _fee = this.formData.fee / 1000000;
+
+        subtitle += '<br/><br/>  <b>Fee:</b> ' + _fee + ' xem';
+
+        if (this.levy != undefined && 'mosaicId' in this.levy) {
+            var _levy = 0;
+            return this.nem.formatLevy(this.formData.mosaics[0], 1, this.levy).then(value => {
+                _levy = value
+                subtitle += "<br/><br/> <b>Levy:</b> " + _levy + " " + this.levy.mosaicId.name;
+                return subtitle;
+            });
+        }
+        else {
+            return Promise.resolve(subtitle);
+        }
+    }
+
+    /**
+     * Presents prompt to confirm the transaction, handling confirmation
+     */
     presentPrompt() {
         let loader = this.loading.create({
             content: "Please wait..."
@@ -200,7 +260,10 @@ export class TransferPage {
         });
     }
 
-
+    /**
+     * Calculates fee into this.formData.fee and presents prompt once finished
+     * TODO: Resolve both ifs with a promise, and handle presentPrompt in startTransaction
+     */
     updateFees() {
         if (this.formData.isMosaicTransfer) {
             this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
@@ -217,15 +280,19 @@ export class TransferPage {
         }
     }
 
-
+    /**
+     * Sets transaction amount and determine if it is mosaic or xem transaction, updating fees
+     */
     startTransaction() {
         //if is nem:xem, set amount
+        if (!this.amount) this.amount = 0;
+
         if (this.selectedMosaic == 'nem:xem') {
             this.formData.mosaics = [];
             this.formData.amount = this.amount;
         }
         else {
-            this.formData.amount = 1; // Always send 1
+            this.formData.amount = 1;
             var namespace_mosaic = this.selectedMosaic.split(":");
             this.formData.mosaics = [{
                 'mosaicId': {
@@ -243,55 +310,9 @@ export class TransferPage {
         }
     }
 
-    private _subtitleBuilder(): Promise<string> {
-        var subtitle = 'You are going to send: <br/><br/> ';
-        var currency = '';
-        if (this.selectedMosaic == 'nem:xem') {
-            currency = "<b>Amount:</b> " + this.amount + " xem";
-        }
-        else {
-            currency = "<b>Amount:</b> " + this.amount + " " + this.selectedMosaic;
-        }
-        subtitle += currency;
-
-        var _fee = this.formData.fee / 1000000;
-
-        subtitle += '<br/><br/>  <b>Fee:</b> ' + _fee + ' xem';
-
-        if (this.levy != undefined && 'mosaicId' in this.levy) {
-            var _levy = 0;
-            return this.nem.formatLevy(this.formData.mosaics[0], 1, this.levy).then(value => {
-                _levy = value
-                subtitle += "<br/><br/> <b>Levy:</b> " + _levy + " " + this.levy.mosaicId.name;
-                return subtitle;
-            });
-        }
-        else {
-            return Promise.resolve(subtitle);
-        }
-
-    }
-
-    canSendTransaction() {
-        var result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
-        if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
-        return result;
-    }
-
-    confirmTransaction() {
-
-        if (this.formData.isMosaicTransfer) {
-            return this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
-                return this.nem.confirmTransaction(this.common, entity);
-            });
-        }
-
-        else {
-            var entity = this.nem.prepareTransaction(this.common, this.formData);
-            return this.nem.confirmTransaction(this.common, entity);
-        }
-    }
-
+    /**
+     * Scans Account QR and sets account into this.formData.rawRecipient
+     */
     scanQR() {
         this.barcodeScanner.scan().then((barcodeData) => {
             var addresObject = JSON.parse(barcodeData.text);
