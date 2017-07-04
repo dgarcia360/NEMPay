@@ -5,6 +5,7 @@ import {Keyboard} from '@ionic-native/keyboard';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {ConfigProvider} from '../../providers/config/config.provider';
 import {ToastProvider} from '../../providers/toast/toast.provider';
 
 import {BalancePage} from '../balance/balance';
@@ -24,7 +25,7 @@ export class TransferPage {
     selectedWallet: any;
     selectedMosaicDefinitionMetaDataPair: any;
 
-    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard) {
+    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, private config: ConfigProvider) {
 
         this.formData = {};
         this.amount = 0;
@@ -50,7 +51,7 @@ export class TransferPage {
 
         //Gets mosaic to transfer definition
         if (this.selectedMosaic != 'nem:xem') {
-            this.nem.getMosaicsMetaDataPair(this.selectedMosaic.split(":")[0], this.selectedMosaic.split(":")[1]).then(
+            this.nem.getMosaicsMetaDataPair(this.selectedMosaic.split(":")[0], this.selectedMosaic.split(":")[1], this.config.defaultNetwork()).then(
                 value => {
                     this.selectedMosaicDefinitionMetaDataPair = value[this.selectedMosaic];
                     this.levy = value[this.selectedMosaic].mosaicDefinition.levy;
@@ -147,14 +148,14 @@ export class TransferPage {
     confirmTransaction() {
 
         if (this.formData.isMosaicTransfer) {
-            return this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
-                return this.nem.confirmTransaction(this.common, entity);
+            return this.nem.prepareMosaicTransaction(this.common, this.formData, this.config.defaultNetwork() ).then(entity => {
+                return this.nem.confirmTransaction(this.common, entity, this.config.defaultNetwork());
             });
         }
 
         else {
-            var entity = this.nem.prepareTransaction(this.common, this.formData);
-            return this.nem.confirmTransaction(this.common, entity);
+            var entity = this.nem.prepareTransaction(this.common, this.formData, this.config.defaultNetwork());
+            return this.nem.confirmTransaction(this.common, entity, this.config.defaultNetwork());
         }
     }
 
@@ -178,7 +179,7 @@ export class TransferPage {
 
         if (this.levy != undefined && 'mosaicId' in this.levy) {
             var _levy = 0;
-            return this.nem.formatLevy(this.formData.mosaics[0], 1, this.levy).then(value => {
+            return this.nem.formatLevy(this.formData.mosaics[0], 1, this.levy, this.config.defaultNetwork()).then(value => {
                 _levy = value
                 subtitle += "<br/><br/> <b>Levy:</b> " + _levy + " " + this.levy.mosaicId.name;
                 return subtitle;
@@ -214,7 +215,7 @@ export class TransferPage {
                         role: 'cancel'
                     },
                     {
-                        text: 'Confirm Transaction',
+                        text: 'Confirm',
                         handler: data => {
                             this.keyboard.close();
                             this.common.password = data.passphrase;
@@ -266,14 +267,14 @@ export class TransferPage {
      */
     updateFees() {
         if (this.formData.isMosaicTransfer) {
-            this.nem.prepareMosaicTransaction(this.common, this.formData).then(entity => {
+            this.nem.prepareMosaicTransaction(this.common, this.formData, this.config.defaultNetwork()).then(entity => {
                 this.formData.innerFee = 0;
                 this.formData.fee = entity.fee;
                 this.presentPrompt();
             });
         }
         else {
-            var entity = this.nem.prepareTransaction(this.common, this.formData);
+            var entity = this.nem.prepareTransaction(this.common, this.formData, this.config.defaultNetwork());
             this.formData.innerFee = 0;
             this.formData.fee = entity.fee;
             this.presentPrompt();

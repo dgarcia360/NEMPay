@@ -4,6 +4,7 @@ import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 
 import {LoginPage} from '../login/login';
+import {ConfigProvider} from "../../providers/config/config.provider";
 
 @Component({
     selector: 'page-signup-brainwallet',
@@ -12,7 +13,7 @@ import {LoginPage} from '../login/login';
 export class SignupBrainWalletPage {
     newAccount: any;
 
-    constructor(private app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider) {
+    constructor(private app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider) {
         this.newAccount = {
             'name': '',
             'passphrase': '',
@@ -34,7 +35,7 @@ export class SignupBrainWalletPage {
             });
 
             loader.present().then(_ => {
-                this.nem.createBrainWallet(this.newAccount.name, this.newAccount.passphrase, -104).then(
+                this.nem.createBrainWallet(this.newAccount.name, this.newAccount.passphrase, this.config.defaultNetwork() ).then(
                     value => {
                         if (value) {
                             loader.dismiss();

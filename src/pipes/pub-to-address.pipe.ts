@@ -1,5 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {NemProvider} from '../providers/nem/nem.provider';
+import {ConfigProvider} from '../providers/config/config.provider';
 
 /*
  * Transform Public to address
@@ -12,10 +13,10 @@ import {NemProvider} from '../providers/nem/nem.provider';
  
 @Pipe({name: 'pubToAddress'})
 export class PubToAddressPipe implements PipeTransform {
-    constructor(public nem: NemProvider) {
+    constructor(public nem: NemProvider, private config: ConfigProvider) {
     }
 
     transform(value: any): string {
-        return this.nem.formatAddress(this.nem.pubToAddress(value));
+        return this.nem.formatAddress(this.nem.pubToAddress(value, this.config.defaultNetwork()));
     }
 }

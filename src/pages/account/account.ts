@@ -5,6 +5,7 @@ import * as kjua from "kjua";
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {ConfigProvider} from '../../providers/config/config.provider';
 
 import {LoginPage} from "../login/login";
 
@@ -17,7 +18,7 @@ export class AccountPage {
     selectedWallet: any;
     qrCode: any;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider) {
         this.selectedWallet = {accounts: [{'address': ''}]};
 
         //Stores sensitive data.
@@ -41,7 +42,7 @@ export class AccountPage {
                 else {
                     this.selectedWallet = value;
                     let infoQR = JSON.stringify({
-                        "v": -104,
+                        "v": this.config.defaultNetwork(),
                         "type": 1,
                         "data": {
                             "addr": this.selectedWallet.accounts[0].address,

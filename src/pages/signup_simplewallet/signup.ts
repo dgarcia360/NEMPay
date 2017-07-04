@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {App, LoadingController} from 'ionic-angular';
-import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {ConfigProvider} from '../../providers/config/config.provider';
+import {NemProvider} from '../../providers/nem/nem.provider';
 
 import {LoginPage} from '../login/login';
 
@@ -12,7 +13,7 @@ import {LoginPage} from '../login/login';
 export class SignupSimpleWalletPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider) {
+    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider) {
         this.newAccount = {
             'name': '',
             'passphrase': '',
@@ -30,7 +31,7 @@ export class SignupSimpleWalletPage {
             });
 
             loader.present().then(_ => {
-                this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.passphrase, -104).then(
+                this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.passphrase, this.config.defaultNetwork()).then(
                     value => {
                         if (value) {
                             loader.dismiss();

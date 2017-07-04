@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
+
 import {MenuController, NavController, LoadingController} from 'ionic-angular';
 
+import {ConfigProvider} from '../../providers/config/config.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 
 import {TransferPage} from '../transfer/transfer';
@@ -15,7 +17,7 @@ export class BalancePage {
     balance: any;
     selectedMosaic: any;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private menu: MenuController) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private menu: MenuController, private config: ConfigProvider) {
 
     }
 
@@ -30,10 +32,13 @@ export class BalancePage {
      */
     getBalance(refresher) {
         this.menu.enable(true);
+        var loader = null;
 
-        let loader = this.loading.create({
-            content: "Please wait..."
-        });
+        if (!refresher){
+            loader = this.loading.create({
+                content: "Please wait..."
+            });
+        }
 
         this.nem.getSelectedWallet().then(
             value => {
@@ -42,12 +47,20 @@ export class BalancePage {
                     this.navCtrl.setRoot(LoginPage);
                 }
                 else {
-                    loader.present();
-                    this.nem.getBalance(value.accounts[0].address).then(
+                    if (!refresher) {
+                        loader.present();
+                    }
+                    this.nem.getBalance(value.accounts[0].address, this.config.defaultNetwork()).then(
                         value => {
-                            if (refresher) refresher.complete();
+
+                            if (refresher) {
+                                refresher.complete();
+                            }
+                            else{
+                                loader.dismiss();
+                            }
                             this.balance = value.data;
-                            loader.dismiss();
+
                         })
                 }
             }
