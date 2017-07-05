@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController, LoadingController} from 'ionic-angular';
 import {Clipboard} from '@ionic-native/clipboard';
+import {TranslateService} from '@ngx-translate/core';
+
 import {ConfigProvider} from '../../providers/config/config.provider';
 import {ToastProvider} from '../../providers/toast/toast.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
@@ -15,7 +17,7 @@ export class TransactionsConfirmedPage {
     transactions: any;
     address: any;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard, private config: ConfigProvider) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard, private config: ConfigProvider, public translate: TranslateService) {
         this.transactions = [];
         this.address = '';
     }

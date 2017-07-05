@@ -1,6 +1,6 @@
 import {NgModule, ErrorHandler} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-
+import {Http, HttpModule} from '@angular/http'
 import {IonicApp, IonicModule, IonicErrorHandler} from 'ionic-angular';
 import {IonicStorageModule} from '@ionic/storage';
 
@@ -12,7 +12,9 @@ import {Keyboard} from '@ionic-native/keyboard';
 import {SocialSharing} from '@ionic-native/social-sharing';
 import {Network} from '@ionic-native/network';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
-
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { Globalization } from '@ionic-native/globalization';
 
 import {AlertProvider} from '../providers/alert/alert.provider';
 import {ConfigProvider} from '../providers/config/config.provider';
@@ -39,6 +41,9 @@ import {SignupBrainWalletPage} from '../pages/signup_brainwallet/signup';
 import {SignupSimpleWalletPage} from '../pages/signup_simplewallet/signup';
 import {SignupPrivateKeyPage} from '../pages/signup_privatekey/signup';
 
+export function createTranslateLoader(http: Http) {
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
     declarations: [
@@ -61,11 +66,22 @@ import {SignupPrivateKeyPage} from '../pages/signup_privatekey/signup';
         NemDatePipe,
         FormatAddressPipe,
         FormatLevyPipe,
+        FormatLevyPipe,
+
     ],
     imports: [
         BrowserModule,
+        HttpModule,
         IonicModule.forRoot(MyApp),
-        IonicStorageModule.forRoot()
+        IonicStorageModule.forRoot(),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: (createTranslateLoader),
+                deps: [Http]
+            }
+        })
+
     ],
     bootstrap: [IonicApp],
     entryComponents: [
@@ -91,10 +107,11 @@ import {SignupPrivateKeyPage} from '../pages/signup_privatekey/signup';
         Keyboard,
         Network,
         BarcodeScanner,
+        Globalization,
         NemProvider,
         ConfigProvider,
         AlertProvider,
-        ToastProvider
+        ToastProvider,
     ]
 })
 export class AppModule {

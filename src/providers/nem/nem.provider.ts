@@ -55,6 +55,8 @@ export class NemProvider {
         )
     }
 
+    //Wallets
+
     /**
      * Check If Wallet Name Exists
      * @param walletName
@@ -221,6 +223,26 @@ export class NemProvider {
         )
     }
 
+
+    // NEM
+
+
+    private _provideDefaultNode(network){
+        var defaultNode = "";
+        if(network == -104){
+            defaultNode = this.nem.default.model.nodes.defaultTestnet
+        }
+        else if (network == 104){
+
+            defaultNode = this.nem.default.model.nodes.defaultMainnet;
+        }
+
+        else if (network == 96){
+            defaultNode = this.nem.default.model.nodes.defaultMijin;
+        }
+        return defaultNode;
+
+    }
     /**
      * Given a mosaic, it returns its definition
      * @param mosaicNamespaceId mosaic namespace
@@ -231,7 +253,7 @@ export class NemProvider {
     public getMosaicsMetaDataPair(mosaicNamespaceId, mosaicId, network) {
 
         // init endpoint
-        var endpoint = this.nem.default.model.objects.create("endpoint")(network, this.nem.default.model.nodes.defaultPort);
+        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
 
         var mosaicDefinitionMetaDataPair = this.nem.default.model.objects.get("mosaicDefinitionMetaDataPair");
 
@@ -288,7 +310,7 @@ export class NemProvider {
      * @return Promise with mosaics information
      */
     public getBalance(address, network) {
-        var endpoint = this.nem.default.model.objects.create("endpoint")(network, this.nem.default.model.nodes.defaultPort);
+        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
         // Gets account data
         return this.nem.default.com.requests.account.mosaics(endpoint, address).then(
             value => {
@@ -320,10 +342,11 @@ export class NemProvider {
      * Check if acount belongs to the current Network
      * @param address address to check
      * @param formData transaction definition object
+     * @param network sselectedNetwork
      * @return Return prepared transaction
      */
-    public isFromNetwork(address) {
-        return this.nem.default.model.address.isFromNetwork(address, this.nem.default.model.network.data.testnet.id);
+    public isFromNetwork(address, network) {
+        return this.nem.default.model.address.isFromNetwork(address, network);
     }
 
     /**
@@ -368,7 +391,7 @@ export class NemProvider {
      * @return Promise containing sent transaction
      */
     public confirmTransaction(common, transactionEntity, network) {
-        var endpoint = this.nem.default.model.objects.create("endpoint")(network, this.nem.default.model.nodes.defaultPort);
+        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
         return this.nem.default.model.transactions.send(common, transactionEntity, endpoint);
     }
 
@@ -431,7 +454,7 @@ export class NemProvider {
      * @return Promise with account transactions
      */
     public getAllTransactionsFromAnAccount(address, network) {
-        var endpoint = this.nem.default.model.objects.create("endpoint")(network, this.nem.default.model.nodes.defaultPort);
+        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
 
         return this.nem.default.com.requests.account.allTransactions(endpoint, address).then(value => {
             return this._adaptTransactions(value, network);
@@ -445,7 +468,7 @@ export class NemProvider {
      * @return Promise with account transactions
      */
     public getUnconfirmedTransactionsFromAnAccount(address, network) {
-        var endpoint = this.nem.default.model.objects.create("endpoint")(network, this.nem.default.model.nodes.defaultPort);
+        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
         return this.nem.default.com.requests.account.unconfirmedTransactions(endpoint, address).then(value => {
             return this._adaptTransactions(value, network);
         });

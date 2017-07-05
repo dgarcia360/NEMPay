@@ -4,7 +4,7 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>
-            Account
+            {{'ACCOUNT' | translate }}
         </ion-title>
     </ion-navbar>
 </ion-header>
@@ -14,7 +14,7 @@
     display: block;
     margin-top: 20px;"></div>
         <h1 id="account-heading1" style="color:#000000;">
-            Your Address
+            {{'YOUR_ADDRESS' | translate }}
         </h1>
     </form>
     <div id="account-markdown1" class="show-list-numbers-and-dots">
@@ -23,45 +23,46 @@
         </p>
     </div>
     <button id="account-button3" ion-button color="positive" block on-click="shareAddress()">
-        Share Address
+        {{'SHARE_ADDRESS' | translate }}
     </button>
     <div class="spacer" style="width:300px;height:40px;" id="account-spacer1"></div>
     <div class="private-key">
         <h2 id="account-heading2">
-            Private Key
+            {{'PRIVATE_KEY' | translate }}
         </h2>
         <div id="signup-markdown2" class="show-list-numbers-and-dots">
             <p style="color:#000000;">
-                To view your private key, insert your password or passphrase.
+                {{'PRIVATE_KEY_SUBTITLE' | translate }}
             </p>
         </div>
         <form id="private-key-form">
             <ion-list id="private-key-list">
                 <ion-item id="password-input" *ngIf='!common.privateKey'>
                     <ion-label>
-                        Password/Passphrase
+                        {{'PASSWORD_PASSPHRASE' | translate }}
                     </ion-label>
                     <ion-input type="password" [(ngModel)]="common.password" name="password"></ion-input>
                 </ion-item>
-                <p>Your private key holds all the power of your account. It is a priority to make sure it is stored
-                    safely somewhere offline.</p>
+                <p>
+                    {{'PASSWORD_PASSPHRASE_WARNING' | translate }}
+                   </p>
                 <p>{{ common.privateKey}}</p>
             </ion-list>
 
-            <button id="signup-button6" ion-button color="stable" block on-click="showPrivateKey()"
+            <button id="show-button" ion-button color="stable" block on-click="showPrivateKey()"
                     [disabled]="!common.password" *ngIf='!common.privateKey'>
-                Show Private Key
+                {{'SHOW_PRIVATE_KEY' | translate }}
+
             </button>
-            <button id="signup-button6" ion-button color="stable" block on-click="cleanCommon()"
+            <button id="hidde-button" ion-button color="stable" block on-click="cleanCommon()"
                     *ngIf='common.privateKey'>
-                Hide Private Key
+                {{'HIDE_PRIVATE_KEY' | translate }}
             </button>
 
         </form>
     </div>
 
-
-    <div class="spacer" style="width:300px;height:40px;" id="account-spacer1"></div>
+    <div class="spacer" style="width:300px;height:40px;" id="account-spacer2"></div>
 
     <button id="account-button4" ion-button color="positive" block on-click="logout()">
         Logout

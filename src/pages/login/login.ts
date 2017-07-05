@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {MenuController, NavController, LoadingController} from 'ionic-angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
@@ -18,7 +19,7 @@ export class LoginPage {
     common: any;
 
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private alert: AlertProvider, private loading: LoadingController, private menu: MenuController) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private alert: AlertProvider, private loading: LoadingController, private menu: MenuController, public translate: TranslateService) {
 
         this.wallets = [];
         this.selectedWallet = null;
@@ -32,6 +33,9 @@ export class LoginPage {
         this.nem.getWallets().then(
             value => {
                 this.wallets = value;
+
+                //select first loaded wallet by default
+                if(this.wallets.length > 0) this.selectedWallet = this.wallets[0];
             }
         );
 

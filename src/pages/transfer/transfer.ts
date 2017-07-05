@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
 import {Keyboard} from '@ionic-native/keyboard';
+import {TranslateService} from '@ngx-translate/core';
 
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {NemProvider} from '../../providers/nem/nem.provider';
@@ -25,7 +26,7 @@ export class TransferPage {
     selectedWallet: any;
     selectedMosaicDefinitionMetaDataPair: any;
 
-    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, private config: ConfigProvider) {
+    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, private config: ConfigProvider, public translate: TranslateService) {
 
         this.formData = {};
         this.amount = 0;
@@ -103,7 +104,7 @@ export class TransferPage {
      */
     checkAddress(address) {
         var success = true;
-        if (this.nem.isFromNetwork(address)) {
+        if (this.nem.isFromNetwork(address, this.config.defaultNetwork())) {
             this.formData.recipient = address;
         }
         else {
@@ -293,8 +294,10 @@ export class TransferPage {
             this.formData.amount = this.amount;
         }
         else {
+            //if mosaic, amount represents multiplier
             this.formData.amount = 1;
             var namespace_mosaic = this.selectedMosaic.split(":");
+
             this.formData.mosaics = [{
                 'mosaicId': {
                     'namespaceId': namespace_mosaic[0],

@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {App, LoadingController} from 'ionic-angular';
+import {TranslateService} from '@ngx-translate/core';
+
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {ConfigProvider} from '../../providers/config/config.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
@@ -13,7 +15,7 @@ import {LoginPage} from '../login/login';
 export class SignupSimpleWalletPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider) {
+    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService) {
         this.newAccount = {
             'name': '',
             'passphrase': '',

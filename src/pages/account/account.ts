@@ -1,6 +1,11 @@
 import {Component} from '@angular/core';
-import {NavController, LoadingController} from 'ionic-angular';
+import {NavController, LoadingController, Platform} from 'ionic-angular';
+import { Subscription } from 'rxjs';
+
 import {SocialSharing} from '@ionic-native/social-sharing';
+
+import {TranslateService} from '@ngx-translate/core';
+
 import * as kjua from "kjua";
 
 import {NemProvider} from '../../providers/nem/nem.provider';
@@ -17,8 +22,9 @@ export class AccountPage {
     common: any;
     selectedWallet: any;
     qrCode: any;
+    private onResumeSubscription: Subscription;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider,platform: Platform) {
         this.selectedWallet = {accounts: [{'address': ''}]};
 
         //Stores sensitive data.
@@ -27,6 +33,12 @@ export class AccountPage {
         this.cleanCommon();
 
         this.qrCode = {'src': ''};
+
+        //clear common if app paused
+        this.onResumeSubscription = platform.resume.subscribe(() => {
+            this.cleanCommon();
+        });
+
     }
 
     /**
@@ -131,5 +143,11 @@ export class AccountPage {
         this.cleanCommon();
         this.navCtrl.setRoot(LoginPage);
     }
+
+    ngOnDestroy() {
+        // always unsubscribe your subscriptions to prevent leaks
+        this.onResumeSubscription.unsubscribe();
+    }
+
 }
 
