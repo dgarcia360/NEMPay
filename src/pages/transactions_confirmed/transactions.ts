@@ -23,14 +23,14 @@ export class TransactionsConfirmedPage {
     }
 
     ionViewWillEnter() {
-        this.getTransactions(false);
+        this._getTransactions(false);
     }
 
     /**
      * Retrieves current account confirmed transactions into this.transactions
      * @param refresher  Ionic refresher or false, if called on View Enter
      */
-    getTransactions(refresher) {
+    private _getTransactions(refresher) {
         let loader = this.loading.create({
             content: "Please wait..."
         });
@@ -60,7 +60,7 @@ export class TransactionsConfirmedPage {
      * Copies into clipboard recipient or sender address
      * @param transaction  transaction object
      */
-    copyTransactionAddress(transaction) {
+    public copyTransactionAddress(transaction) {
         var address;
         if (this.address == transaction.recipient) {
             address = this.nem.pubToAddress(transaction.signer, this.config.defaultNetwork());

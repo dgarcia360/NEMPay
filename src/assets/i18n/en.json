@@ -19,7 +19,7 @@
   "BALANCE": "Balance",
   "TRANSFER_BUTTON": "Transfer",
   "PASSWORD": "Password",
-  "OR_CREATE_A_WALLET": "Or Create a Wallet",
+  "CREATE_OR_IMPORT_AN_ACCOUNT": "Create or import an account",
   "LOGIN": "Log in",
 
   "SIMPLE WALLET": "Simple Walket",
@@ -28,6 +28,7 @@
   "WALLET_NAME": "Wallet Name",
   "REPEAT_PASSWORD": "Repeat Password",
   "SIGNUP": "Sign Up",
+  "KEEP_YOUR_PRIVATE_KEY_SAFE": "Keep your Private Key safe",
 
   "TRANSACTIONS": "Transactions",
   "CONFIRMED_TRANSACTIONS": "Confirmed Transactions",

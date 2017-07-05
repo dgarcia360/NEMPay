@@ -58,7 +58,7 @@ export class LoginPage {
     /**
      * Enters into the app with the selected wallet
      */
-    login() {
+    public login() {
 
         let loader = this.loading.create({
             content: "Please wait..."
@@ -105,7 +105,7 @@ export class LoginPage {
     /**
      * Moves to Signup Page
      */
-    goToSignup() {
+    public goToSignup() {
         this.navCtrl.push(SignupPage);
     }
 

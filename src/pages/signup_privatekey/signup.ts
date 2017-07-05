@@ -18,20 +18,22 @@ export class SignupPrivateKeyPage {
     newAccount: any;
 
     constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService) {
-        this.newAccount = {
-            'name': '',
-            'password': '',
-            'private_key': '',
-            'repeat_password': ''
-        };
+        //sensitive data
+        this.newAccount = null;
+
+        //initialize senstivie data
+        this._clearNewAccount();
     }
 
     /**
      * Clears sensitive data
      */
-    cleanNewAccount() {
+    private _clearNewAccount() {
         this.newAccount = {
-            'privateKey': ''
+            'name': '',
+            'password': '',
+            'private_key': '',
+            'repeat_password': ''
         };
     }
 
@@ -49,10 +51,10 @@ export class SignupPrivateKeyPage {
 
             loader.present().then(_ => {
                 this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key, this.config.defaultNetwork()).then(
-                    value => {
-                        if (value) {
+                    wallet => {
+                        if (wallet) {
                             loader.dismiss();
-                            this.cleanNewAccount();
+                            this._clearNewAccount();
                             this.app.getRootNav().push(LoginPage);
                         }
                         else {

@@ -48,7 +48,7 @@ export class TransferPage {
         this.common = {};
 
         //Initializes sensitive data.
-        this.cleanCommon();
+        this._clearCommon();
 
         //Gets mosaic to transfer definition
         if (this.selectedMosaic != 'nem:xem') {
@@ -79,7 +79,7 @@ export class TransferPage {
     /**
      * Clears sensitive data
      */
-    cleanCommon() {
+    private _clearCommon() {
         this.common = {
             'password': '',
             'privateKey': ''
@@ -89,7 +89,7 @@ export class TransferPage {
     /**
      * Resets recipient data
      */
-    resetRecipientData() {
+    private _resetRecipientData() {
         // Reset public key data
         this.formData.recipientPubKey = '';
         // Reset cleaned recipient address
@@ -101,13 +101,13 @@ export class TransferPage {
      * check if address is from network
      * @param address Adrress to check
      */
-    checkAddress(address) {
+    private _checkAddress(address) {
         var success = true;
         if (this.nem.isFromNetwork(address, this.config.defaultNetwork())) {
             this.formData.recipient = address;
         }
         else {
-            this.resetRecipientData();
+            this._resetRecipientData();
             success = false;
         }
         return success;
@@ -116,9 +116,9 @@ export class TransferPage {
     /**
      * Cleans this.fromData.rawRecipient and check if account belongs to network
      */
-    processRecipientInput() {
+    private _processRecipientInput() {
         // Reset recipient data
-        this.resetRecipientData();
+        this._resetRecipientData();
         var success = true;
         // return if no value or address length < to min address length
         if (!this.formData.rawRecipient || this.formData.rawRecipient.length < 40) {
@@ -127,7 +127,7 @@ export class TransferPage {
         //if raw data, clean address and check if it is from network
         if (success) {
             let recipientAddress = this.formData.rawRecipient.toUpperCase().replace(/-/g, '');
-            success = this.checkAddress(recipientAddress);
+            success = this._checkAddress(recipientAddress);
         }
         return success;
     }
@@ -136,7 +136,7 @@ export class TransferPage {
      * Check if user can send tranaction
      * TODO: encapsulate in a service, implememntation it is duplicatedin other controllers too
      */
-    canSendTransaction() {
+    private _canSendTransaction() {
         var result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
         if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
         return result;
@@ -145,7 +145,7 @@ export class TransferPage {
     /**
      * Confirms transaction form xem and mosaicsTransactions
      */
-    confirmTransaction() {
+    private _confirmTransaction() {
 
         if (this.formData.isMosaicTransfer) {
             return this.nem.prepareMosaicTransaction(this.common, this.formData, this.config.defaultNetwork() ).then(entity => {
@@ -193,7 +193,7 @@ export class TransferPage {
     /**
      * Presents prompt to confirm the transaction, handling confirmation
      */
-    presentPrompt() {
+    private _presentPrompt() {
         let loader = this.loading.create({
             content: "Please wait..."
         });
@@ -220,14 +220,14 @@ export class TransferPage {
                             this.keyboard.close();
                             this.common.password = data.password;
                             loader.present().then(_ => {
-                                if (this.canSendTransaction()) {
-                                    this.confirmTransaction().then(value => {
+                                if (this._canSendTransaction()) {
+                                    this._confirmTransaction().then(value => {
                                         if (value.message == 'SUCCESS') {
                                             loader.dismiss();
                                             console.log("Transactions confirmed");
                                             this.toast.showTransactionConfirmed();
                                             this.navCtrl.push(BalancePage, {});
-                                            this.cleanCommon();
+                                            this._clearCommon();
                                         }
                                         else if (value.message == 'FAILURE_INSUFFICIENT_BALANCE') {
                                             loader.dismiss();
@@ -265,26 +265,26 @@ export class TransferPage {
      * Calculates fee into this.formData.fee and presents prompt once finished
      * TODO: Resolve both ifs with a promise, and handle presentPrompt in startTransaction
      */
-    updateFees() {
+    private _updateFees() {
         if (this.formData.isMosaicTransfer) {
             this.nem.prepareMosaicTransaction(this.common, this.formData, this.config.defaultNetwork()).then(entity => {
                 this.formData.innerFee = 0;
                 this.formData.fee = entity.fee;
-                this.presentPrompt();
+                this._presentPrompt();
             });
         }
         else {
             var entity = this.nem.prepareTransaction(this.common, this.formData, this.config.defaultNetwork());
             this.formData.innerFee = 0;
             this.formData.fee = entity.fee;
-            this.presentPrompt();
+            this._presentPrompt();
         }
     }
 
     /**
      * Sets transaction amount and determine if it is mosaic or xem transaction, updating fees
      */
-    startTransaction() {
+    public startTransaction() {
         //if is nem:xem, set amount
         if (!this.amount) this.amount = 0;
 
@@ -305,18 +305,18 @@ export class TransferPage {
                 'quantity': this.amount * Math.pow(10, this.divisibility)
             }];
         }
-        if (!this.processRecipientInput()) {
+        if (!this._processRecipientInput()) {
             this.alert.showAlertDoesNotBelongToNetwork();
         }
         else {
-            this.updateFees();
+            this._updateFees();
         }
     }
 
     /**
      * Scans Account QR and sets account into this.formData.rawRecipient
      */
-    scanQR() {
+    public scanQR() {
         this.barcodeScanner.scan().then((barcodeData) => {
             var addresObject = JSON.parse(barcodeData.text);
             this.formData.rawRecipient = addresObject.data.addr;

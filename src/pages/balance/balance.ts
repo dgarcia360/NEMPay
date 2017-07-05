@@ -25,14 +25,14 @@ export class BalancePage {
 
     ionViewWillEnter() {
         this.menu.enable(true);
-        this.getBalance(false);
+        this._getBalance(false);
     }
 
     /**
      * Retrieves current account owned mosaics  into this.balance
      * @param refresher  Ionic refresher or false, if called on View Enter
      */
-    getBalance(refresher) {
+    private _getBalance(refresher) {
 
         this.nem.getSelectedWallet().then(
             value => {
@@ -70,15 +70,15 @@ export class BalancePage {
      * @param mosaic  Mosaic object to be checked if is transferable
 
      */
-    checkIfSelectedMosaicIsTransferable(mosaic){
+    private _checkIfSelectedMosaicIsTransferable(mosaic){
         return mosaic.definition.properties[3].value;
     }
 
     /**
      * Moves to transfer, by default with mosaic selected
      */
-    goToTransfer(){
-        if(this.checkIfSelectedMosaicIsTransferable(this.selectedMosaic)){
+    public goToTransfer(){
+        if(this._checkIfSelectedMosaicIsTransferable(this.selectedMosaic)){
             this.navCtrl.push(TransferPage, {
                 selectedMosaic: this.selectedMosaic.mosaicId.namespaceId + ':' + this.selectedMosaic.mosaicId.name,
                 quantity: this.selectedMosaic.quantity,
