@@ -1,42 +1,41 @@
-<ion-content padding id="page5">
+<ion-content padding id="signup-simple-wallet">
 
-    <form id="signup-form7">
-        <ion-list id="signup-list7">
-            <ion-item id="signup-input6">
+    <form>
+        <ion-list>
+            <ion-item>
                 <ion-label>
-                    Wallet Name
+                    {{'WALLET_NAME' | translate}}
                 </ion-label>
                 <ion-input [(ngModel)]="newAccount.name" name="name" type="text" placeholder=""></ion-input>
             </ion-item>
-            <ion-item id="signup-input9">
+            <ion-item>
                 <ion-label>
-                    Password
+                    {{'PASSWORD' | translate}}
+
                 </ion-label>
-                <ion-input type="password" [(ngModel)]="newAccount.passphrase" name="passphrase"></ion-input>
+                <ion-input type="password" [(ngModel)]="newAccount.password" name="password"></ion-input>
             </ion-item>
-            <ion-item id="signup-input10">
+            <ion-item>
                 <ion-label>
-                    Repeat Password
+                    {{'REPEAT_PASSWORD' | translate}}
                 </ion-label>
-                <ion-input type="password" [(ngModel)]="newAccount.repeat_passphrase"
-                           name="repeat_passphrase"></ion-input>
+                <ion-input type="password" [(ngModel)]="newAccount.repeat_password"
+                           name="repeat_password"></ion-input>
             </ion-item>
         </ion-list>
-        <div class="spacer" style="height:10px;" id="login-spacer2"></div>
+        <div class="spacer" style="height:10px;"></div>
 
-        <div id="signup-markdown2" class="show-list-numbers-and-dots">
+        <div class="show-list-numbers-and-dots">
             <p style="color:#000000;">
-                Please read about <a href="https://www.w3.org/TR/2014/WD-WebCryptoAPI-20140325/#RandomSource-interface"
-                                     rel="nofollow" target="_blank"><b>dangers</b></a> that client side generated keys
-                pose; we are not responsible for any loss that could be due to the entropy of key generation. Even if it
+                We are not responsible for any loss that could be due to the entropy of key generation. Even if it
                 is unlikely to happen, it is still recommended to use a private key generated from a NEM client (NCC).
             </p>
         </div>
-        <div class="spacer" style="height:10px;" id="login-spacer2"></div>
+        <div class="spacer" style="height:10px;"></div>
 
-        <button id="signup-button6" ion-button color="stable" block on-click="createSimpleWallet()"
-                [disabled]="!newAccount.passphrase || !newAccount.repeat_passphrase || !newAccount.name">
-            Sign up
+        <button ion-button color="stable" block on-click="createSimpleWallet()"
+                [disabled]="!newAccount.password || !newAccount.repeat_password || !newAccount.name">
+            {{'SIGNUP' | translate}}
         </button>
     </form>
 </ion-content>

@@ -20,9 +20,9 @@ export class SignupPrivateKeyPage {
     constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService) {
         this.newAccount = {
             'name': '',
-            'passphrase': '',
+            'password': '',
             'private_key': '',
-            'repeat_passphrase': ''
+            'repeat_password': ''
         };
     }
 
@@ -39,7 +39,7 @@ export class SignupPrivateKeyPage {
      * Creates Wallet from this.newAccount.private_key
      */
     public createPrivateKeyWallet() {
-        if (this.newAccount.passphrase != this.newAccount.repeat_passphrase) {
+        if (this.newAccount.password != this.newAccount.repeat_password) {
             this.alert.showPasswordDoNotMatch();
         }
         else {
@@ -48,7 +48,7 @@ export class SignupPrivateKeyPage {
             });
 
             loader.present().then(_ => {
-                this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.passphrase, this.newAccount.private_key, this.config.defaultNetwork()).then(
+                this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key, this.config.defaultNetwork()).then(
                     value => {
                         if (value) {
                             loader.dismiss();

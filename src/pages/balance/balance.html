@@ -4,11 +4,11 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>
-            Balance
+            {{'BALANCE' | translate}}
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content padding id="page1">
+<ion-content padding id="balance">
 
     <ion-refresher (ionRefresh)="getBalance($event)">
         <ion-refresher-content
@@ -27,7 +27,7 @@
 
                 <ion-label><b>
                     {{ mosaic.quantity | exponentialStrength:(mosaic.definition.properties[0].value)}}</b>
-                    {{mosaic.mosaicId.namespaceId}}:{{mosaic.mosaicId.name}}
+                    {{ mosaic.mosaicId.namespaceId}}:{{mosaic.mosaicId.name}}
                 </ion-label>
 
             </ion-item>
@@ -38,7 +38,7 @@
 
         <button id="balance-button1" ion-button color="positive" block style="border-radius:1px 1px 1px 1px;"
                 on-click="goToTransfer()" [disabled]="!selectedMosaic">
-            Transfer
+            {{'TRANSFER_BUTTON' | translate}}
         </button>
 
     </div>

@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {NavController, MenuController} from 'ionic-angular';
-import {SignupBrainWalletPage} from '../signup_brainwallet/signup';
 import {SignupSimpleWalletPage} from '../signup_simplewallet/signup';
 import {SignupPrivateKeyPage} from '../signup_privatekey/signup';
 
@@ -12,8 +11,7 @@ import {SignupPrivateKeyPage} from '../signup_privatekey/signup';
 export class SignupPage {
 
     tab1Root = SignupSimpleWalletPage;
-    tab2Root = SignupBrainWalletPage;
-    tab3Root = SignupPrivateKeyPage;
+    tab2Root = SignupPrivateKeyPage;
 
     constructor(public navCtrl: NavController, private menu: MenuController) {
 

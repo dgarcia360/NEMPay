@@ -18,13 +18,13 @@ export class SignupSimpleWalletPage {
     constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService) {
         this.newAccount = {
             'name': '',
-            'passphrase': '',
-            'repeat_passphrase': ''
+            'password': '',
+            'repeat_password': ''
         };
     }
 
     public createSimpleWallet() {
-        if (this.newAccount.passphrase != this.newAccount.repeat_passphrase) {
+        if (this.newAccount.password != this.newAccount.repeat_password) {
             this.alert.showPasswordDoNotMatch();
         }
         else {
@@ -33,7 +33,7 @@ export class SignupSimpleWalletPage {
             });
 
             loader.present().then(_ => {
-                this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.passphrase, this.config.defaultNetwork()).then(
+                this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.password, this.config.defaultNetwork()).then(
                     value => {
                         if (value) {
                             loader.dismiss();

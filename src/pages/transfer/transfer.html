@@ -4,47 +4,47 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>
-            Transfer
+            {{'ADDRESS' | translate}}
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content padding id="page2">
+<ion-content padding id="transfer">
     <ion-row>
         <ion-col>
     <span style="float:right" on-click="scanQR()">
-        <ion-icon name="qr-scanner"></ion-icon> Scan QR
+        <ion-icon name="qr-scanner"></ion-icon> {{'SCAN_QR' | translate}}
     </span>
         </ion-col>
     </ion-row>
-    <form id="transfer-form4" (ngSubmit)="startTransaction()">
+    <form (ngSubmit)="startTransaction()">
         <ion-item id="transfer-input1">
             <ion-label stacked>
-                Recipient Address
+                {{'RECIPIENT_ADDRESS' | translate}}
             </ion-label>
             <ion-input type="text" name="recipient" placeholder="" [(ngModel)]="formData.rawRecipient"></ion-input>
         </ion-item>
-        <ion-item id="transfer-input2">
+        <ion-item>
             <ion-label>
-                Amount
+                {{'AMOUNT' | translate}}
             </ion-label>
             <ion-input type="number" min="0" name="amount" [(ngModel)]="amount" placeholder=""></ion-input>
         </ion-item>
-        <ion-item id="transfer-select1" class="width-50">
+        <ion-item>
             <ion-label>
                 {{selectedMosaic}}
             </ion-label>
         </ion-item>
 
-        <ion-item id="transfer-textarea1">
+        <ion-item>
             <ion-label stacked>
-                Message
+                {{'MESSAGE' | translate}}
             </ion-label>
             <ion-textarea rows="8" name="message" placeholder="" [(ngModel)]="formData.message"></ion-textarea>
         </ion-item>
-        <div class="spacer" style="height:10px;" id="login-spacer2"></div>
+        <div class="spacer" style="height:10px;"></div>
 
-        <button id="transfer-button2" ion-button color="positive" block  [disabled]="amount > 9000000000 ">
-            Continue
+        <button ion-button color="positive" block  [disabled]="amount > 9000000000">
+            {{'CONTINUE' | translate}}
         </button>
     </form>
 

@@ -1,17 +1,13 @@
 <ion-header>
     <ion-navbar color="primary">
         <ion-title>
-            Signup
+            {{'SIGNUP' | translate}}
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content padding id="page5">
-
-
+<ion-content padding id="signup">
     <ion-tabs>
-        <ion-tab [root]="tab1Root" tabTitle="Simple Wallet"></ion-tab>
-        <ion-tab [root]="tab2Root" tabTitle="Brain Wallet"></ion-tab>
-        <ion-tab [root]="tab3Root" tabTitle="Private Key"></ion-tab>
+        <ion-tab [root]="tab1Root" tabTitle="Create Account"></ion-tab>
+        <ion-tab [root]="tab2Root" tabTitle="Import Account"></ion-tab>
     </ion-tabs>
-
 </ion-content>

@@ -18,7 +18,6 @@ export class AlertProvider {
 
     }
 
-
     showWalletNotSelectedAlert() {
         let alert = this.alertCtrl.create({
             title: 'Wallet not selected',
@@ -32,7 +31,7 @@ export class AlertProvider {
 
     showInvalidPasswordAlert() {
         let alert = this.alertCtrl.create({
-            title: 'Provided password or passphrase is invalid',
+            title: 'Provided password is invalid',
             subTitle: '',
             buttons: ['OK']
         });
@@ -42,7 +41,7 @@ export class AlertProvider {
 
     showPasswordDoNotMatch() {
         let alert = this.alertCtrl.create({
-            title: 'Introduced Passwords or Passphrases are different',
+            title: 'Introduced Passwords are different',
             subTitle: '',
             buttons: ['OK']
         });
@@ -62,7 +61,6 @@ export class AlertProvider {
         return alert;
     }
 
-
     showAlertDoesNotBelongToNetwork() {
         let alert = this.alertCtrl.create({
             title: 'Address is not valid for this network',
@@ -72,7 +70,6 @@ export class AlertProvider {
         alert.present();
         return alert;
     }
-
 
     showTransactionConfirmed() {
         let alert = this.alertCtrl.create({
@@ -101,6 +98,15 @@ export class AlertProvider {
         return alert;
     }
 
+    showMosaicNotTransferable() {
+        let alert = this.alertCtrl.create({
+            title: 'Selected Mosaic It is not transferable',
+            buttons: ['OK']
+        });
+        alert.present();
+        return alert;
+    }
+
     showError(error) {
         let alert = this.alertCtrl.create({
             title: error,
@@ -109,6 +115,5 @@ export class AlertProvider {
         alert.present();
         return alert;
     }
-
 
 }

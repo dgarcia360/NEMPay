@@ -169,32 +169,6 @@ export class NemProvider {
         )
     }
 
-    /**
-     * Create Brain Wallet
-     * @param walletName wallet idenitifier for app
-     * @param password wallet's password
-     * @param selected network
-     * @return Promise with wallet created
-     */
-    public createBrainWallet(walletName, password, network) {
-        //TODO: make able to choose netwok
-        let wallet = this.nem.default.model.wallet.createBrain(walletName, password, network);
-
-        return this._checkIfWalletNameExists(walletName).then(
-            value => {
-                if (value) {
-                    return null;
-                }
-                else {
-                    return this._storeWallet(wallet).then(
-                        value => {
-                            return value;
-                        }
-                    )
-                }
-            }
-        )
-    }
 
     /**
      * Create Wallet from private key

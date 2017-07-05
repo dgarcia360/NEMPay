@@ -8,29 +8,29 @@
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content padding id="page3">
-    <form id="account-form6">
+<ion-content padding id="account">
+    <form>
         <div id="accountInfoQR"><img [src]="qrCode.src" style="height: 250px;margin: 0 auto;
     display: block;
     margin-top: 20px;"></div>
-        <h1 id="account-heading1" style="color:#000000;">
+        <h1 style="color:#000000;">
             {{'YOUR_ADDRESS' | translate }}
         </h1>
     </form>
-    <div id="account-markdown1" class="show-list-numbers-and-dots">
+    <div class="show-list-numbers-and-dots">
         <p style="color:#000000;">
             {{selectedWallet.accounts[0].address |formatAddress}}
         </p>
     </div>
-    <button id="account-button3" ion-button color="positive" block on-click="shareAddress()">
+    <button ion-button color="positive" block on-click="shareAddress()">
         {{'SHARE_ADDRESS' | translate }}
     </button>
     <div class="spacer" style="width:300px;height:40px;" id="account-spacer1"></div>
     <div class="private-key">
-        <h2 id="account-heading2">
+        <h2 >
             {{'PRIVATE_KEY' | translate }}
         </h2>
-        <div id="signup-markdown2" class="show-list-numbers-and-dots">
+        <div  class="show-list-numbers-and-dots">
             <p style="color:#000000;">
                 {{'PRIVATE_KEY_SUBTITLE' | translate }}
             </p>
@@ -39,12 +39,12 @@
             <ion-list id="private-key-list">
                 <ion-item id="password-input" *ngIf='!common.privateKey'>
                     <ion-label>
-                        {{'PASSWORD_PASSPHRASE' | translate }}
+                        {{'PASSWORD' | translate }}
                     </ion-label>
                     <ion-input type="password" [(ngModel)]="common.password" name="password"></ion-input>
                 </ion-item>
                 <p>
-                    {{'PASSWORD_PASSPHRASE_WARNING' | translate }}
+                    {{'PASSWORD_WARNING' | translate }}
                    </p>
                 <p>{{ common.privateKey}}</p>
             </ion-list>
@@ -64,7 +64,7 @@
 
     <div class="spacer" style="width:300px;height:40px;" id="account-spacer2"></div>
 
-    <button id="account-button4" ion-button color="positive" block on-click="logout()">
+    <button id="account-button2" ion-button color="positive" block on-click="logout()">
         Logout
     </button>
 </ion-content>

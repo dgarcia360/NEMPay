@@ -86,7 +86,6 @@ export class TransferPage {
         };
     }
 
-
     /**
      * Resets recipient data
      */
@@ -164,7 +163,7 @@ export class TransferPage {
      * alert Confirmation subtitle builder
      */
     private _subtitleBuilder(): Promise<string> {
-        var subtitle = 'You are going to send: <br/><br/> ';
+        var subtitle = 'a: <br/><br/> ';
         var currency = '';
         if (this.selectedMosaic == 'nem:xem') {
             currency = "<b>Amount:</b> " + this.amount + " xem";
@@ -205,8 +204,8 @@ export class TransferPage {
                 subTitle: subitle,
                 inputs: [
                     {
-                        name: 'passphrase',
-                        placeholder: 'Passphrase/Password',
+                        name: 'password',
+                        placeholder: 'Password',
                         type: 'password'
                     },
                 ],
@@ -219,7 +218,7 @@ export class TransferPage {
                         text: 'Confirm',
                         handler: data => {
                             this.keyboard.close();
-                            this.common.password = data.passphrase;
+                            this.common.password = data.password;
                             loader.present().then(_ => {
                                 if (this.canSendTransaction()) {
                                     this.confirmTransaction().then(value => {

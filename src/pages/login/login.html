@@ -1,17 +1,17 @@
 <ion-header>
 </ion-header>
-<ion-content padding id="page6">
-    <div class="spacer" style="height:80px;" id="login-spacer4"></div>
+<ion-content padding id="login">
+    <div class="spacer" style="height:80px;" id="login-spacer1"></div>
     <div>
-        <img src="assets/img/xg0CfSgTSYWnIwzKb6ZI_nem_pay.png"
+        <img src="assets/img/logo.png"
              style="display:block;width:40%;height:auto;margin-left:auto;margin-right:auto;"/>
     </div>
-    <div class="spacer" style="height:40px;" id="login-spacer3"></div>
-    <ion-list id="login-list8">
+    <div class="spacer" style="height:40px;"></div>
+    <ion-list>
 
-        <ion-item id="login-select3">
+        <ion-item>
             <ion-label>
-                Account
+                {{'ACCOUNT' | translate}}
             </ion-label>
 
             <ion-select [(ngModel)]="selectedWallet" [compareWith]="compareFn" name="selected_wallet">
@@ -21,26 +21,25 @@
         </ion-item>
     </ion-list>
 
-    <form id="login-form8" (ngSubmit)="login()">
-        <ion-list id="login-list9">
+    <form (ngSubmit)="login()">
+        <ion-list>
 
-            <ion-item id="login-input12">
+            <ion-item>
                 <ion-label>
-                    Password
+                    {{'PASSWORD' | translate}}
                 </ion-label>
                 <ion-input [(ngModel)]="common.password" type="password" name="password" placeholder=""></ion-input>
             </ion-item>
         </ion-list>
-        <div class="spacer" style="height:10px;" id="login-spacer2"></div>
-        <button id="login-button7" ion-button color="positive" block type="submit"
+        <div class="spacer" style="height:10px;"></div>
+        <button ion-button color="positive" block type="submit"
                 [disabled]="!selectedWallet || !common.password">
-            Log in
+            {{'LOGIN' | translate}}
         </button>
     </form>
-    <div class="spacer" style="height:10px;" id="login-spacer2"></div>
-
-    <button id="login-button8" ion-button clear color="positive" block on-click="goToSignup()">
-        Or create a wallet
+    <div class="spacer"></div>
+    <button ion-button clear color="positive" block on-click="goToSignup()">
+        {{'OR_CREATE_OR_IMPORT_AN_ACCOUNT' | translate}}
     </button>
 
 </ion-content>

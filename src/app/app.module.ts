@@ -37,7 +37,6 @@ import {TransactionsUnconfirmedPage} from '../pages/transactions_unconfirmed/tra
 import {AccountPage} from '../pages/account/account';
 import {LoginPage} from '../pages/login/login';
 import {SignupPage} from '../pages/signup/signup';
-import {SignupBrainWalletPage} from '../pages/signup_brainwallet/signup';
 import {SignupSimpleWalletPage} from '../pages/signup_simplewallet/signup';
 import {SignupPrivateKeyPage} from '../pages/signup_privatekey/signup';
 
@@ -54,12 +53,10 @@ export function createTranslateLoader(http: Http) {
         AccountPage,
         LoginPage,
         SignupPage,
-        SignupBrainWalletPage,
         SignupSimpleWalletPage,
         SignupPrivateKeyPage,
         TransactionsConfirmedPage,
         TransactionsUnconfirmedPage,
-
         DivideByExponentialBaseTenPipe,
         HexMessageToStringPipe,
         PubToAddressPipe,
@@ -94,7 +91,6 @@ export function createTranslateLoader(http: Http) {
         AccountPage,
         LoginPage,
         SignupPage,
-        SignupBrainWalletPage,
         SignupSimpleWalletPage,
         SignupPrivateKeyPage,
     ],
