@@ -22,14 +22,14 @@ export class TransactionsUnconfirmedPage {
     }
 
     ionViewWillEnter() {
-        this._getTransactions(false);
+        this.getTransactions(false);
     }
 
     /**
      * Retrieves current account unconfirmed transactions into this.transactions
      * @param refresher  Ionic refresher or false, if called on View Enter
      */
-    private _getTransactions(refresher) {
+    public getTransactions(refresher) {
         let loader = this.loading.create({
             content: "Please wait..."
         });
