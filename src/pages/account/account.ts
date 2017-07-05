@@ -24,7 +24,7 @@ export class AccountPage {
     qrCode: any;
     private onResumeSubscription: Subscription;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider,platform: Platform) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider,private platform: Platform, public translate: TranslateService) {
         this.selectedWallet = {accounts: [{'address': ''}]};
 
         //Stores sensitive data.
