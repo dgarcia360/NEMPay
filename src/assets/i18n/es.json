@@ -35,7 +35,7 @@
   "CONFIRMED_TRANSACTIONS": "Confirmed Transactions",
   "PENDING_TRANSACTIONS": "Pending Transactions",
 
-
+  "TRANSFER": "Transfer",
   "FROM": "From",
   "TO": "To",
   "MESSAGE": "Message",
