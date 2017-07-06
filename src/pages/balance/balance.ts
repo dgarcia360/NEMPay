@@ -71,7 +71,9 @@ export class BalancePage {
 
      */
     private _checkIfSelectedMosaicIsTransferable(mosaic){
-        return mosaic.definition.properties[3].value;
+        let isTransferable = (mosaic.definition.properties[3].value == 'true');
+        return isTransferable;
+
     }
 
     /**
