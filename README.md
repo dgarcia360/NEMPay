@@ -1,6 +1,6 @@
 ## NEMPay
 
-*NEMPay at the moment only works in the test net*.
+* NEMPay at the moment only works in the test net *. MainNet version will be released soon.
 
 NEMPay is an app developed by Atraura Blockchain to transfer assets in an easy way, directly from mobile devices, using NEM Blockchain.  Just selecting the asset to be sent from your balance, typing recipient address and amount to be sent, you can make a quick transaction in just few seconds.
 
@@ -9,21 +9,24 @@ Companies and individuals can take advantage of NEMPay in order to make an app f
 Currently, the app is available for Android and iOS.
 
 ### Provided functionality
-
----
-
-* Wallet creation
+* Create/Import Account
 * View balance
-* View transactions
-* Send assets
-* Send xem
-* Send assets
+* Send xem / mosaics
 * Scan QR
+* View transactions
 * Share Address
-* Mijin Integration
 
-### Stay tuned
-In the following days, we will open the first private beta, and publish the roadmap of the projects.
+## Getting Started
+
+* Clone this repository: `git clone https://github.com/dgarcia360/NEMPay`.
+* Run `npm install` from the project root.
+* Install cordova (`npm install -g cordova`)
+* Install ionic (`npm install -g ionic`)
+* Run `ionic serve` in a terminal from the project root.
+* Profit
+
+*Note:* How to publish an app can be found here `http://ionicframework.com/docs/v1/guide/publishing.html`.
 
 
-Special thanks to QuantumMechanics, for inspiring the project developing NanoWallet and nem-sdk, guillemsole, for providing support in the development of NEMPay, Jeff McDonald & Albert Castellana, for all the feedback provided previous to the app testing period and aleixmp, for creating solid guidelines when releasing an Open Source product.
+## Contributing
+See [CONTRIBUTING.md](https://github.com/dgarcia360/NEMPay/blob/master/CONTRIBUTING.md) and [CONTRIBUTING.md](https://github.com/dgarcia360/NEMPay/blob/master/CODE_OF_CONDUCT.md) :tada::+1:

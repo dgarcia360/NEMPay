@@ -163,7 +163,7 @@ export class TransferPage {
      * alert Confirmation subtitle builder
      */
     private _subtitleBuilder(): Promise<string> {
-        var subtitle = 'a: <br/><br/> ';
+        var subtitle = 'You are going to send: <br/><br/> ';
         var currency = '';
         if (this.selectedMosaic == 'nem:xem') {
             currency = "<b>Amount:</b> " + this.amount + " xem";
