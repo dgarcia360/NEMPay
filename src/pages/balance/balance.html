@@ -19,7 +19,7 @@
         </ion-refresher-content>
     </ion-refresher>
 
-    <form id="balance-form1" style="padding-bottom: 50px;">
+    <form>
 
         <ion-list radio-group [(ngModel)]="selectedMosaic" name="selected_mosaic">
             <ion-item *ngFor="let mosaic of balance">
@@ -34,12 +34,15 @@
         </ion-list>
 
     </form>
-    <div class="bottom" text-center>
+</ion-content>
 
-        <button ion-button color="positive" block
+
+
+<ion-footer no-shadow>
+    <ion-toolbar position="bottom" class="background-white no-border">
+        <button ion-button  full color="positive"
                 on-click="goToTransfer()" [disabled]="!selectedMosaic">
             {{'TRANSFER_BUTTON' | translate}}
         </button>
-
-    </div>
-</ion-content>
+    </ion-toolbar>
+</ion-footer>
