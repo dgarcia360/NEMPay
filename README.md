@@ -14,7 +14,7 @@ A common user case would be create an app for their own mosaic and namespace. Th
 
 You can contact david@atraura.com for a budget.
 
-### Provided Functionallity
+### Provided Features
 ![alt text](https://cdn-images-1.medium.com/max/1600/1*rN0_HrixacfHJwk1fspeLA.png)
 
 * Create/Import Account
