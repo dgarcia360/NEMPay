@@ -42,12 +42,13 @@ export class TransactionsUnconfirmedPage {
                     this.navCtrl.push(LoginPage);
                 }
                 else {
-                    if (refresher) refresher.complete();
-                    loader.present();
+                    if (!refresher) loader.present();
+
                     this.nem.getUnconfirmedTransactionsFromAnAccount(this.address, this.config.defaultNetwork()).then(
                         value => {
+                            if (refresher) refresher.complete();
+                            else loader.dismiss();
                             this.transactions = value;
-                            loader.dismiss();
                         })
                 }
             }

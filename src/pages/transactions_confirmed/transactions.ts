@@ -43,13 +43,12 @@ export class TransactionsConfirmedPage {
                     this.navCtrl.push(LoginPage);
                 }
                 else {
-                    loader.present();
+                    if (!refresher) loader.present();
                     this.nem.getAllTransactionsFromAnAccount(this.address, this.config.defaultNetwork()).then(
                         value => {
                             if (refresher) refresher.complete();
+                            else loader.dismiss();
                             this.transactions = value;
-                            console.log(this.transactions);
-                            loader.dismiss();
                         })
                 }
             }
