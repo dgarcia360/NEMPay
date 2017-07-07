@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {App, LoadingController} from 'ionic-angular';
+import {BarcodeScanner} from '@ionic-native/barcode-scanner';
+
 import {TranslateService} from '@ngx-translate/core';
 
 import {AlertProvider} from '../../providers/alert/alert.provider';
@@ -17,7 +19,7 @@ import {LoginPage} from '../login/login';
 export class SignupPrivateKeyPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService) {
+    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
         //sensitive data
         this.newAccount = null;
 
@@ -36,6 +38,19 @@ export class SignupPrivateKeyPage {
             'repeat_password': ''
         };
     }
+
+    /**
+     * Scans wallet QR and stores its private key in newAccount.privateKey
+     */
+    public scanWalletQR() {
+        this.barcodeScanner.scan().then((barcode) => {
+            var walletInfo = JSON.parse(barcode.text);
+            console.log(walletInfo);
+            this.newAccount.private_key = walletInfo.data.priv_key;
+        }, (err) => {
+            console.log("Error on scan");
+        });
+    };
 
     /**
      * Creates Wallet from this.newAccount.private_key
