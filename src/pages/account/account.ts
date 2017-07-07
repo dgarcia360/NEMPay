@@ -135,6 +135,13 @@ export class AccountPage {
     }
 
     /**
+     * Removes private key
+     */
+    public hidePrivateKey(){
+        this._clearCommon();
+    }
+
+    /**
      * Clears data and moves to login screen
      * @param transaction  transaction object
      */
