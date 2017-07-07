@@ -169,7 +169,6 @@ export class NemProvider {
         )
     }
 
-
     /**
      * Create Wallet from private key
      * @param walletName wallet idenitifier for app
@@ -197,26 +196,63 @@ export class NemProvider {
         )
     }
 
+    /**
+     * Given an iterator and a node list.it returns a the endpoint.
+     * Uri if the node is alive, or it is called again with a different node.
+     * @param iterator node index to test
+     * @param nodes node list to try
+     */
+    private _getAvailableNodeFromNodeList(iterator, nodes){
+        var result = "";
 
-    // NEM
+        //start testing first node
+        var node = nodes[iterator];
 
+        var endpoint = this.nem.default.model.objects.create("endpoint")(node.uri, this.nem.default.model.nodes.defaultPort);
 
+        return this.nem.default.com.requests.endpoint.heartbeat(endpoint).then(data => {
+            //if success and is heart beat result
+            if(data.code === 1 && data.type === 2) {
+                result = node.uri;
+                console.log(result);
+                return result;
+            }
+            else {
+                var iterator2 = iterator +1;
+                if(iterator2 < nodes.length) return this._getAvailableNodeFromNodeList(iterator2, nodes);
+            }
+        }).catch(_ => {
+            var iterator2 = iterator +1;
+            if(iterator2 < nodes.length) return this._getAvailableNodeFromNodeList(iterator2, nodes);
+        });
+    }
+
+    /**
+     * Given a network id, it provides an alive node
+     * @param network mosaic namespace
+     * @return Promise with default node
+     */
     private _provideDefaultNode(network){
-        var defaultNode = "";
+        var defaultNode;
+
         if(network == -104){
-            defaultNode = this.nem.default.model.nodes.defaultTestnet
+            let nodes = this.nem.default.model.nodes.testnet;
+            defaultNode =  this._getAvailableNodeFromNodeList(0, nodes);
+
         }
         else if (network == 104){
 
-            defaultNode = this.nem.default.model.nodes.defaultMainnet;
+            let nodes = this.nem.default.model.nodes.mainnet;
+
+            defaultNode =  this._getAvailableNodeFromNodeList(0, nodes);
         }
 
         else if (network == 96){
-            defaultNode = this.nem.default.model.nodes.defaultMijin;
+            defaultNode =  Promise.resolve(this.nem.default.model.nodes.defaultMijin);
         }
         return defaultNode;
-
     }
+
     /**
      * Given a mosaic, it returns its definition
      * @param mosaicNamespaceId mosaic namespace
@@ -227,30 +263,33 @@ export class NemProvider {
     public getMosaicsMetaDataPair(mosaicNamespaceId, mosaicId, network) {
 
         // init endpoint
-        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
+        return this._provideDefaultNode(network).then(node => {
 
-        var mosaicDefinitionMetaDataPair = this.nem.default.model.objects.get("mosaicDefinitionMetaDataPair");
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
 
-        return this.nem.default.com.requests.namespace.mosaicDefinitions(endpoint, mosaicNamespaceId).then(
-            value => {
-                // Look for the mosaic definition(s) we want in the request response (Could use ["eur", "usd"] to return eur and usd mosaicDefinitionMetaDataPairs)
-                var neededDefinition = this.nem.default.utils.helpers.searchMosaicDefinitionArray(value, [mosaicId]);
+            var mosaicDefinitionMetaDataPair = this.nem.default.model.objects.get("mosaicDefinitionMetaDataPair");
 
-                // Get full name of mosaic to use as object key
-                var fullMosaicName = mosaicNamespaceId + ':' + mosaicId;
+            return this.nem.default.com.requests.namespace.mosaicDefinitions(endpoint, mosaicNamespaceId).then(
+                value => {
+                    // Look for the mosaic definition(s) we want in the request response (Could use ["eur", "usd"] to return eur and usd mosaicDefinitionMetaDataPairs)
+                    var neededDefinition = this.nem.default.utils.helpers.searchMosaicDefinitionArray(value, [mosaicId]);
 
-                // Check if the mosaic was found
-                if (undefined === neededDefinition[fullMosaicName]) {
-                    console.error("Mosaic not found !");
+                    // Get full name of mosaic to use as object key
+                    var fullMosaicName = mosaicNamespaceId + ':' + mosaicId;
+
+                    // Check if the mosaic was found
+                    if (undefined === neededDefinition[fullMosaicName]) {
+                        //return xem definition
+                        return mosaicDefinitionMetaDataPair;
+                    }
+                    // Set mosaic definition into mosaicDefinitionMetaDataPair
+                    mosaicDefinitionMetaDataPair[fullMosaicName] = {};
+                    mosaicDefinitionMetaDataPair[fullMosaicName].mosaicDefinition = neededDefinition[fullMosaicName];
+
                     return mosaicDefinitionMetaDataPair;
                 }
-                // Set mosaic definition into mosaicDefinitionMetaDataPair
-                mosaicDefinitionMetaDataPair[fullMosaicName] = {};
-                mosaicDefinitionMetaDataPair[fullMosaicName].mosaicDefinition = neededDefinition[fullMosaicName];
-
-                return mosaicDefinitionMetaDataPair;
-            }
-        );
+            );
+        });
     }
 
     /**
@@ -284,15 +323,18 @@ export class NemProvider {
      * @return Promise with mosaics information
      */
     public getBalance(address, network) {
-        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
-        // Gets account data
-        return this.nem.default.com.requests.account.mosaics(endpoint, address).then(
-            value => {
-                return this._addDivisibilityToBalance(value, network);
-            }
-        ).catch(error => {
-            return false;
-        })
+        return this._provideDefaultNode(network).then(node => {
+            console.log(node);
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
+            // Gets account data
+            return this.nem.default.com.requests.account.mosaics(endpoint, address).then(
+                value => {
+                    return this._addDivisibilityToBalance(value, network);
+                }
+            ).catch(error => {
+                return false;
+            })
+        });
     }
 
     /**
@@ -343,7 +385,7 @@ export class NemProvider {
      * @param common sensitive data
      * @param formData transaction definition object
      * @param selected Network
-     * @return Promise containing prepared transacton
+     * @return Promise containing prepared transaction
      */
     public prepareMosaicTransaction(common, formData, network) {
         // Create transfer transaction
@@ -428,10 +470,14 @@ export class NemProvider {
      * @return Promise with account transactions
      */
     public getAllTransactionsFromAnAccount(address, network) {
-        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
+        return this._provideDefaultNode(network).then(node => {
 
-        return this.nem.default.com.requests.account.allTransactions(endpoint, address).then(value => {
-            return this._adaptTransactions(value, network);
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
+
+            return this.nem.default.com.requests.account.allTransactions(endpoint, address).then(value => {
+                return this._adaptTransactions(value, network);
+            });
+
         });
     }
 
@@ -442,9 +488,12 @@ export class NemProvider {
      * @return Promise with account transactions
      */
     public getUnconfirmedTransactionsFromAnAccount(address, network) {
-        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
-        return this.nem.default.com.requests.account.unconfirmedTransactions(endpoint, address).then(value => {
-            return this._adaptTransactions(value, network);
+        return this._provideDefaultNode(network).then(node => {
+
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
+            return this.nem.default.com.requests.account.unconfirmedTransactions(endpoint, address).then(value => {
+                return this._adaptTransactions(value, network);
+            });
         });
     }
 }
