@@ -24,7 +24,7 @@
 
       </span>
             <span *ngIf="address != tx.transaction.recipient">
-<h2> <span *ngIf='tx.transaction.amount != 0 && !tx.transaction.mosaics'><span style="color: #f53d3d">-</span>{{tx.transaction.amount/1000000}} xem</span>     
+<h2> <span *ngIf='tx.transaction.amount != 0 && !tx.transaction.mosaics'><span style="color: #f53d3d">-</span>{{tx.transaction.amount/1000000}} xem</span>
       <span *ngFor="let mos of tx.transaction.mosaics">
               <span style="color: #f53d3d">-</span>{{ mos.quantity |  exponentialStrength:(mos.definition.properties[0].value)}} {{mos.mosaicId.name}}
           </span>
@@ -37,7 +37,7 @@
             <p *ngIf="tx.transaction.fee"><b>{{'FEE' | translate}}:</b> {{tx.transaction.fee/1000000}} xem</p>
             <p> <span *ngFor="let mos of tx.transaction.mosaics;let firstItem = first;">
       <span *ngIf='firstItem && mos.definition.levy.mosaicId'><b>{{'LEVY' | translate}}</b>:</span>
-      <span *ngIf="mos.definition.levy.mosaicId"> {{mos | formatLevy:(mos.definition.levy) | async}} {{mos.definition.levy.mosaicId.name}} </span></span>
+                <span *ngIf="mos.definition.levy.mosaicId"> {{mos | formatLevy:(mos.definition.levy) | async}} {{mos.definition.levy.mosaicId.name}} </span></span></p>
             <p *ngIf="tx.transaction.message.payload"><b> {{'MESSAGE' | translate}}:</b> {{tx.transaction.message | hexMessageToString}}
             </p>
         </ion-item>
