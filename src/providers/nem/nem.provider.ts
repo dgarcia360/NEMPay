@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
+import CryptoJS from 'crypto-js';
 
 // import { Http } from '@angular/http';
 // import 'rxjs/add/operator/map';
@@ -194,6 +195,37 @@ export class NemProvider {
                 }
             }
         )
+    }
+
+
+    /**
+     * Decrypt private key
+     * @param password password
+     * @param encriptedData Object containing private_key encrypted and salt
+     * @return Decrypted private key
+     */
+
+    public decryptPrivateKey(password, encriptedData){
+        let salt = CryptoJS.enc.Hex.parse(encriptedData.salt);
+        let encrypted = encriptedData.priv_key;
+
+        //generate key
+        let key = CryptoJS.PBKDF2(password, salt, {
+            keySize: 256 / 32,
+            iterations: 2000
+        }).toString();
+
+        //separated from priv_key iv and cipherdata
+        let iv = encrypted.substring(0, 32);
+        let encryptedPrvKey = encrypted.substring(32, 128);
+
+        //separated  vh from priv_key iv and cipherdata
+        let obj = {
+            ciphertext: CryptoJS.enc.Hex.parse(encryptedPrvKey),
+            iv: this.nem.default.utils.convert.hex2ua(iv),
+            key: this.nem.default.utils.convert.hex2ua(key.toString())
+        }
+        return Promise.resolve(this.nem.default.crypto.helpers.decrypt(obj));
     }
 
     /**
@@ -407,8 +439,10 @@ export class NemProvider {
      * @return Promise containing sent transaction
      */
     public confirmTransaction(common, transactionEntity, network) {
-        var endpoint = this.nem.default.model.objects.create("endpoint")(this._provideDefaultNode(network), this.nem.default.model.nodes.defaultPort);
-        return this.nem.default.model.transactions.send(common, transactionEntity, endpoint);
+        return this._provideDefaultNode(network).then(node => {
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
+            return this.nem.default.model.transactions.send(common, transactionEntity, endpoint);
+        })
     }
 
     /**

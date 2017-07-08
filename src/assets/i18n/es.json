@@ -60,6 +60,7 @@
   "ALERT_ACCOUNT_DOES_NOT_HAVE_ENOUGH_FUNDS": "Your account has insufficient funds",
   "ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE": "Attached message is too large.",
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Selected Mosaic It is not transferable",
+  "ALERT_INVALID_PRIVATE_KEY": "Invalid Private Key",
 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Remember that at the moment only works on testnet",
   "ALERT_PHONE_DISCONNECTED": "Your phone is disconnected from internet",

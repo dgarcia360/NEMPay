@@ -40,14 +40,24 @@ export class SignupPrivateKeyPage {
     }
 
     /**
-     * Scans wallet QR and stores its private key in newAccount.privateKey
+     * Scans wallet QR and stores its private key in newAccount.privateKey 
      */
     public scanWalletQR() {
-        this.barcodeScanner.scan().then((barcode) => {
+        this.barcodeScanner.scan().then(barcode => {
+            
             var walletInfo = JSON.parse(barcode.text);
-            console.log(walletInfo);
-            this.newAccount.private_key = walletInfo.data.priv_key;
-        }, (err) => {
+            if (!this.newAccount.password){
+                this.alert.showBarCodeScannerRequiresPassword();
+            }
+            if (this.newAccount.password != this.newAccount.repeat_password) {
+                this.alert.showPasswordDoNotMatch();
+            }
+            else{
+                this.nem.decryptPrivateKey(this.newAccount.password, walletInfo.data).then(privateKey =>{
+                this.newAccount.private_key = privateKey;
+                });
+            }
+        }).catch(err => {
             console.log("Error on scan");
         });
     };
@@ -59,12 +69,16 @@ export class SignupPrivateKeyPage {
         if (this.newAccount.password != this.newAccount.repeat_password) {
             this.alert.showPasswordDoNotMatch();
         }
-        else {
+        else if (!(this.newAccount.privateKey.length != 64 || this.newAccount.privateKey.length != 66)){
+            this.alert.showInvalidPrivateKey();
+        }
+        else{
             let loader = this.loading.create({
                 content: "Please wait..."
             });
 
             loader.present().then(_ => {
+
                 this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key, this.config.defaultNetwork()).then(
                     wallet => {
                         if (wallet) {
@@ -77,10 +91,11 @@ export class SignupPrivateKeyPage {
                             this.alert.showWalletNameAlreadyExists();
                         }
                     }
-                )
+                ).catch(_ => {
+                    loader.dismiss();
+                    this.alert.showInvalidPrivateKey();
+                })
             })
         }
     }
-
-
 }

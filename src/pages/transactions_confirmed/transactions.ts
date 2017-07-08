@@ -60,15 +60,14 @@ export class TransactionsConfirmedPage {
      * @param transaction  transaction object
      */
     public copyTransactionAddress(transaction) {
-        var address;
+        var copiableAddress = "";
         if (this.address == transaction.recipient) {
-            address = this.nem.pubToAddress(transaction.signer, this.config.defaultNetwork());
+            copiableAddress = this.nem.pubToAddress(transaction.signer, this.config.defaultNetwork());
         }
         else {
-            address = transaction.recipient;
+            copiableAddress = transaction.recipient;
         }
-
-        this.clipboard.copy(address).then(_ => {
+        this.clipboard.copy(copiableAddress).then(_ => {
             this.toast.showCopyCorrect();
         });
     }

@@ -137,8 +137,11 @@ export class TransferPage {
      * TODO: encapsulate in a service, implememntation it is duplicatedin other controllers too
      */
     private _canSendTransaction() {
-        var result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
-        if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
+        var result = false;
+        if (this.common.password) {
+            result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
+            if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
+        }
         return result;
     }
 

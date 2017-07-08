@@ -107,6 +107,25 @@ export class AlertProvider {
         return alert;
     }
 
+    showBarCodeScannerRequiresPassword() {
+        let alert = this.alertCtrl.create({
+            title: 'To use QR wallet scanner, you must use the same password as your current wallet account',
+            buttons: ['OK']
+        });
+        alert.present();
+        return alert;
+    }
+
+
+    showInvalidPrivateKey() {
+        let alert = this.alertCtrl.create({
+            title: 'Invalid Private Key',
+            buttons: ['OK']
+        });
+        alert.present();
+        return alert;
+    }
+
     showError(error) {
         let alert = this.alertCtrl.create({
             title: error,
