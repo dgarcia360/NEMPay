@@ -69,7 +69,7 @@ export class SignupPrivateKeyPage {
         if (this.newAccount.password != this.newAccount.repeat_password) {
             this.alert.showPasswordDoNotMatch();
         }
-        else if (!(this.newAccount.privateKey.length != 64 || this.newAccount.privateKey.length != 66)){
+        else if (!(this.newAccount.private_key.length != 64 || this.newAccount.private_key.length != 66)){
             this.alert.showInvalidPrivateKey();
         }
         else{
