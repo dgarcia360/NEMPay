@@ -7,9 +7,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 
-
 import {ConfigProvider} from '../../providers/config/config.provider';
-
 import {LoginPage} from '../login/login';
 
 @Component({
@@ -49,12 +47,12 @@ export class SignupPrivateKeyPage {
             if (!this.newAccount.password){
                 this.alert.showBarCodeScannerRequiresPassword();
             }
-            if (this.newAccount.password != this.newAccount.repeat_password) {
+            else if (this.newAccount.password != this.newAccount.repeat_password) {
                 this.alert.showPasswordDoNotMatch();
             }
             else{
                 this.nem.decryptPrivateKey(this.newAccount.password, walletInfo.data).then(privateKey =>{
-                this.newAccount.private_key = privateKey;
+                    this.newAccount.private_key = privateKey;
                 });
             }
         }).catch(err => {
