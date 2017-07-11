@@ -1,0 +1,69 @@
+{
+
+  "PULL_TO_REFRESH": "Потяните вниз для обновления",
+  "REFRESHING": "Обновляется...",
+  "PLEASE_WAIT": "Пожалуйста подождите...",
+  "CONFIRM": "Подтверидить",
+  "CANCEL": "Отмена",
+  "OK": "ОК",
+
+  "ACCOUNT": "Учетная запись",
+  "YOUR_ADDRESS": "Ваш адрес",
+  "SHARE_ADDRESS": "Передать Адрес",
+  "PRIVATE_KEY": "Личный Ключ",
+  "PRIVATE_KEY_SUBTITLE": "Для просмотра личного ключа, введите Ваш пароль или парольную фразу.",
+  "PASSWORD_WARNING" : "Ваш личный ключ предоставляет полный доступ к учетной записи. Важно хранить личный ключ в безопасном месте(не в сети).",
+  "SHOW_PRIVATE_KEY": "Показать Личный Ключ",
+  "HIDE_PRIVATE_KEY": "Скрыть Личный Ключ",
+
+  "BALANCE": "Баланс",
+  "TRANSFER_BUTTON": "Перевод",
+  "PASSWORD": "Пароль",
+  "CREATE_OR_IMPORT_AN_ACCOUNT": "СОЗДАТЬ ИЛИ ИМПОРТИРОВАТЬ УЧЕТНУЮ ЗАПИСЬ",
+  "LOGIN": "Войти",
+
+  "SIMPLE WALLET": "Простой Кошелек",
+  "BRAIN WALLET": "Brain Кошелек",
+
+  "WALLET_NAME": "Имя Кошелька",
+  "REPEAT_PASSWORD": "Повторите Пароль",
+  "SIGNUP": "Регистрация",
+  "IMPORT": "Импорт",
+  "KEEP_YOUR_PRIVATE_KEY_SAFE": "Держите Ваш Личный Ключ в безопасном месте",
+
+  "TRANSACTIONS": "Транзакции",
+  "CONFIRMED_TRANSACTIONS": "Подтвержденные Транзакции",
+  "PENDING_TRANSACTIONS": "Транзакции в Ожидании",
+
+  "TRANSFER": "Перевод",
+  "FROM": "Откуда",
+  "TO": "Куда",
+  "MESSAGE": "Сообщение",
+  "FEE": "Комиссия",
+  "Levy": "Налог",
+
+  "ADDRESS": "Адрес",
+  "RECIPIENT_ADDRESS": "Адрес Получателя",
+  "SCAN_QR": "Сканировать QR",
+  "AMOUNT": "Сумма",
+  "MESSAGE": "Сообщение",
+  "CONTINUE": "Продолжить",
+  "YOU_ARE_GOING_TO_SEND": "Вы отправляете",
+  "CONFIRM_TRANSACTION": "Подтвердить",
+
+  "ALERT_NOT_WALLET_SELECTED": "Кошелек не выбран",
+  "ALERT_PROVIDED_PASSWORD_INVALID" : "Недопустимый пароль",
+  "ALERT_PASSWORDS_DO_NOT_MATCH" : "Введенные пароли не совпадают",
+  "ALERT_WALLET_NAME_ALREADY_EXISTS": "Имя кошелька уже сужествует",
+  "ALERT_WALLET_IS_NOT_INVALID_FOR_THIS_NETWORK": "Недействительный адрес для этой сети",
+  "ALERT_TRANSACTION_CONFIRMED" : "Транзакция успешно отправлена",
+  "ALERT_ACCOUNT_DOES_NOT_HAVE_ENOUGH_FUNDS": "На Вашем счету недостаточно средств",
+  "ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE": "Вложенное сообщение слишком большое.",
+  "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Выбранная мозаика не перемещаема",
+  "ALERT_INVALID_PRIVATE_KEY": "Неверный Личный Ключ",
+
+  "ALERT_SUBTITLE_ONLY_TESTNET": "Помните, что на данный момент работает только в тестовая сеть",
+  "ALERT_PHONE_DISCONNECTED": "Ваш устройство отключено от Интернет",
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Откройте приложение снова, как только Вы подключитесь к Интернет"
+
+}
