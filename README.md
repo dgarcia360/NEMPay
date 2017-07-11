@@ -26,9 +26,9 @@ You can contact david@atraura.com for more information.
 
 ### Getting Started
 * Clone this repository: `git clone https://github.com/dgarcia360/NEMPay`.
-* Run `npm install` from the project root.
-* Install cordova (`npm install -g cordova`)
 * Install ionic (`npm install -g ionic`)
+* Install cordova (`npm install -g cordova`)
+* Run `npm install` from the project root.
 * Run `ionic serve` in a terminal from the project root.
 * Profit
 
