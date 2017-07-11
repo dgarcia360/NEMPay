@@ -1,10 +1,10 @@
 {
 
-  "PULL_TO_REFRESH": "Tire para actualizar",
+  "PULL_TO_REFRESH": "Deslice para actualizar",
   "REFRESHING": "Actualizando...",
-  "PLEASE_WAIT": "Por favor espera...",
+  "PLEASE_WAIT": "Por favor,espere...",
   "CONFIRM": "Confirmar",
-  "CANCEL": "Cacelar",
+  "CANCEL": "Cancelar",
   "OK": "OK",
 
   "ACCOUNT": "Cuenta",
@@ -22,7 +22,7 @@
   "CREATE_OR_IMPORT_AN_ACCOUNT": "CREAR O IMPORTAR UNA CUENTA",
   "LOGIN": "Iniciar sesión",
 
-  "SIMPLE WALLET": "Cartera simple",
+  "SIMPLE WALLET": "Cartera",
   "BRAIN WALLET": "Cartera brain",
 
   "WALLET_NAME": "Nombre de la cartera",
@@ -62,7 +62,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Mosaico seleccionado no es transferible",
   "ALERT_INVALID_PRIVATE_KEY": "Clave privada no válida",
 
-  "ALERT_SUBTITLE_ONLY_TESTNET": "Recuerde que por el momento solo funciona en testnet",
+  "ALERT_SUBTITLE_ONLY_TESTNET": "Recuerde que por el momento sólo funciona en testnet",
   "ALERT_PHONE_DISCONNECTED": "Su teléfono está desconectado de Internet",
   "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Abre la aplicación de nuevo una vez que tengas conexión a Internet"
 
