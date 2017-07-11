@@ -1,0 +1,69 @@
+{
+
+  "PULL_TO_REFRESH": "Pull to refresh",
+  "REFRESHING": "Refreshing...",
+  "PLEASE_WAIT": "Please wait...",
+  "CONFIRM": "Confirm",
+  "CANCEL": "Cancel",
+  "OK": "OK",
+
+  "ACCOUNT": "Account",
+  "YOUR_ADDRESS": "Your address",
+  "SHARE_ADDRESS": "Share Address",
+  "PRIVATE_KEY": "Private Key",
+  "PRIVATE_KEY_SUBTITLE": "To view your private key, insert your password or passphrase.",
+  "PASSWORD_WARNING" : "Your private key holds all the power of your account. It is a priority to make sure it is stored safely somewhere offline.",
+  "SHOW_PRIVATE_KEY": "Show Private Key",
+  "HIDE_PRIVATE_KEY": "Hide Private Key",
+
+  "BALANCE": "Balance",
+  "TRANSFER_BUTTON": "Transfer",
+  "PASSWORD": "Password",
+  "CREATE_OR_IMPORT_AN_ACCOUNT": "CREATE OR IMPORT AN ACCOUNT",
+  "LOGIN": "Log in",
+
+  "SIMPLE WALLET": "Simple Walket",
+  "BRAIN WALLET": "Brain Wallet",
+
+  "WALLET_NAME": "Wallet Name",
+  "REPEAT_PASSWORD": "Repeat Password",
+  "SIGNUP": "Sign Up",
+  "IMPORT": "Import",
+  "KEEP_YOUR_PRIVATE_KEY_SAFE": "Keep your Private Key safe",
+
+  "TRANSACTIONS": "Transactions",
+  "CONFIRMED_TRANSACTIONS": "Confirmed Transactions",
+  "PENDING_TRANSACTIONS": "Pending Transactions",
+
+  "TRANSFER": "Transfer",
+  "FROM": "From",
+  "TO": "To",
+  "MESSAGE": "Message",
+  "FEE": "Fee",
+  "Levy": "Levy",
+
+  "ADDRESS": "Address",
+  "RECIPIENT_ADDRESS": "Recipient Address",
+  "SCAN_QR": "Scan QR",
+  "AMOUNT": "Amount",
+  "MESSAGE": "Message",
+  "CONTINUE": "Continue",
+  "YOU_ARE_GOING_TO_SEND": "You are going to send",
+  "CONFIRM_TRANSACTION": "Confirm Transaction",
+
+  "ALERT_NOT_WALLET_SELECTED": "Wallet not selected",
+  "ALERT_PROVIDED_PASSWORD_INVALID" : "Provided password is invalid",
+  "ALERT_PASSWORDS_DO_NOT_MATCH" : "Introduced Passwords are different",
+  "ALERT_WALLET_NAME_ALREADY_EXISTS": "Wallet Name already exists",
+  "ALERT_WALLET_IS_NOT_INVALID_FOR_THIS_NETWORK": "Address is not valid for this network",
+  "ALERT_TRANSACTION_CONFIRMED" : "Transaction successfully sent",
+  "ALERT_ACCOUNT_DOES_NOT_HAVE_ENOUGH_FUNDS": "Your account has insufficient funds",
+  "ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE": "Attached message is too large.",
+  "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Selected Mosaic It is not transferable",
+  "ALERT_INVALID_PRIVATE_KEY": "Invalid Private Key",
+
+  "ALERT_SUBTITLE_ONLY_TESTNET": "Remember that at the moment only works on testnet",
+  "ALERT_PHONE_DISCONNECTED": "Your phone is disconnected from internet",
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Open the app again once you have internet connection"
+
+}
