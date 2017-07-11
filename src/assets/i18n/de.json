@@ -1,0 +1,69 @@
+{
+
+  "PULL_TO_REFRESH": "Zum aktualisieren ziehen",
+  "REFRESHING": "Aktualisiere...",
+  "PLEASE_WAIT": "Bitte warten...",
+  "CONFIRM": "Bestätigen",
+  "CANCEL": "Abbrechen",
+  "OK": "OK",
+
+  "ACCOUNT": "Konto",
+  "YOUR_ADDRESS": "Ihre Adresse",
+  "SHARE_ADDRESS": "Adresse teilen",
+  "PRIVATE_KEY": "Privater Schlüssel",
+  "PRIVATE_KEY_SUBTITLE": "Geben Sie ihr Passwort ein, um ihren privaten Schlüssel zu sehen.",
+  "PASSWORD_WARNING" : "Ihr privater Schlüssel enthält die ganze Macht Ihres Kontos. Es hat oberste Priorität sicherzustellen, das es irgendwo offline sicher aufbewahrt ist.",
+  "SHOW_PRIVATE_KEY": "Zeige privaten Schlüssel",
+  "HIDE_PRIVATE_KEY": "Verstecke privaten Schlüssel",
+
+  "BALANCE": "Kontostand",
+  "TRANSFER_BUTTON": "Überweisung",
+  "PASSWORD": "Passwort",
+  "CREATE_OR_IMPORT_AN_ACCOUNT": "Erstellen oder importieren Sie ein Konto",
+  "LOGIN": "Anmelden",
+
+  "SIMPLE WALLET": "Simple Wallet",
+  "BRAIN WALLET": "Brain Wallet",
+
+  "WALLET_NAME": "Wallet Name",
+  "REPEAT_PASSWORD": "Passwort wiederholen",
+  "SIGNUP": "Registrieren",
+  "IMPORT": "Importieren",
+  "KEEP_YOUR_PRIVATE_KEY_SAFE": "Sichern Sie Ihren privaten Schlüssel",
+
+  "TRANSACTIONS": "Transaktionen",
+  "CONFIRMED_TRANSACTIONS": "Bestätigte Transaktionen",
+  "PENDING_TRANSACTIONS": "Ausstehende Transaktionen",
+
+  "TRANSFER": "Überweisung",
+  "FROM": "Absender",
+  "TO": "Empfänger",
+  "MESSAGE": "Nachricht",
+  "FEE": "Gebühr",
+  "Levy": "Abgaben",
+
+  "ADDRESS": "Adresse",
+  "RECIPIENT_ADDRESS": "Empfänger Adresse",
+  "SCAN_QR": "QR scannen",
+  "AMOUNT": "Menge",
+  "MESSAGE": "Nachricht",
+  "CONTINUE": "Fortsetzen",
+  "YOU_ARE_GOING_TO_SEND": "Sie verschicken",
+  "CONFIRM_TRANSACTION": "Bestätige Transaktion",
+
+  "ALERT_NOT_WALLET_SELECTED": "Wallet nicht ausgewählt",
+  "ALERT_PROVIDED_PASSWORD_INVALID" : "Eingegebenes Passwort ist ungültig",
+  "ALERT_PASSWORDS_DO_NOT_MATCH" : "Eingegebene Passwörter sind unterschiedlich",
+  "ALERT_WALLET_NAME_ALREADY_EXISTS": "Wallet Name existiert bereits",
+  "ALERT_WALLET_IS_NOT_INVALID_FOR_THIS_NETWORK": "Adresse ist für dieses Netzwerk nicht gültig",
+  "ALERT_TRANSACTION_CONFIRMED" : "Transaktion erfolgreich gesendet.",
+  "ALERT_ACCOUNT_DOES_NOT_HAVE_ENOUGH_FUNDS": "Ihr Konto verfügt nicht über ausreichende Mittel",
+  "ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE": "Angehängte Nachricht ist zu groß.",
+  "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Ausgewähltes Mosaik ist nicht übertragbar",
+  "ALERT_INVALID_PRIVATE_KEY": "Ungültiger privater Schlüssel",
+
+  "ALERT_SUBTITLE_ONLY_TESTNET": "Denken Sie daran, dass es momentan nur im Testnetz funktioniert",
+  "ALERT_PHONE_DISCONNECTED": "Ihr Mobilteil ist vom Internet getrennt",
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Öffen Sie die App erneut, sobald sie eine Internetverbindung haben"
+
+}
