@@ -39,7 +39,7 @@
   "TO": "Receptor",
   "MESSAGE": "Mensaje",
   "FEE": "Comisión",
-  "Levy": "Impuesto",
+  "LEVY": "Impuesto",
 
   "ADDRESS": "Dirección",
   "RECIPIENT_ADDRESS": "Dirección del receptor",
