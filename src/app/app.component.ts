@@ -42,18 +42,12 @@ export class MyApp {
                 this.globalization.getPreferredLanguage()
                     .then(language => {
                         //if the file is available
-                        console.log(language);
-                        console.log(availableLanguages);
-                        console.log(language.value in availableLanguages);
                         if (language.value in availableLanguages) {
                             this.translateService.use(language.value);
                         }
                         //else, try with the first substring
                         else{
                             for (var lang of availableLanguages){
-
-                                console.log(language.value.split("-")[0] == lang);
-
                                 if(language.value.split("-")[0] == lang){
                                     this.translateService.use(lang);
                                     break;

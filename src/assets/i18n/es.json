@@ -33,6 +33,7 @@
   "TRANSACTIONS": "Transacciones",
   "CONFIRMED_TRANSACTIONS": "Transacciones confirmadas",
   "PENDING_TRANSACTIONS": "Transacciones pendientes",
+  "NOTHING_TO_SHOW": "Nothing to show",
 
   "TRANSFER": "Transferir",
   "FROM": "Remitente",

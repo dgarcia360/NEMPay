@@ -33,6 +33,7 @@
   "TRANSACTIONS": "Transactions",
   "CONFIRMED_TRANSACTIONS": "Confirmed Transactions",
   "PENDING_TRANSACTIONS": "Pending Transactions",
+  "NOTHING_TO_SHOW": "Nothing to show",
 
   "TRANSFER": "Transfer",
   "FROM": "From",

@@ -33,6 +33,7 @@
   "TRANSACTIONS": "Транзакции",
   "CONFIRMED_TRANSACTIONS": "Подтвержденные Транзакции",
   "PENDING_TRANSACTIONS": "Транзакции в Ожидании",
+  "NOTHING_TO_SHOW": "Nothing to show",
 
   "TRANSFER": "Перевод",
   "FROM": "Откуда",

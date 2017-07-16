@@ -34,6 +34,9 @@
   "CONFIRMED_TRANSACTIONS": "Transaccions Confirmades",
   "PENDING_TRANSACTIONS": "Transaccions Pendents",
 
+  "NOTHING_TO_SHOW": "Nothing to show",
+
+
   "TRANSFER": "Transferir",
   "FROM": "De",
   "TO": "A",

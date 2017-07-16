@@ -2,9 +2,9 @@
     <ion-refresher (ionRefresh)="getTransactions($event)">
         <ion-refresher-content
                 pullingIcon="arrow-dropdown"
-                pullingText="Pull to refresh"
+                pullingText="{{'PULL_TO_REFRESH' | translate}} "
                 refreshingSpinner="circles"
-                refreshingText="Refreshing...">
+                refreshingText="{{'REFRESHING' | translate}} ">
         </ion-refresher-content>
     </ion-refresher>
 

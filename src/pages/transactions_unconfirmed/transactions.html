@@ -2,9 +2,9 @@
     <ion-refresher (ionRefresh)="getTransactions($event)">
         <ion-refresher-content
                 pullingIcon="arrow-dropdown"
-                pullingText="Pull to refresh"
+                pullingText="{{'PULL_TO_REFRESH' | translate}} "
                 refreshingSpinner="circles"
-                refreshingText="Refreshing...">
+                refreshingText="{{'REFRESHING' | translate}} ">
         </ion-refresher-content>
     </ion-refresher>
 
@@ -44,6 +44,6 @@
 
     </ion-list>
     <div *ngIf="transactions.length == 0">
-        <h5>Nothing to show</h5>
+        <h5>{{'NOTHING_TO_SHOW' | translate}} </h5>
     </div>
 </ion-content>
