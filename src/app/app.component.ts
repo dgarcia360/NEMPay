@@ -37,7 +37,7 @@ export class MyApp {
             });
 
             //i18n configuration
-            this.translateService.setDefaultLang('en');
+            this.translateService.setDefaultLang('ja');
             if (platform.is('cordova')) {
                 this.globalization.getPreferredLanguage()
                     .then(language => {
