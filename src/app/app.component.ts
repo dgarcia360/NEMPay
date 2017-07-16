@@ -58,7 +58,7 @@ export class MyApp {
                     .catch(e => console.log(e));
             }
             else{
-                this.translateService.use('en');
+                this.translateService.use('ja');
             }
 
             //ionic default

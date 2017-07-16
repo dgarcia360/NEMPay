@@ -33,7 +33,7 @@
   "TRANSACTIONS": "トランザクション",
   "CONFIRMED_TRANSACTIONS": "承認済みのトランザクション",
   "PENDING_TRANSACTIONS": "未承認のトランザクション",
-  "NOTHING_TO_SHOW": "Nothing to show",
+  "NOTHING_TO_SHOW": "何も見せない",
 
   "TRANSFER": "送信",
   "FROM": "送り主",
