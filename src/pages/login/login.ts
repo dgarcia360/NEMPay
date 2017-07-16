@@ -4,6 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {LoaderProvider} from '../../providers/loader/loader.provider';
 
 import {BalancePage} from '../balance/balance';
 import {SignupPage} from '../signup/signup';
@@ -19,7 +20,7 @@ export class LoginPage {
     common: any;
 
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private alert: AlertProvider, private loading: LoadingController, private menu: MenuController, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private alert: AlertProvider, private loader: LoaderProvider, private menu: MenuController, public translate: TranslateService) {
 
         this.wallets = [];
         this.selectedWallet = null;
@@ -59,17 +60,14 @@ export class LoginPage {
      * Enters into the app with the selected wallet
      */
     public login() {
-
-        let loader = this.loading.create({
-            content: "Please wait..."
-        });
+      
 
 
-        loader.present().then(
+        this.loader.present().then(
             _ => {
 
                 if (!this.selectedWallet) {
-                    loader.dismiss();
+                    this.loader.dismiss();
                     this.alert.showWalletNotSelectedAlert();
                 }
                 var invalidPassword = false;
@@ -90,14 +88,13 @@ export class LoginPage {
                 }
 
                 if (invalidPassword) {
-                    loader.dismiss();
+                    this.loader.dismiss();
                     this.alert.showInvalidPasswordAlert();
                 }
                 else {
                     this.nem.setSelectedWallet(this.selectedWallet);
-                    loader.dismiss();
+                    this.loader.dismiss();
                     this.navCtrl.setRoot(BalancePage);
-
                 }
             })
     }

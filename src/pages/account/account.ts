@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, LoadingController, Platform} from 'ionic-angular';
+import {NavController, Platform} from 'ionic-angular';
 import { Subscription } from 'rxjs';
 
 import {SocialSharing} from '@ionic-native/social-sharing';
@@ -10,6 +10,8 @@ import * as kjua from "kjua";
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {LoaderProvider} from '../../providers/loader/loader.provider';
+
 import {ConfigProvider} from '../../providers/config/config.provider';
 
 import {LoginPage} from "../login/login";
@@ -24,7 +26,7 @@ export class AccountPage {
     qrCode: any;
     private onResumeSubscription: Subscription;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider,private platform: Platform, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loader: LoaderProvider, private alert: AlertProvider, private config: ConfigProvider,private platform: Platform, public translate: TranslateService) {
         this.selectedWallet = {accounts: [{'address': ''}]};
 
         //Stores sensitive data.
@@ -117,19 +119,15 @@ export class AccountPage {
      */
     public showPrivateKey() {
 
-        let loader = this.loading.create({
-            content: "Please wait..."
-        });
-
-        loader.present().then(
+        this.loader.present().then(
             _ => {
                 if (!this._canShowPrivateKey()) {
-                    loader.dismiss();
+                    this.loader.dismiss();
                     this._clearCommon();
                     this.alert.showInvalidPasswordAlert();
                 }
                 else {
-                    loader.dismiss();
+                    this.loader.dismiss();
                 }
             })
     }

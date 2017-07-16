@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
+import {NavController, NavParams, AlertController} from 'ionic-angular';
 import {Keyboard} from '@ionic-native/keyboard';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -8,6 +8,7 @@ import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {ConfigProvider} from '../../providers/config/config.provider';
 import {ToastProvider} from '../../providers/toast/toast.provider';
+import {LoaderProvider} from '../../providers/loader/loader.provider';
 
 import {BalancePage} from '../balance/balance';
 import {LoginPage} from '../login/login';
@@ -26,7 +27,7 @@ export class TransferPage {
     selectedWallet: any;
     selectedMosaicDefinitionMetaDataPair: any;
 
-    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, private config: ConfigProvider, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loader: LoaderProvider, private keyboard: Keyboard, private config: ConfigProvider, public translate: TranslateService) {
 
         this.formData = {};
         this.amount = 0;
@@ -197,10 +198,7 @@ export class TransferPage {
      * Presents prompt to confirm the transaction, handling confirmation
      */
     private _presentPrompt() {
-        let loader = this.loading.create({
-            content: "Please wait..."
-        });
-
+       
         this._subtitleBuilder().then(subitle => {
             let alert = this.alertCtrl.create({
                 title: 'Confirm Transaction',
@@ -222,33 +220,33 @@ export class TransferPage {
                         handler: data => {
                             this.keyboard.close();
                             this.common.password = data.password;
-                            loader.present().then(_ => {
+                            this.loader.present().then(_ => {
                                 if (this._canSendTransaction()) {
                                     this._confirmTransaction().then(value => {
                                         if (value.message == 'SUCCESS') {
-                                            loader.dismiss();
+                                            this.loader.dismiss();
                                             console.log("Transactions confirmed");
                                             this.toast.showTransactionConfirmed();
                                             this.navCtrl.push(BalancePage, {});
                                             this._clearCommon();
                                         }
                                         else if (value.message == 'FAILURE_INSUFFICIENT_BALANCE') {
-                                            loader.dismiss();
+                                            this.loader.dismiss();
                                             this.alert.showDoesNotHaveEnoughFunds();
                                         }
                                         else if (value.message == 'FAILURE_MESSAGE_TOO_LARGE') {
-                                            loader.dismiss();
+                                            this.loader.dismiss();
                                             this.alert.showMessageTooLarge();
                                         }
                                         else {
-                                            loader.dismiss();
+                                            this.loader.dismiss();
                                             this.alert.showError(value.message);
                                         }
                                     });
                                 }
                                 else {
                                     this.common.privateKey = '';
-                                    loader.dismiss();
+                                    this.loader.dismiss();
                                     this.alert.showInvalidPasswordAlert();
                                 }
                             });

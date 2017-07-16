@@ -17,6 +17,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { Globalization } from '@ionic-native/globalization';
 
 import {AlertProvider} from '../providers/alert/alert.provider';
+import {LoaderProvider} from '../providers/loader/loader.provider';
 import {ConfigProvider} from '../providers/config/config.provider';
 import {ToastProvider} from '../providers/toast/toast.provider';
 import {NemProvider} from '../providers/nem/nem.provider';
@@ -108,6 +109,7 @@ export function createTranslateLoader(http: Http) {
         ConfigProvider,
         AlertProvider,
         ToastProvider,
+        LoaderProvider
     ]
 })
 export class AppModule {

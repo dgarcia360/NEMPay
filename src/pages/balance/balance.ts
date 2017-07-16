@@ -1,11 +1,12 @@
 import {Component} from '@angular/core';
 
-import {MenuController, NavController, LoadingController} from 'ionic-angular';
+import {MenuController, NavController} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
 
 import {ConfigProvider} from '../../providers/config/config.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {LoaderProvider} from '../../providers/loader/loader.provider';
 
 import {TransferPage} from '../transfer/transfer';
 import {LoginPage} from '../login/login';
@@ -19,7 +20,7 @@ export class BalancePage {
     balance: any;
     selectedMosaic: any;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private menu: MenuController, private config: ConfigProvider, public translate: TranslateService, private alert: AlertProvider) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private menu: MenuController, private config: ConfigProvider, public translate: TranslateService, private alert: AlertProvider, private loader: LoaderProvider) {
 
     }
 
@@ -43,11 +44,7 @@ export class BalancePage {
                 }
                 else {
 
-                    let loader = this.loading.create({
-                        content: "Please wait..."
-                    });
-
-                    if (!refresher) loader.present();
+                    if (!refresher) this.loader.present();
 
                     this.nem.getBalance(value.accounts[0].address, this.config.defaultNetwork()).then(
                         value => {
@@ -57,7 +54,7 @@ export class BalancePage {
                                 refresher.complete();
                             }
                             else{
-                                loader.dismiss();
+                                this.loader.dismiss();
                             }
                         })
                 }
