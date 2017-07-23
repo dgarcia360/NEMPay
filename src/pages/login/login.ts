@@ -4,7 +4,6 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
-import {LoaderProvider} from '../../providers/loader/loader.provider';
 
 import {BalancePage} from '../balance/balance';
 import {SignupPage} from '../signup/signup';
@@ -20,7 +19,7 @@ export class LoginPage {
     common: any;
 
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private alert: AlertProvider, private loader: LoaderProvider, private menu: MenuController, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private alert: AlertProvider, private loading: LoadingController, private menu: MenuController, public translate: TranslateService) {
 
         this.wallets = [];
         this.selectedWallet = null;
@@ -60,43 +59,47 @@ export class LoginPage {
      * Enters into the app with the selected wallet
      */
     public login() {
-      
 
+        this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+            let loader = this.loading.create({
+                content: res
+            });
 
-        this.loader.present().then(
-            _ => {
+            loader.present().then(
+                _ => {
 
-                if (!this.selectedWallet) {
-                    this.loader.dismiss();
-                    this.alert.showWalletNotSelectedAlert();
-                }
-                var invalidPassword = false;
-                // Decrypt/generate private key and check it. Returned private key is contained into this.common
-                if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo)) {
-                    invalidPassword = true;
-                }
-
-                if (!invalidPassword && (this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) {
-
-                    if (!this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
+                    if (!this.selectedWallet) {
+                        loader.dismiss();
+                        this.alert.showWalletNotSelectedAlert();
+                    }
+                    var invalidPassword = false;
+                    // Decrypt/generate private key and check it. Returned private key is contained into this.common
+                    if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo)) {
                         invalidPassword = true;
                     }
-                }
-                else {
-                    invalidPassword = true;
-                    this.common.privateKey = '';
-                }
 
-                if (invalidPassword) {
-                    this.loader.dismiss();
-                    this.alert.showInvalidPasswordAlert();
-                }
-                else {
-                    this.nem.setSelectedWallet(this.selectedWallet);
-                    this.loader.dismiss();
-                    this.navCtrl.setRoot(BalancePage);
-                }
-            })
+                    if (!invalidPassword && (this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) {
+
+                        if (!this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
+                            invalidPassword = true;
+                        }
+                    }
+                    else {
+                        invalidPassword = true;
+                        this.common.privateKey = '';
+                    }
+
+                    if (invalidPassword) {
+                        loader.dismiss();
+                        this.alert.showInvalidPasswordAlert();
+                    }
+                    else {
+                        this.nem.setSelectedWallet(this.selectedWallet);
+                        loader.dismiss();
+                        this.navCtrl.setRoot(BalancePage);
+                    }
+                });
+        });
     }
 
     /**

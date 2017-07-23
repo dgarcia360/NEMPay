@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, AlertController} from 'ionic-angular';
+import {NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
 import {Keyboard} from '@ionic-native/keyboard';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -8,10 +8,11 @@ import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {ConfigProvider} from '../../providers/config/config.provider';
 import {ToastProvider} from '../../providers/toast/toast.provider';
-import {LoaderProvider} from '../../providers/loader/loader.provider';
 
 import {BalancePage} from '../balance/balance';
 import {LoginPage} from '../login/login';
+
+import 'rxjs/add/operator/toPromise';
 
 @Component({
     selector: 'page-transfer',
@@ -27,7 +28,7 @@ export class TransferPage {
     selectedWallet: any;
     selectedMosaicDefinitionMetaDataPair: any;
 
-    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loader: LoaderProvider, private keyboard: Keyboard, private config: ConfigProvider, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, private config: ConfigProvider, public translate: TranslateService) {
 
         this.formData = {};
         this.amount = 0;
@@ -166,26 +167,27 @@ export class TransferPage {
     /**
      * alert Confirmation subtitle builder
      */
-    private _subtitleBuilder(): Promise<string> {
-        var subtitle = 'You are going to send: <br/><br/> ';
+    private _subtitleBuilder(res){
+
+        var subtitle = res[0] + ' <br/><br/> ';
         var currency = '';
         if (this.selectedMosaic == 'nem:xem') {
-            currency = "<b>Amount:</b> " + this.amount + " xem";
+            currency = "<b>"+res[1]+":</b> " + this.amount + " xem";
         }
         else {
-            currency = "<b>Amount:</b> " + this.amount + " " + this.selectedMosaic;
+            currency = "<b>"+res[1]+"</b> " + this.amount + " " + this.selectedMosaic;
         }
         subtitle += currency;
 
         var _fee = this.formData.fee / 1000000;
 
-        subtitle += '<br/><br/>  <b>Fee:</b> ' + _fee + ' xem';
+        subtitle += '<br/><br/>  <b>'+res[2]+':</b> ' + _fee + ' xem';
 
         if (this.levy != undefined && 'mosaicId' in this.levy) {
             var _levy = 0;
             return this.nem.formatLevy(this.formData.mosaics[0], 1, this.levy, this.config.defaultNetwork()).then(value => {
                 _levy = value
-                subtitle += "<br/><br/> <b>Levy:</b> " + _levy + " " + this.levy.mosaicId.name;
+                subtitle += "<br/><br/> <b>"+res[3]+":</b> " + _levy + " " + this.levy.mosaicId.name;
                 return subtitle;
             });
         }
@@ -198,67 +200,79 @@ export class TransferPage {
      * Presents prompt to confirm the transaction, handling confirmation
      */
     private _presentPrompt() {
-       
-        this._subtitleBuilder().then(subitle => {
-            let alert = this.alertCtrl.create({
-                title: 'Confirm Transaction',
-                subTitle: subitle,
-                inputs: [
-                    {
-                        name: 'password',
-                        placeholder: 'Password',
-                        type: 'password'
-                    },
-                ],
-                buttons: [
-                    {
-                        text: 'Cancel',
-                        role: 'cancel'
-                    },
-                    {
-                        text: 'Confirm',
-                        handler: data => {
-                            this.keyboard.close();
-                            this.common.password = data.password;
-                            this.loader.present().then(_ => {
-                                if (this._canSendTransaction()) {
-                                    this._confirmTransaction().then(value => {
-                                        if (value.message == 'SUCCESS') {
-                                            this.loader.dismiss();
-                                            console.log("Transactions confirmed");
-                                            this.toast.showTransactionConfirmed();
-                                            this.navCtrl.push(BalancePage, {});
-                                            this._clearCommon();
-                                        }
-                                        else if (value.message == 'FAILURE_INSUFFICIENT_BALANCE') {
-                                            this.loader.dismiss();
-                                            this.alert.showDoesNotHaveEnoughFunds();
-                                        }
-                                        else if (value.message == 'FAILURE_MESSAGE_TOO_LARGE') {
-                                            this.loader.dismiss();
-                                            this.alert.showMessageTooLarge();
-                                        }
-                                        else {
-                                            this.loader.dismiss();
-                                            this.alert.showError(value.message);
-                                        }
-                                    });
-                                }
-                                else {
-                                    this.common.privateKey = '';
-                                    this.loader.dismiss();
-                                    this.alert.showInvalidPasswordAlert();
-                                }
-                            });
+        this.translate.get(['YOU_ARE_GOING_TO_SEND','AMOUNT','FEE', 'LEVY', 'CONFIRM_TRANSACTION', 'PASSWORD','CANCEL','CONFIRM'], {}).subscribe((res) => {
 
+            this._subtitleBuilder(res).then(subtitle => {
+
+                let alert = this.alertCtrl.create({
+                    title: res[4],
+                    subTitle: subtitle,
+                    inputs: [
+                        {
+                            name: 'password',
+                            placeholder: res[5],
+                            type: 'password'
+                        },
+                    ],
+                    buttons: [
+                        {
+                            text: res[6],
+                            role: 'cancel'
+                        },
+                        {
+                            text: res[7],
+                            handler: data => {
+                                this.keyboard.close();
+                                this.common.password = data.password;
+                                this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+                                    let loader = this.loading.create({
+                                        content: res
+                                    });
+
+                                    loader.present().then(
+                                        _ => {
+                                            if (this._canSendTransaction()) {
+                                                this._confirmTransaction().then(value => {
+                                                    if (value.message == 'SUCCESS') {
+                                                        loader.dismiss();
+                                                        console.log("Transactions confirmed");
+                                                        this.toast.showTransactionConfirmed();
+                                                        this.navCtrl.push(BalancePage, {});
+                                                        this._clearCommon();
+                                                    }
+                                                    else if (value.message == 'FAILURE_INSUFFICIENT_BALANCE') {
+                                                        loader.dismiss();
+                                                        this.alert.showDoesNotHaveEnoughFunds();
+                                                    }
+                                                    else if (value.message == 'FAILURE_MESSAGE_TOO_LARGE') {
+                                                        loader.dismiss();
+                                                        this.alert.showMessageTooLarge();
+                                                    }
+                                                    else {
+                                                        loader.dismiss();
+                                                        this.alert.showError(value.message);
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                this.common.privateKey = '';
+                                                loader.dismiss();
+                                                this.alert.showInvalidPasswordAlert();
+                                            }
+                                        });
+                                });
+
+                            }
                         }
-                    }
-                ]
+                    ]
+                });
+
+                alert.onDidDismiss(() => {
+                    this.keyboard.close()
+                });
+
+                alert.present();
             });
-            alert.onDidDismiss(() => {
-                this.keyboard.close()
-            })
-            alert.present();
         });
     }
 

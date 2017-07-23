@@ -1,12 +1,11 @@
 import {Component} from '@angular/core';
-import {App} from 'ionic-angular';
+import {App, LoadingController} from 'ionic-angular';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 
 import {TranslateService} from '@ngx-translate/core';
 
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
-import {ConfigProvider} from '../../providers/loader/loader.provider';
 
 import {ConfigProvider} from '../../providers/config/config.provider';
 import {LoginPage} from '../login/login';
@@ -18,7 +17,7 @@ import {LoginPage} from '../login/login';
 export class SignupPrivateKeyPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private loader: LoaderProvider, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
+    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
         //sensitive data
         this.newAccount = null;
 
@@ -39,11 +38,11 @@ export class SignupPrivateKeyPage {
     }
 
     /**
-     * Scans wallet QR and stores its private key in newAccount.privateKey 
+     * Scans wallet QR and stores its private key in newAccount.privateKey
      */
     public scanWalletQR() {
         this.barcodeScanner.scan().then(barcode => {
-            
+
             var walletInfo = JSON.parse(barcode.text);
             if (!this.newAccount.password){
                 this.alert.showBarCodeScannerRequiresPassword();
@@ -72,27 +71,34 @@ export class SignupPrivateKeyPage {
             this.alert.showInvalidPrivateKey();
         }
         else{
-           
 
-            this.loader.present().then(_ => {
 
-                this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key, this.config.defaultNetwork()).then(
-                    wallet => {
-                        if (wallet) {
-                            this.loader.dismiss();
-                            this._clearNewAccount();
-                            this.app.getRootNav().push(LoginPage);
-                        }
-                        else {
-                            this.loader.dismiss();
-                            this.alert.showWalletNameAlreadyExists();
-                        }
-                    }
-                ).catch(_ => {
-                    this.loader.dismiss();
-                    this.alert.showInvalidPrivateKey();
-                })
-            })
+            this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+                let loader = this.loading.create({
+                    content: res
+                });
+
+                loader.present().then(
+                    _ => {
+
+                        this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key, this.config.defaultNetwork()).then(
+                            wallet => {
+                                if (wallet) {
+                                    loader.dismiss();
+                                    this._clearNewAccount();
+                                    this.app.getRootNav().push(LoginPage);
+                                }
+                                else {
+                                    loader.dismiss();
+                                    this.alert.showWalletNameAlreadyExists();
+                                }
+                            }
+                        ).catch(_ => {
+                            loader.dismiss();
+                            this.alert.showInvalidPrivateKey();
+                        });
+                    });
+            });
         }
     }
 }

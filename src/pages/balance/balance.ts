@@ -1,12 +1,11 @@
 import {Component} from '@angular/core';
 
-import {MenuController, NavController} from 'ionic-angular';
+import {MenuController, NavController, LoadingController} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
 
 import {ConfigProvider} from '../../providers/config/config.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
-import {LoaderProvider} from '../../providers/loader/loader.provider';
 
 import {TransferPage} from '../transfer/transfer';
 import {LoginPage} from '../login/login';
@@ -20,7 +19,7 @@ export class BalancePage {
     balance: any;
     selectedMosaic: any;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private menu: MenuController, private config: ConfigProvider, public translate: TranslateService, private alert: AlertProvider, private loader: LoaderProvider) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private menu: MenuController, private config: ConfigProvider, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
 
     }
 
@@ -34,32 +33,38 @@ export class BalancePage {
      * @param refresher  Ionic refresher or false, if called on View Enter
      */
     public getBalance(refresher) {
+        this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+            let loader = this.loading.create({
+                content: res
+            });
 
-        this.nem.getSelectedWallet().then(
-            value => {
 
-                if (!value) {
-                    if (refresher) refresher.complete();
-                    this.navCtrl.setRoot(LoginPage);
+            this.nem.getSelectedWallet().then(
+                value => {
+
+                    if (!value) {
+                        if (refresher) refresher.complete();
+                        this.navCtrl.setRoot(LoginPage);
+                    }
+                    else {
+
+                        if (!refresher) loader.present();
+
+                        this.nem.getBalance(value.accounts[0].address, this.config.defaultNetwork()).then(
+                            value => {
+                                this.balance = value.data;
+                                console.log(this.balance);
+                                if (refresher) {
+                                    refresher.complete();
+                                }
+                                else {
+                                    loader.dismiss();
+                                }
+                            });
+                    }
                 }
-                else {
-
-                    if (!refresher) this.loader.present();
-
-                    this.nem.getBalance(value.accounts[0].address, this.config.defaultNetwork()).then(
-                        value => {
-                            this.balance = value.data;
-                            console.log(this.balance);
-                            if (refresher) {
-                                refresher.complete();
-                            }
-                            else{
-                                this.loader.dismiss();
-                            }
-                        })
-                }
-            }
-        )
+            )
+        });
     }
 
     /**

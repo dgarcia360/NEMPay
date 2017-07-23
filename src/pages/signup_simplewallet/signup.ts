@@ -1,11 +1,10 @@
 import {Component} from '@angular/core';
-import {App, AlertController} from 'ionic-angular';
+import {App, AlertController, LoadingController} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
 
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {ConfigProvider} from '../../providers/config/config.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
-import {LoaderProvider} from '../../providers/loader/loader.provider';
 
 import {LoginPage} from '../login/login';
 
@@ -16,7 +15,7 @@ import {LoginPage} from '../login/login';
 export class SignupSimpleWalletPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private loader: LoaderProvider, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService, private alertCtrl: AlertController) {
+    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService, private alertCtrl: AlertController) {
         // sensitive data
         this.newAccount = null;
 
@@ -80,20 +79,27 @@ export class SignupSimpleWalletPage {
         }
         else {
 
-            this.loader.present().then(_ => {
-                this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.password, this.config.defaultNetwork()).then(
-                    wallet => {
-                        if (wallet) {
-                            this.loader.dismiss();
-                            this._showTutorialAlert(wallet);
-                        }
-                        else {
-                            this.loader.dismiss();
-                            this.alert.showWalletNameAlreadyExists();
-                        }
-                    }
-                )
-            })
+            this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+                let loader = this.loading.create({
+                    content: res
+                });
+
+                loader.present().then(
+                    _ => {
+                        this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.password, this.config.defaultNetwork()).then(
+                            wallet => {
+                                if (wallet) {
+                                    loader.dismiss();
+                                    this._showTutorialAlert(wallet);
+                                }
+                                else {
+                                    loader.dismiss();
+                                    this.alert.showWalletNameAlreadyExists();
+                                }
+                            }
+                        )
+                    });
+            });
         }
     }
 }

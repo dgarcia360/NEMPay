@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ToastController} from 'ionic-angular';
+import {TranslateService} from '@ngx-translate/core';
 
 // import { Http } from '@angular/http';
 // import 'rxjs/add/operator/map';
@@ -14,28 +15,34 @@ import {ToastController} from 'ionic-angular';
 @Injectable()
 export class ToastProvider {
 
-    constructor(private toast: ToastController) {
+    constructor(private toast: ToastController, private translate: TranslateService) {
 
     }
 
     showTransactionConfirmed() {
-        let toast = this.toast.create({
-            message: 'Transaction successfully sent',
-            duration: 3000,
-            position: 'bottom'
+        return this.translate.get('ALERT_TRANSACTION_CONFIRMED', {}).subscribe((res: string) => {
+
+            let toast = this.toast.create({
+                message: res,
+                duration: 3000,
+                position: 'bottom'
+            });
+            toast.present();
+            return toast;
         });
-        toast.present();
-        return toast;
     }
 
     showCopyCorrect() {
-        let toast = this.toast.create({
-            message: 'Transaction displayed address has been copied',
-            duration: 3000,
-            position: 'bottom'
-        });
-        toast.present();
-        return toast;
-    }
+        return this.translate.get('ALERT_ADDRESS_COPIED', {}).subscribe((res: string) => {
 
+            let toast = this.toast.create({
+                message: res,
+                duration: 3000,
+                position: 'bottom'
+            });
+            toast.present();
+            return toast;
+
+        });
+    }
 }
