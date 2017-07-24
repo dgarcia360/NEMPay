@@ -33,6 +33,8 @@
 
   "SIMPLE_WALLET_WARNING": "We are not responsible for any loss that could be due to the entropy of key generation.",
   "PRIVATE_KEY_WALLET_WARNING": "Private key wallets use ONLY a password to encrypt the imported private key. Therefore it's crucial to select a SAFE password.",
+  
+  "IMPORT_ACCOUNT_QR_WARNING": "To use QR wallet scanner, you must use the same password as your current wallet account",
 
   "TRANSACTIONS": "Transacciones",
   "CONFIRMED_TRANSACTIONS": "Transacciones confirmadas",

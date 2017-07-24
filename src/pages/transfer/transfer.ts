@@ -169,25 +169,25 @@ export class TransferPage {
      */
     private _subtitleBuilder(res){
 
-        var subtitle = res[0] + ' <br/><br/> ';
+        var subtitle = res['YOU_ARE_GOING_TO_SEND'] + ' <br/><br/> ';
         var currency = '';
         if (this.selectedMosaic == 'nem:xem') {
-            currency = "<b>"+res[1]+":</b> " + this.amount + " xem";
+            currency = "<b>"+res['AMOUNT']+":</b> " + this.amount + " xem";
         }
         else {
-            currency = "<b>"+res[1]+"</b> " + this.amount + " " + this.selectedMosaic;
+            currency = "<b>"+res['AMOUNT']+"</b> " + this.amount + " " + this.selectedMosaic;
         }
         subtitle += currency;
 
         var _fee = this.formData.fee / 1000000;
 
-        subtitle += '<br/><br/>  <b>'+res[2]+':</b> ' + _fee + ' xem';
+        subtitle += '<br/><br/>  <b>'+res['FEE']+':</b> ' + _fee + ' xem';
 
         if (this.levy != undefined && 'mosaicId' in this.levy) {
             var _levy = 0;
             return this.nem.formatLevy(this.formData.mosaics[0], 1, this.levy, this.config.defaultNetwork()).then(value => {
                 _levy = value
-                subtitle += "<br/><br/> <b>"+res[3]+":</b> " + _levy + " " + this.levy.mosaicId.name;
+                subtitle += "<br/><br/> <b>"+res['LEVY']+":</b> " + _levy + " " + this.levy.mosaicId.name;
                 return subtitle;
             });
         }
@@ -201,26 +201,26 @@ export class TransferPage {
      */
     private _presentPrompt() {
         this.translate.get(['YOU_ARE_GOING_TO_SEND','AMOUNT','FEE', 'LEVY', 'CONFIRM_TRANSACTION', 'PASSWORD','CANCEL','CONFIRM'], {}).subscribe((res) => {
-
+            console.log(res);
             this._subtitleBuilder(res).then(subtitle => {
 
                 let alert = this.alertCtrl.create({
-                    title: res[4],
+                    title: res['CONFIRM_TRANSACTION'],
                     subTitle: subtitle,
                     inputs: [
                         {
                             name: 'password',
-                            placeholder: res[5],
+                            placeholder: res['PASSWORD'],
                             type: 'password'
                         },
                     ],
                     buttons: [
                         {
-                            text: res[6],
+                            text: res['CANCEL'],
                             role: 'cancel'
                         },
                         {
-                            text: res[7],
+                            text: res['CONFIRM'],
                             handler: data => {
                                 this.keyboard.close();
                                 this.common.password = data.password;

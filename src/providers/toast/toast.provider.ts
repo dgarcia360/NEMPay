@@ -20,7 +20,7 @@ export class ToastProvider {
     }
 
     showTransactionConfirmed() {
-        return this.translate.get('ALERT_TRANSACTION_CONFIRMED', {}).subscribe((res: string) => {
+        this.translate.get('ALERT_TRANSACTION_CONFIRMED', {}).subscribe((res: string) => {
 
             let toast = this.toast.create({
                 message: res,
@@ -28,12 +28,11 @@ export class ToastProvider {
                 position: 'bottom'
             });
             toast.present();
-            return toast;
         });
     }
 
     showCopyCorrect() {
-        return this.translate.get('ALERT_ADDRESS_COPIED', {}).subscribe((res: string) => {
+        this.translate.get('ALERT_ADDRESS_COPIED', {}).subscribe((res: string) => {
 
             let toast = this.toast.create({
                 message: res,
@@ -41,8 +40,6 @@ export class ToastProvider {
                 position: 'bottom'
             });
             toast.present();
-            return toast;
-
         });
     }
 }

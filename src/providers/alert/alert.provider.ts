@@ -20,148 +20,144 @@ export class AlertProvider {
     }
 
     showWalletNotSelectedAlert() {
-        return this.translate.get('ALERT_NOT_WALLET_SELECTED', {}).subscribe((res: string) => {
+        this.translate.get(['ALERT_NOT_WALLET_SELECTED', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_NOT_WALLET_SELECTED'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
     }
 
     showInvalidPasswordAlert() {
-        return this.translate.get('ALERT_PROVIDED_PASSWORD_INVALID', {}).subscribe((res: string) => {
+
+        this.translate.get(['ALERT_PROVIDED_PASSWORD_INVALID', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_PROVIDED_PASSWORD_INVALID'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
     }
 
+
     showPasswordDoNotMatch() {
-        return this.translate.get('ALERT_PASSWORDS_DO_NOT_MATCH', {}).subscribe((res: string) => {
+        this.translate.get(['ALERT_PASSWORDS_DO_NOT_MATCH', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_PASSWORDS_DO_NOT_MATCH'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
     }
 
     showWalletNameAlreadyExists() {
-        return this.translate.get('ALERT_WALLET_NAME_ALREADY_EXISTS', {}).subscribe((res: string) => {
+        this.translate.get(['ALERT_WALLET_NAME_ALREADY_EXISTS', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_WALLET_NAME_ALREADY_EXISTS'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
     }
 
     showAlertDoesNotBelongToNetwork() {
 
-        return this.translate.get('ALERT_WALLET_IS_NOT_INVALID_FOR_THIS_NETWORK', {}).subscribe((res: string) => {
+        this.translate.get(['ALERT_WALLET_IS_NOT_INVALID_FOR_THIS_NETWORK', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_WALLET_IS_NOT_INVALID_FOR_THIS_NETWORK'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
     }
 
     showTransactionConfirmed() {
 
-        return this.translate.get('ALERT_TRANSACTION_CONFIRMED', {}).subscribe((res: string) => {
+        this.translate.get(['ALERT_TRANSACTION_CONFIRMED', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_TRANSACTION_CONFIRMED'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
 
     }
 
     showDoesNotHaveEnoughFunds() {
 
-        return this.translate.get('ALERT_ACCOUNT_DOES_NOT_HAVE_ENOUGH_FUNDS', {}).subscribe((res: string) => {
+        this.translate.get(['ALERT_ACCOUNT_DOES_NOT_HAVE_ENOUGH_FUNDS', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_ACCOUNT_DOES_NOT_HAVE_ENOUGH_FUNDS'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
 
     }
 
     showMessageTooLarge() {
-        return this.translate.get('ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE', {}).subscribe((res: string) => {
+        this.translate.get(['ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
     }
 
     showMosaicNotTransferable() {
-        return this.translate.get('ALERT_MOSAIC_IS_NOT_TRANSFERABLE', {}).subscribe((res: string) => {
+        this.translate.get(['ALERT_MOSAIC_IS_NOT_TRANSFERABLE', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_MOSAIC_IS_NOT_TRANSFERABLE'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
     }
 
     showBarCodeScannerRequiresPassword() {
-        //TODO: ADD it in i18n
-        let alert = this.alertCtrl.create({
-            title: 'To use QR wallet scanner, you must use the same password as your current wallet account',
-            buttons: ['OK']
+        this.translate.get(['IMPORT_ACCOUNT_QR_WARNING', 'OK'], {}).subscribe((res) => {
+
+            let alert = this.alertCtrl.create({
+                title: res['IMPORT_ACCOUNT_QR_WARNING'],
+                buttons: [res['OK']]
+            });
+            alert.present();
         });
-        alert.present();
-        return alert;
+
     }
 
 
     showInvalidPrivateKey() {
-        return this.translate.get('ALERT_INVALID_PRIVATE_KEY', {}).subscribe((res: string) => {
+        this.translate.get(['ALERT_INVALID_PRIVATE_KEY', 'OK'], {}).subscribe((res) => {
             let alert = this.alertCtrl.create({
-                title: res,
-                buttons: ['OK']
+                title: res['ALERT_INVALID_PRIVATE_KEY'],
+                buttons: [res['OK']]
             });
 
             alert.present();
-            return alert;
         });
     }
 
     showError(error) {
-        let alert = this.alertCtrl.create({
-            title: error,
-            buttons: ['OK']
-        });
-        alert.present();
-        return alert;
-    }
+        this.translate.get('OK', {}).subscribe((res) => {
 
+            let alert = this.alertCtrl.create({
+                title: error,
+                buttons: [res]
+            });
+            alert.present();
+        });
+
+    }
 }
