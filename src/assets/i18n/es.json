@@ -28,18 +28,18 @@
   "SIGNUP": "Registrar",
   "IMPORT": "Importar",
   "KEEP_YOUR_PRIVATE_KEY_SAFE": "Mantenga su clave privada a salvo",
-  "CREATE_ACCOUNT": "Create Account",
-  "IMPORT_ACCOUNT": "Import Account",
+  "CREATE_ACCOUNT": "Crear Cuenta",
+  "IMPORT_ACCOUNT": "Importar Cuenta",
 
-  "SIMPLE_WALLET_WARNING": "We are not responsible for any loss that could be due to the entropy of key generation.",
-  "PRIVATE_KEY_WALLET_WARNING": "Private key wallets use ONLY a password to encrypt the imported private key. Therefore it's crucial to select a SAFE password.",
+  "SIMPLE_WALLET_WARNING": "No nos hacemos responsables de ninguna pérdida que pueda ser producida por la entropia de la generación de la clave.",
+  "PRIVATE_KEY_WALLET_WARNING": "Las carteras de clave privada utilizan sólo na contraseña para encriptar la clave privada importada. Por ello, es crucial seleccionar una contraseña SEGURA.",
   
-  "IMPORT_ACCOUNT_QR_WARNING": "To use QR wallet scanner, you must use the same password as your current wallet account",
+  "IMPORT_ACCOUNT_QR_WARNING": "Para usar el escáner de cartera QR, debe introducir la misma contraseña que en su actual cartera",
 
   "TRANSACTIONS": "Transacciones",
   "CONFIRMED_TRANSACTIONS": "Transacciones confirmadas",
   "PENDING_TRANSACTIONS": "Transacciones pendientes",
-  "NOTHING_TO_SHOW": "Nothing to show",
+  "NOTHING_TO_SHOW": "Nada que mostrar",
 
   "TRANSFER": "Transferir",
   "FROM": "Remitente",
