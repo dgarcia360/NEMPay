@@ -28,20 +28,20 @@
   "SIGNUP": "Registrar-se",
   "IMPORT": "Importar",
   "KEEP_YOUR_PRIVATE_KEY_SAFE": "Mantingui segura la seva clau privada",
-  "CREATE_ACCOUNT": "Create Account",
-  "IMPORT_ACCOUNT": "Import Account",
+  "CREATE_ACCOUNT": "Crear Compte",
+  "IMPORT_ACCOUNT": "Importar Compte",
 
-  "SIMPLE_WALLET_WARNING": "We are not responsible for any loss that could be due to the entropy of key generation.",
-  "PRIVATE_KEY_WALLET_WARNING": "Private key wallets use ONLY a password to encrypt the imported private key. Therefore it's crucial to select a SAFE password.",
+  "SIMPLE_WALLET_WARNING": "No som responsables de cap pèrdua deguda a l'entropia de generació de la clau.",
+  "PRIVATE_KEY_WALLET_WARNING": "Les carteres de clau privada utilitzen només una contrasenya per encriptar la clau privada. Per això, és crucial utilitzar una contrasenya SEGURA.",
 
 
-  "IMPORT_ACCOUNT_QR_WARNING": "To use QR wallet scanner, you must use the same password as your current wallet account",
+  "IMPORT_ACCOUNT_QR_WARNING": "Per utilitzar l'escàner QR, has d'utilitzar la mateixa contrasenya que a la vostra actual",
 
   "TRANSACTIONS": "Transaccions",
   "CONFIRMED_TRANSACTIONS": "Transaccions Confirmades",
   "PENDING_TRANSACTIONS": "Transaccions Pendents",
 
-  "NOTHING_TO_SHOW": "Nothing to show",
+  "NOTHING_TO_SHOW": "Res per mostrar",
 
   "TRANSFER": "Transferir",
   "FROM": "De",
@@ -75,6 +75,4 @@
   "ALERT_SUBTITLE_ONLY_TESTNET": "Recordi que en aquest moment només funciona a la Testnet",
   "ALERT_PHONE_DISCONNECTED": "El seu telèfon està desconnectat d'Internet",
   "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Torneu a obrir l'aplicació una vegada tingueu connexió a Internet"
-
-  "TOAST_S"
 }
