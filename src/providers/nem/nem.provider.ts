@@ -356,7 +356,6 @@ export class NemProvider {
      */
     public getBalance(address, network) {
         return this._provideDefaultNode(network).then(node => {
-            console.log(node);
             var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
             // Gets account data
             return this.nem.default.com.requests.account.mosaics(endpoint, address).then(
