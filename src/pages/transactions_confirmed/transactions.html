@@ -38,7 +38,7 @@
             <p> <span *ngFor="let mos of tx.transaction.mosaics;let firstItem = first;">
       <span *ngIf='firstItem && mos.definition.levy.mosaicId'><b>{{'LEVY' | translate}}</b>:</span>
                 <span *ngIf="mos.definition.levy.mosaicId"> {{mos | formatLevy:(mos.definition.levy) | async}} {{mos.definition.levy.mosaicId.name}} </span></span></p>
-            <p *ngIf="tx.transaction.message"><b> {{'MESSAGE' | translate}}:</b> {{tx.transaction.message | hexMessageToString}}
+            <p *ngIf="tx.transaction.message.payload"><b> {{'MESSAGE' | translate}}:</b> {{tx.transaction.message | hexMessageToString}}
             </p>
         </ion-item>
 
