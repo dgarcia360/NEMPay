@@ -51,6 +51,8 @@ export class TransactionsConfirmedPage {
                                 if (refresher) refresher.complete();
                                 else loader.dismiss();
                                 this.transactions = value;
+                                console.log(this.transactions);
+
                             })
                     }
                 }
