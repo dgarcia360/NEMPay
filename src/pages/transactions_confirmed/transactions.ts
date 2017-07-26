@@ -31,28 +31,33 @@ export class TransactionsConfirmedPage {
      * @param refresher  Ionic refresher or false, if called on View Enter
      */
     public getTransactions(refresher) {
-        let loader = this.loading.create({
-            content: "Please wait..."
-        });
 
-        this.nem.getSelectedWallet().then(
-            value => {
-                this.address = value.accounts[0].address;
-                if (!value) {
-                    if (refresher) refresher.complete();
-                    this.navCtrl.push(LoginPage);
+        this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+            let loader = this.loading.create({
+                content: res
+            });
+
+            this.nem.getSelectedWallet().then(
+                value => {
+                    this.address = value.accounts[0].address;
+                    if (!value) {
+                        if (refresher) refresher.complete();
+                        this.navCtrl.push(LoginPage);
+                    }
+                    else {
+                        if (!refresher) loader.present();
+                        this.nem.getAllTransactionsFromAnAccount(this.address, this.config.defaultNetwork()).then(
+                            value => {
+                                if (refresher) refresher.complete();
+                                else loader.dismiss();
+                                this.transactions = value;
+                                console.log(this.transactions);
+
+                            })
+                    }
                 }
-                else {
-                    if (!refresher) loader.present();
-                    this.nem.getAllTransactionsFromAnAccount(this.address, this.config.defaultNetwork()).then(
-                        value => {
-                            if (refresher) refresher.complete();
-                            else loader.dismiss();
-                            this.transactions = value;
-                        })
-                }
-            }
-        )
+            )
+        });
     }
 
     /**

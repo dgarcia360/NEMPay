@@ -23,33 +23,37 @@ export class MyApp {
 
     constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, network: Network, alertCtrl: AlertController, private translateService: TranslateService, private globalization: Globalization) {
         platform.ready().then(() => {
-            // Okay, so the platform is ready and our plugins are available.
-            // Here you can do any higher level native things you might need.
+
+            // alert if internet is disconnected
             let alert = alertCtrl.create({
                 title: 'Your phone is disconnected from internet',
                 subTitle: 'Open the app again once you have internet connection',
             });
 
+            let availableLanguages = ['en', 'es','ca', 'ko', 'ru', 'pl', 'ja', 'de'];
+
             network.onDisconnect().subscribe(() => {
                 alert.present();
             });
 
+            //i18n configuration
             this.translateService.setDefaultLang('en');
             if (platform.is('cordova')) {
-
                 this.globalization.getPreferredLanguage()
                     .then(language => {
-
-                        if (language.value == 'es') {
-                            this.translateService.use('es');
+                        //if the file is available
+                        if (language.value in availableLanguages) {
+                            this.translateService.use(language.value);
                         }
-                        else if (language.value == 'ca') {
-                            this.translateService.use('ca');
+                        //else, try with the first substring
+                        else{
+                            for (var lang of availableLanguages){
+                                if(language.value.split("-")[0] == lang){
+                                    this.translateService.use(lang);
+                                    break;
+                                }
+                            }
                         }
-                        else {
-                            this.translateService.use('en');
-                        }
-
                     })
                     .catch(e => console.log(e));
             }
@@ -57,6 +61,7 @@ export class MyApp {
                 this.translateService.use('en');
             }
 
+            //ionic default
             statusBar.styleDefault();
             splashScreen.hide();
         });

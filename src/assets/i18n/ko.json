@@ -11,7 +11,7 @@
   "YOUR_ADDRESS": "Your address",
   "SHARE_ADDRESS": "Share Address",
   "PRIVATE_KEY": "Private Key",
-  "PRIVATE_KEY_SUBTITLE": "To view your private key, insert your password or passphrase.",
+  "PRIVATE_KEY_SUBTITLE": "To view your private key, insert your password.",
   "PASSWORD_WARNING" : "Your private key holds all the power of your account. It is a priority to make sure it is stored safely somewhere offline.",
   "SHOW_PRIVATE_KEY": "Show Private Key",
   "HIDE_PRIVATE_KEY": "Hide Private Key",
@@ -22,7 +22,6 @@
   "CREATE_OR_IMPORT_AN_ACCOUNT": "CREATE OR IMPORT AN ACCOUNT",
   "LOGIN": "Log in",
   "LOGOUT": "Log out",
-
 
   "WALLET_NAME": "Wallet Name",
   "REPEAT_PASSWORD": "Repeat Password",
@@ -74,4 +73,5 @@
   "ALERT_SUBTITLE_ONLY_TESTNET": "Remember that at the moment it only works on testnet",
   "ALERT_PHONE_DISCONNECTED": "Your phone is disconnected from internet",
   "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Open the app again once you have internet connection"
+
 }

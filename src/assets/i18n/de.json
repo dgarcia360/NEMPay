@@ -34,13 +34,11 @@
 
   "SIMPLE_WALLET_WARNING": "Wir sind nicht verantwortlich für irgendeinen Verlust, der auf die Entropie der Schlüsselgenerierung zurückzuführen werden könnte",
   "PRIVATE_KEY_WALLET_WARNING": "Private Schlüssel wallets verwenden NUR ein Passwort um die importierten privaten Schlüssel zu verschlüsseln. Daher ist es entscheidend, ein SICHERES Passwort zu wählen.",
-
-
   "IMPORT_ACCOUNT_QR_WARNING": "Um den QR wallet Scanner zu verwenden, müssen Sie das Selbe Passwort verwenden, wie das von ihrer bestehenden wallet.",
-
   "TRANSACTIONS": "Transaktionen",
   "CONFIRMED_TRANSACTIONS": "Bestätigte Transaktionen",
   "PENDING_TRANSACTIONS": "Ausstehende Transaktionen",
+ 
   "NOTHING_TO_SHOW": "Keine Transaktionen vorhanden",
 
   "TRANSFER": "Überweisung",

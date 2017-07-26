@@ -2,9 +2,9 @@
     <ion-refresher (ionRefresh)="getTransactions($event)">
         <ion-refresher-content
                 pullingIcon="arrow-dropdown"
-                pullingText="Pull to refresh"
+                pullingText="{{'PULL_TO_REFRESH' | translate}} "
                 refreshingSpinner="circles"
-                refreshingText="Refreshing...">
+                refreshingText="{{'REFRESHING' | translate}} ">
         </ion-refresher-content>
     </ion-refresher>
 
@@ -33,7 +33,7 @@
     white-space:nowrap;
     text-overflow: ellipsis;"><b>{{'TO' | translate}}:</b> {{tx.transaction.recipient | formatAddress}}</p>
       </span>
-            <p><b>Date:</b> {{tx.transaction.timeStamp | nemDate}}</p>
+            <p><b>{{'DATE' | translate}}:</b> {{tx.transaction.timeStamp | nemDate}}</p>
             <p *ngIf="tx.transaction.fee"><b>{{'FEE' | translate}}:</b> {{tx.transaction.fee/1000000}} xem</p>
             <p> <span *ngFor="let mos of tx.transaction.mosaics;let firstItem = first;">
       <span *ngIf='firstItem && mos.definition.levy.mosaicId'><b>{{'LEVY' | translate}}</b>:</span>
@@ -44,6 +44,6 @@
 
     </ion-list>
     <div *ngIf="transactions.length == 0">
-        <h5>Nothing to show</h5>
+        <h5>{{'NOTHING_TO_SHOW' | translate}} </h5>
     </div>
 </ion-content>

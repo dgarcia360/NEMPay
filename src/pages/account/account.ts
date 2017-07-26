@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, LoadingController, Platform} from 'ionic-angular';
+import {NavController, Platform, LoadingController} from 'ionic-angular';
 import { Subscription } from 'rxjs';
 
 import {SocialSharing} from '@ionic-native/social-sharing';
@@ -10,6 +10,7 @@ import * as kjua from "kjua";
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+
 import {ConfigProvider} from '../../providers/config/config.provider';
 
 import {LoginPage} from "../login/login";
@@ -116,22 +117,23 @@ export class AccountPage {
      * @param transaction  transaction object
      */
     public showPrivateKey() {
+        this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+            let loader = this.loading.create({
+                content: res
+            });
 
-        let loader = this.loading.create({
-            content: "Please wait..."
+            loader.present().then(
+                _ => {
+                    if (!this._canShowPrivateKey()) {
+                        loader.dismiss();
+                        this._clearCommon();
+                        this.alert.showInvalidPasswordAlert();
+                    }
+                    else {
+                        loader.dismiss();
+                    }
+                });
         });
-
-        loader.present().then(
-            _ => {
-                if (!this._canShowPrivateKey()) {
-                    loader.dismiss();
-                    this._clearCommon();
-                    this.alert.showInvalidPasswordAlert();
-                }
-                else {
-                    loader.dismiss();
-                }
-            })
     }
 
     /**
