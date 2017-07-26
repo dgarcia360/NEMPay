@@ -19,7 +19,7 @@ export class BalancePage {
     balance: any;
     selectedMosaic: any;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private menu: MenuController, private config: ConfigProvider, public translate: TranslateService, private alert: AlertProvider) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private menu: MenuController, private config: ConfigProvider, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
 
     }
 
@@ -33,36 +33,38 @@ export class BalancePage {
      * @param refresher  Ionic refresher or false, if called on View Enter
      */
     public getBalance(refresher) {
+        this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+            let loader = this.loading.create({
+                content: res
+            });
 
-        this.nem.getSelectedWallet().then(
-            value => {
 
-                if (!value) {
-                    if (refresher) refresher.complete();
-                    this.navCtrl.setRoot(LoginPage);
+            this.nem.getSelectedWallet().then(
+                value => {
+
+                    if (!value) {
+                        if (refresher) refresher.complete();
+                        this.navCtrl.setRoot(LoginPage);
+                    }
+                    else {
+
+                        if (!refresher) loader.present();
+
+                        this.nem.getBalance(value.accounts[0].address, this.config.defaultNetwork()).then(
+                            value => {
+                                this.balance = value.data;
+                                console.log(this.balance);
+                                if (refresher) {
+                                    refresher.complete();
+                                }
+                                else {
+                                    loader.dismiss();
+                                }
+                            });
+                    }
                 }
-                else {
-
-                    let loader = this.loading.create({
-                        content: "Please wait..."
-                    });
-
-                    if (!refresher) loader.present();
-
-                    this.nem.getBalance(value.accounts[0].address, this.config.defaultNetwork()).then(
-                        value => {
-                            this.balance = value.data;
-                            console.log(this.balance);
-                            if (refresher) {
-                                refresher.complete();
-                            }
-                            else{
-                                loader.dismiss();
-                            }
-                        })
-                }
-            }
-        )
+            )
+        });
     }
 
     /**

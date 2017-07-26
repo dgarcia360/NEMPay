@@ -38,11 +38,11 @@ export class SignupPrivateKeyPage {
     }
 
     /**
-     * Scans wallet QR and stores its private key in newAccount.privateKey 
+     * Scans wallet QR and stores its private key in newAccount.privateKey
      */
     public scanWalletQR() {
         this.barcodeScanner.scan().then(barcode => {
-            
+
             var walletInfo = JSON.parse(barcode.text);
             if (!this.newAccount.password){
                 this.alert.showBarCodeScannerRequiresPassword();
@@ -71,29 +71,34 @@ export class SignupPrivateKeyPage {
             this.alert.showInvalidPrivateKey();
         }
         else{
-            let loader = this.loading.create({
-                content: "Please wait..."
+
+
+            this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+                let loader = this.loading.create({
+                    content: res
+                });
+
+                loader.present().then(
+                    _ => {
+
+                        this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key, this.config.defaultNetwork()).then(
+                            wallet => {
+                                if (wallet) {
+                                    loader.dismiss();
+                                    this._clearNewAccount();
+                                    this.app.getRootNav().push(LoginPage);
+                                }
+                                else {
+                                    loader.dismiss();
+                                    this.alert.showWalletNameAlreadyExists();
+                                }
+                            }
+                        ).catch(_ => {
+                            loader.dismiss();
+                            this.alert.showInvalidPrivateKey();
+                        });
+                    });
             });
-
-            loader.present().then(_ => {
-
-                this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key, this.config.defaultNetwork()).then(
-                    wallet => {
-                        if (wallet) {
-                            loader.dismiss();
-                            this._clearNewAccount();
-                            this.app.getRootNav().push(LoginPage);
-                        }
-                        else {
-                            loader.dismiss();
-                            this.alert.showWalletNameAlreadyExists();
-                        }
-                    }
-                ).catch(_ => {
-                    loader.dismiss();
-                    this.alert.showInvalidPrivateKey();
-                })
-            })
         }
     }
 }

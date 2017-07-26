@@ -6,6 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ToastProvider} from '../../providers/toast/toast.provider';
 import {ConfigProvider} from '../../providers/config/config.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
+
 import {LoginPage} from '../login/login';
 
 @Component({
@@ -30,29 +31,29 @@ export class TransactionsUnconfirmedPage {
      * @param refresher  Ionic refresher or false, if called on View Enter
      */
     public getTransactions(refresher) {
-        let loader = this.loading.create({
-            content: "Please wait..."
+        this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+            let loader = this.loading.create({
+                content: res
+            });
+            this.nem.getSelectedWallet().then(
+                value => {
+                    this.address = value.accounts[0].address;
+                    if (!value) {
+                        if (refresher) refresher.complete();
+                        this.navCtrl.push(LoginPage);
+                    }
+                    else {
+                        if (!refresher) loader.present();
+
+                        this.nem.getUnconfirmedTransactionsFromAnAccount(this.address, this.config.defaultNetwork()).then(
+                            value => {
+                                if (refresher) refresher.complete();
+                                else loader.dismiss();
+                                this.transactions = value;
+                            });
+                    }
+                });
         });
-
-        this.nem.getSelectedWallet().then(
-            value => {
-                this.address = value.accounts[0].address;
-                if (!value) {
-                    if (refresher) refresher.complete();
-                    this.navCtrl.push(LoginPage);
-                }
-                else {
-                    if (!refresher) loader.present();
-
-                    this.nem.getUnconfirmedTransactionsFromAnAccount(this.address, this.config.defaultNetwork()).then(
-                        value => {
-                            if (refresher) refresher.complete();
-                            else loader.dismiss();
-                            this.transactions = value;
-                        })
-                }
-            }
-        )
     }
 
     /**

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {App, LoadingController, AlertController} from 'ionic-angular';
+import {App, AlertController, LoadingController} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
 
 import {AlertProvider} from '../../providers/alert/alert.provider';
@@ -78,24 +78,28 @@ export class SignupSimpleWalletPage {
             this.alert.showPasswordDoNotMatch();
         }
         else {
-            let loader = this.loading.create({
-                content: "Please wait..."
-            });
 
-            loader.present().then(_ => {
-                this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.password, this.config.defaultNetwork()).then(
-                    wallet => {
-                        if (wallet) {
-                            loader.dismiss();
-                            this._showTutorialAlert(wallet);
-                        }
-                        else {
-                            loader.dismiss();
-                            this.alert.showWalletNameAlreadyExists();
-                        }
-                    }
-                )
-            })
+            this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+                let loader = this.loading.create({
+                    content: res
+                });
+
+                loader.present().then(
+                    _ => {
+                        this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.password, this.config.defaultNetwork()).then(
+                            wallet => {
+                                if (wallet) {
+                                    loader.dismiss();
+                                    this._showTutorialAlert(wallet);
+                                }
+                                else {
+                                    loader.dismiss();
+                                    this.alert.showWalletNameAlreadyExists();
+                                }
+                            }
+                        )
+                    });
+            });
         }
     }
 }

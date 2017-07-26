@@ -21,14 +21,20 @@
   "PASSWORD": "Пароль",
   "CREATE_OR_IMPORT_AN_ACCOUNT": "СОЗДАТЬ ИЛИ ИМПОРТИРОВАТЬ УЧЕТНУЮ ЗАПИСЬ",
   "LOGIN": "Войти",
-
-  "SIMPLE WALLET": "Простой Кошелек",
+  "LOGOUT": "Log out",
 
   "WALLET_NAME": "Имя Кошелька",
   "REPEAT_PASSWORD": "Повторите Пароль",
   "SIGNUP": "Регистрация",
   "IMPORT": "Импорт",
   "KEEP_YOUR_PRIVATE_KEY_SAFE": "Держите Ваш Личный Ключ в безопасном месте",
+  "CREATE_ACCOUNT": "Create Account",
+  "IMPORT_ACCOUNT": "Import Account",
+
+  "SIMPLE_WALLET_WARNING": "We are not responsible for any loss that could be due to the entropy of key generation.",
+  "PRIVATE_KEY_WALLET_WARNING": "Private key wallets use ONLY a password to encrypt the imported private key. Therefore it's crucial to select a SAFE password.",
+
+  "IMPORT_ACCOUNT_QR_WARNING": "To use QR wallet scanner, you must use the same password as your current wallet account",
 
   "TRANSACTIONS": "Транзакции",
   "CONFIRMED_TRANSACTIONS": "Подтвержденные Транзакции",
@@ -41,6 +47,7 @@
   "MESSAGE": "Сообщение",
   "FEE": "Комиссия",
   "LEVY": "Налог",
+  "DATE": "Date",
 
   "ADDRESS": "Адрес",
   "RECIPIENT_ADDRESS": "Адрес Получателя",
@@ -61,6 +68,7 @@
   "ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE": "Вложенное сообщение слишком большое.",
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Выбранная мозаика не перемещаема",
   "ALERT_INVALID_PRIVATE_KEY": "Неверный Личный Ключ",
+  "ALERT_ADDRESS_COPIED": "Transaction address has been copied",
 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Помните, что на данный момент работает только в тестовая сеть",
   "ALERT_PHONE_DISCONNECTED": "Ваш устройство отключено от Интернет",
