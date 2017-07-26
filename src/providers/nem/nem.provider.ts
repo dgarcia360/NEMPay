@@ -233,14 +233,15 @@ export class NemProvider {
      * Uri if the node is alive, or it is called again with a different node.
      * @param iterator node index to test
      * @param nodes node list to try
+     * @port for creating endpoint
      */
-    private _getAvailableNodeFromNodeList(iterator, nodes){
+    private _getAvailableNodeFromNodeList(iterator, nodes, port){
         var result = "";
 
         //start testing first node
         var node = nodes[iterator];
 
-        var endpoint = this.nem.default.model.objects.create("endpoint")(node.uri, this.nem.default.model.nodes.defaultPort);
+        var endpoint = this.nem.default.model.objects.create("endpoint")(node.uri, port);
 
         return this.nem.default.com.requests.endpoint.heartbeat(endpoint).then(data => {
             //if success and is heart beat result
@@ -251,12 +252,28 @@ export class NemProvider {
             }
             else {
                 var iterator2 = iterator +1;
-                if(iterator2 < nodes.length) return this._getAvailableNodeFromNodeList(iterator2, nodes);
+                if(iterator2 < nodes.length) return this._getAvailableNodeFromNodeList(iterator2, nodes, port);
             }
         }).catch(_ => {
             var iterator2 = iterator +1;
-            if(iterator2 < nodes.length) return this._getAvailableNodeFromNodeList(iterator2, nodes);
+            if(iterator2 < nodes.length) return this._getAvailableNodeFromNodeList(iterator2, nodes, port);
         });
+    }
+
+
+    /**
+     * Given an network id, it retrieves its port.
+     * @param network network to provide port
+     * @param nodes node list to try
+     */
+    private _getDefaultPort(network){
+        //If mijin
+       if(network == 96){
+           return this.nem.default.model.nodes.mijinPort;
+       }
+       else{
+           return this.nem.default.model.nodes.defaultPort;
+       }
     }
 
     /**
@@ -266,22 +283,19 @@ export class NemProvider {
      */
     private _provideDefaultNode(network){
         var defaultNode;
+        let defaultPort = this._getDefaultPort(network);
+        var nodes;
 
         if(network == -104){
-            let nodes = this.nem.default.model.nodes.testnet;
-            defaultNode =  this._getAvailableNodeFromNodeList(0, nodes);
-
+            nodes = this.nem.default.model.nodes.testnet;
         }
         else if (network == 104){
-
-            let nodes = this.nem.default.model.nodes.mainnet;
-
-            defaultNode =  this._getAvailableNodeFromNodeList(0, nodes);
+            nodes = this.nem.default.model.nodes.mainnet;
         }
-
         else if (network == 96){
-            defaultNode =  Promise.resolve(this.nem.default.model.nodes.defaultMijin);
+            nodes = this.nem.default.model.nodes.mijin;
         }
+        defaultNode =  this._getAvailableNodeFromNodeList(0, nodes, defaultPort);
         return defaultNode;
     }
 
@@ -297,7 +311,7 @@ export class NemProvider {
         // init endpoint
         return this._provideDefaultNode(network).then(node => {
 
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
 
             var mosaicDefinitionMetaDataPair = this.nem.default.model.objects.get("mosaicDefinitionMetaDataPair");
 
@@ -356,7 +370,7 @@ export class NemProvider {
      */
     public getBalance(address, network) {
         return this._provideDefaultNode(network).then(node => {
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
             // Gets account data
             return this.nem.default.com.requests.account.mosaics(endpoint, address).then(
                 value => {
@@ -439,7 +453,7 @@ export class NemProvider {
      */
     public confirmTransaction(common, transactionEntity, network) {
         return this._provideDefaultNode(network).then(node => {
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
             return this.nem.default.model.transactions.send(common, transactionEntity, endpoint);
         })
     }
@@ -505,7 +519,7 @@ export class NemProvider {
     public getAllTransactionsFromAnAccount(address, network) {
         return this._provideDefaultNode(network).then(node => {
 
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
 
             return this.nem.default.com.requests.account.allTransactions(endpoint, address).then(value => {
                 return this._adaptTransactions(value, network);
@@ -523,7 +537,7 @@ export class NemProvider {
     public getUnconfirmedTransactionsFromAnAccount(address, network) {
         return this._provideDefaultNode(network).then(node => {
 
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this.nem.default.model.nodes.defaultPort);
+            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
             return this.nem.default.com.requests.account.unconfirmedTransactions(endpoint, address).then(value => {
                 return this._adaptTransactions(value, network);
             });
