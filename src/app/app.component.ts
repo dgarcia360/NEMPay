@@ -37,7 +37,7 @@ export class MyApp {
             });
 
             //i18n configuration
-            this.translateService.setDefaultLang('ja');
+            this.translateService.setDefaultLang('en');
             if (platform.is('cordova')) {
                 this.globalization.getPreferredLanguage()
                     .then(language => {
@@ -58,7 +58,7 @@ export class MyApp {
                     .catch(e => console.log(e));
             }
             else{
-                this.translateService.use('ja');
+                this.translateService.use('en');
             }
 
             //ionic default
