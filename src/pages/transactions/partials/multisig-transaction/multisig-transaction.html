@@ -49,8 +49,11 @@
 </p>
 
 <!-- Message -->
-<p *ngIf="tx.transaction.otherTrans.message">
+<p *ngIf="tx.transaction.otherTrans.message && tx.transaction.otherTrans.message.type== 1">
     <span *ngIf="tx.transaction.otherTrans.message.payload">
         <b> {{'MESSAGE' | translate}}:</b> {{tx.transaction.otherTrans.message | hexMessageToString}}
+    </span>
+    <span *ngIf="tx.transaction.otherTrans.message.type == 2">
+        <b> {{'MESSAGE' | translate}}:</b> Encrypted.
     </span>
 </p>
