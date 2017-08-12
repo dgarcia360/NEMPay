@@ -93,4 +93,5 @@
     <plugin name="danielsogl-cordova-plugin-clipboard" spec="^1.0.2" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="phonegap-plugin-barcodescanner" spec="^6.0.6" />
+    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
 </widget>

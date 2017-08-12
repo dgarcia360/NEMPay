@@ -268,12 +268,12 @@ export class NemProvider {
      */
     private _getDefaultPort(network){
         //If mijin
-       if(network == 96){
-           return this.nem.default.model.nodes.mijinPort;
-       }
-       else{
-           return this.nem.default.model.nodes.defaultPort;
-       }
+        if(network == 96){
+            return this.nem.default.model.nodes.mijinPort;
+        }
+        else{
+            return this.nem.default.model.nodes.defaultPort;
+        }
     }
 
     /**
@@ -464,7 +464,7 @@ export class NemProvider {
      * @param selected Network
      * @return Promise with altered transaction
      */
-    private _addDivisibilityToTransaction(mosaics, network) {
+    public addDefinitionToMosaics(mosaics, network) {
         var promises = [];
 
         for (let mosaic of mosaics) {
@@ -482,33 +482,26 @@ export class NemProvider {
         );
     }
 
+
     /**
-     * Adds to transactions data mosaic definitions
-     * @param transactions Array of transactions object
-     * @param selected Network
-     * @return Promise with altered transactions
+     * Returns if transaction has at least one mosaic with levy
+     * @param array of mosaics
+     * @return Boolean indicating the result
      */
-    private _adaptTransactions(transactions, network) {
-        var promises = [];
 
-        for (let tx of transactions) {
-            if (tx.transaction.mosaics) {
-                promises.push(this._addDivisibilityToTransaction(tx.transaction.mosaics, network));
+    public transactionHasAtLeastOneMosaicWithLevy(mosaics){
+        var i = 0;
+        var result = false;
+
+        while (i < mosaics.length && !result){
+            if(mosaics[i].definition.levy.mosaicId){
+                result = true;
             }
+            ++i;
         }
-
-        return Promise.all(promises).then(values => {
-            var i = 0;
-
-            for (let tx of transactions) {
-                if (tx.transaction.mosaics) {
-                    tx.transaction.mosaics = values[i];
-                    ++i;
-                }
-            }
-            return transactions;
-        });
+        return result;
     }
+
 
     /**
      * Get all confirmed transactions of an account
@@ -521,9 +514,7 @@ export class NemProvider {
 
             var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
 
-            return this.nem.default.com.requests.account.allTransactions(endpoint, address).then(value => {
-                return this._adaptTransactions(value, network);
-            });
+            return this.nem.default.com.requests.account.allTransactions(endpoint, address);
 
         });
     }
@@ -538,9 +529,8 @@ export class NemProvider {
         return this._provideDefaultNode(network).then(node => {
 
             var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
-            return this.nem.default.com.requests.account.unconfirmedTransactions(endpoint, address).then(value => {
-                return this._adaptTransactions(value, network);
-            });
+            return this.nem.default.com.requests.account.unconfirmedTransactions(endpoint, address);
+
         });
     }
 }

@@ -40,6 +40,10 @@ import {SignupPage} from '../pages/signup/signup';
 import {SignupSimpleWalletPage} from '../pages/signup_simplewallet/signup';
 import {SignupPrivateKeyPage} from '../pages/signup_privatekey/signup';
 
+
+import {BaseTransactionComponent} from '../pages/transactions/partials/base-transaction/base-transaction';
+import {MultisigTransactionComponent} from '../pages/transactions/partials/multisig-transaction/multisig-transaction';
+
 export function createTranslateLoader(http: Http) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -57,6 +61,8 @@ export function createTranslateLoader(http: Http) {
         SignupPrivateKeyPage,
         TransactionsConfirmedPage,
         TransactionsUnconfirmedPage,
+        BaseTransactionComponent,
+        MultisigTransactionComponent,
         DivideByExponentialBaseTenPipe,
         HexMessageToStringPipe,
         PubToAddressPipe,
@@ -64,7 +70,6 @@ export function createTranslateLoader(http: Http) {
         FormatAddressPipe,
         FormatLevyPipe,
         FormatLevyPipe,
-
     ],
     imports: [
         BrowserModule,

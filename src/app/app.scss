@@ -14,6 +14,8 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+
 .background-white .toolbar-background-md{
   background: #fff !important;
 }
@@ -21,4 +23,19 @@
 .background-white.toolbar-md{
   padding-left: 16px;
   padding-right: 16px;
+}
+
+
+.color-plus{
+  color: #87D37C;
+}
+
+.color-less{
+  color: #f53d3d;
+}
+
+.fit-long-address{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
 }

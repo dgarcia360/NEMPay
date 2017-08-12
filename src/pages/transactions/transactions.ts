@@ -13,6 +13,6 @@ export class TransactionsPage {
     tab2Root = TransactionsUnconfirmedPage;
 
     constructor(public navCtrl: NavController) {
-    }
 
+    }
 }
