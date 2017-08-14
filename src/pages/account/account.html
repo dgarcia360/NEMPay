@@ -18,8 +18,8 @@
         </h1>
     </form>
     <div class="show-list-numbers-and-dots">
-        <p style="color:#000000;" *ngIf='selectedWallet'>
-            {{selectedWallet.address.pretty()}}
+        <p style="color:#000000;">
+            {{selectedWallet?.address.pretty()}}
         </p>
     </div>
     <button ion-button color="positive" block on-click="shareAddress()">

@@ -9,14 +9,16 @@ import {AlertProvider} from '../../providers/alert/alert.provider';
 import {TransferPage} from '../transfer/transfer';
 import {LoginPage} from '../login/login';
 
+import {Wallet, MosaicTransferable} from 'nem-library';
+
 @Component({
     selector: 'page-balance',
     templateUrl: 'balance.html'
 })
 export class BalancePage {
-    selectedWallet: any;
-    balance: any;
-    selectedMosaic: any;
+    selectedWallet: Wallet;
+    balance: MosaicTransferable[];
+    selectedMosaic: MosaicTransferable;
 
     constructor(public navCtrl: NavController, private nem: NemProvider, private menu: MenuController, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
 
@@ -67,24 +69,12 @@ export class BalancePage {
     }
 
     /**
-     * Check If Selected Mosaic is Transferable
-     * @param mosaic  Mosaic object to be checked if is transferable
-
-     */
-    private _checkIfSelectedMosaicIsTransferable(mosaic){
-        let isTransferable = (mosaic.definition.properties[3].value == 'true');
-        return isTransferable;
-
-    }
-
-    /**
      * Moves to transfer, by default with mosaic selected
      */
     goToTransfer(){
-        if(this._checkIfSelectedMosaicIsTransferable(this.selectedMosaic)){
+        if(this.selectedMosaic.properties.transferable){
             this.navCtrl.push(TransferPage, {
-                selectedMosaic: this.selectedMosaic.mosaicId.namespaceId + ':' + this.selectedMosaic.mosaicId.name,
-                quantity: this.selectedMosaic.quantity,
+                selectedMosaic: this.selectedMosaic
             });
         }
         else{

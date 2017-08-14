@@ -26,8 +26,8 @@
                 <ion-radio [value]="mosaic"></ion-radio>
 
                 <ion-label><b>
-                    {{ mosaic.quantity | exponentialStrength:(mosaic.properties.divisibility)}}</b>
-                    {{ mosaic.mosaicId.namespaceId}}:{{mosaic.mosaicId.name}}
+                    {{ mosaic.amount }}</b>
+                    {{ mosaic.mosaicId.description() }}
                 </ion-label>
 
             </ion-item>

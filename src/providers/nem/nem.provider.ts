@@ -61,8 +61,6 @@ export class NemProvider {
                 result = value;
                 result.push(wallet); // TODO: format old wallets to new format
                 result = result.map(_ => _.writeWLTFile());
-                console.log("write");
-                console.log(result);
                 this.storage.set('wallets', JSON.stringify(result));
                 return wallet;
             }
@@ -382,12 +380,10 @@ export class NemProvider {
     /**
      * Check if acount belongs to the current Network
      * @param address address to check
-     * @param formData transaction definition object
-     * @param network sselectedNetwork
      * @return Return prepared transaction
      */
-    public isFromNetwork(address, network) {
-        return this.nem.default.model.address.isFromNetwork(address, network);
+    public isFromNetwork(address: Address): boolean  {
+        return address.network() == NEMLibrary.getNetworkType();
     }
 
     /**
