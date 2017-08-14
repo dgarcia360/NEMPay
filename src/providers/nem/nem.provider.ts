@@ -2,10 +2,17 @@ import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import CryptoJS from 'crypto-js';
 
-// import { Http } from '@angular/http';
-// import 'rxjs/add/operator/map';
 import * as nemSdk from "nem-sdk";
-import {NEMLibrary, NetworkTypes, SimpleWallet, Password, Address, Account, AccountHttp, MosaicHttp, AccountOwnedMosaicsService, MosaicTransferable} from "nem-library";
+import {
+    NEMLibrary, NetworkTypes, SimpleWallet, 
+    Password, Address, Account, AccountHttp, 
+    MosaicHttp, AccountOwnedMosaicsService, 
+    MosaicTransferable, TransferTransaction,
+    TimeWindow, XEM, PlainMessage,
+    TransactionHttp, NemAnnounceResult 
+} from "nem-library";
+
+import { Observable } from "nem-library/node_modules/rxjs";
 
 /*
  Generated class for the NemProvider provider.
@@ -19,12 +26,15 @@ export class NemProvider {
     nem: any;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
+    transactionHttp: TransactionHttp;
     accountOwnedMosaicsSerivce: AccountOwnedMosaicsService
 
     constructor(private storage: Storage) {
         NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
         this.accountHttp = new AccountHttp();
         this.mosaicHttp = new MosaicHttp();
+        this.transactionHttp = new TransactionHttp();
+
         this.accountOwnedMosaicsSerivce = new AccountOwnedMosaicsService(this.accountHttp, this.mosaicHttp);
         this.nem = nemSdk;
     }
@@ -388,50 +398,38 @@ export class NemProvider {
 
     /**
      * Prepares xem transaction
-     * @param common sensitive data
-     * @param formData transaction definition object
-     * @param selected Network
-     * @return Return prepared transaction
+     * @param recipientAddress recipientAddress
+     * @param amount amount
+     * @param message message
+     * @return Return transfer transaction
      */
-    public prepareTransaction(common, formData, network) {
-        // Create transfer transaction
-        var transferTransaction = this.nem.default.model.objects.create("transferTransaction")(formData.recipient, formData.amount, formData.message);
-
-        return this.nem.default.model.transactions.prepare("transferTransaction")(common, transferTransaction, network);
-
+    public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
+        console.log(recipientAddress);
+        return TransferTransaction.create(TimeWindow.createWithDeadline(), recipientAddress, new XEM(amount), PlainMessage.create(message));
     }
 
     /**
      * Prepares mosaic transaction
-     * @param common sensitive data
-     * @param formData transaction definition object
-     * @param selected Network
+     * @param recipientAddress recipientAddress
+     * @param mosaicsTransferable mosaicsTransferable
+     * @param message message
      * @return Promise containing prepared transaction
      */
-    public prepareMosaicTransaction(common, formData, network) {
-        // Create transfer transaction
-        var transferTransaction = this.nem.default.model.objects.create("transferTransaction")(formData.recipient, formData.amount, formData.message);
-
-        let mosaicAttachment = this.nem.default.model.objects.create("mosaicAttachment")(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name, formData.mosaics[0].quantity);
-        transferTransaction.mosaics.push(mosaicAttachment);
-
-        return this.getMosaicsMetaDataPair(formData.mosaics[0].mosaicId.namespaceId, formData.mosaics[0].mosaicId.name, network).then(value => {
-            return this.nem.default.model.transactions.prepare("mosaicTransferTransaction")(common, transferTransaction, value, network);
-        })
+    public prepareMosaicTransaction(recipientAddress: Address, mosaicsTransferable: MosaicTransferable[], message: string): TransferTransaction {        
+        return TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(), recipientAddress, mosaicsTransferable, PlainMessage.create(message));        
     }
 
     /**
      * Send transaction into the blockchain
-     * @param common sensitive data
-     * @param transactionEntity transaction to send
-     * @param selected Network
+     * @param transferTransaction transferTransaction
+     * @param password wallet
+     * @param password password
      * @return Promise containing sent transaction
      */
-    public confirmTransaction(common, transactionEntity, network) {
-        return this._provideDefaultNode(network).then(node => {
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
-            return this.nem.default.model.transactions.send(common, transactionEntity, endpoint);
-        })
+    public confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Observable<NemAnnounceResult> {
+        let account = wallet.open(new Password(password));
+        let signedTransaction = account.signTransaction(transferTransaction);
+        return this.transactionHttp.announceTransaction(signedTransaction);
     }
 
     /**
