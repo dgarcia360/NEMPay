@@ -81,7 +81,7 @@ export class SignupPrivateKeyPage {
                 loader.present().then(
                     _ => {
 
-                        this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key, this.config.defaultNetwork()).then(
+                        this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key).then(
                             wallet => {
                                 if (wallet) {
                                     loader.dismiss();

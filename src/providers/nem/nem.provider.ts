@@ -5,6 +5,8 @@ import CryptoJS from 'crypto-js';
 // import { Http } from '@angular/http';
 // import 'rxjs/add/operator/map';
 import * as nemSdk from "nem-sdk";
+import {NEMLibrary, NetworkTypes, SimpleWallet, Password} from "nem-library";
+import {Observable} from "rxjs/Observable";
 
 /*
  Generated class for the NemProvider provider.
@@ -14,10 +16,11 @@ import * as nemSdk from "nem-sdk";
  */
 @Injectable()
 export class NemProvider {
-    nem: any;
     wallets: any;
+    nem: any;
 
     constructor(private storage: Storage) {
+        NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
         this.nem = nemSdk;
     }
 
@@ -35,7 +38,7 @@ export class NemProvider {
         return this.nem.default.utils.format.nemDate(nemDate);
     }
 
-    public formatAddress(address) {
+    public formatAddress(address) { // From TBMVIOVCN3ZQJDSLR2MPOH3LEVPIPULZPUQVBOVE to TBMVIO-VCN3ZQ-JDSLR2-MPOH3-LEVPI-PULZPU-QVBOVE
         return this.nem.default.utils.format.address(address);
     }
 
@@ -45,11 +48,12 @@ export class NemProvider {
      * @return Promise with stored wallet
      */
     private _storeWallet(wallet): any {
+
         var result = [];
         return this.getWallets().then(
             value => {
                 result = value;
-                result.push(wallet);
+                result.push(wallet); // TODO: format old wallets to new format
                 this.storage.set('wallets', JSON.stringify(result));
                 return wallet;
             }
@@ -152,8 +156,8 @@ export class NemProvider {
      * @param selected network
      * @return Promise with wallet created
      */
-    public createSimpleWallet(walletName, password, network) {
-        let wallet = this.nem.default.model.wallet.createPRNG(walletName, password, network);
+    public createSimpleWallet(walletName: string, password: string) {
+        let wallet = SimpleWallet.create(walletName, new Password(password));
         return this._checkIfWalletNameExists(walletName).then(
             value => {
                 if (value) {
@@ -178,9 +182,8 @@ export class NemProvider {
      * @param selected network
      * * @return Promise with wallet created
      */
-    public createPrivateKeyWallet(walletName, password, privateKey, network) {
-        //TODO: make able to choose netwok
-        let wallet = this.nem.default.model.wallet.importPrivateKey(walletName, password, privateKey, network);
+    public createPrivateKeyWallet(walletName, password, privateKey) {
+        let wallet = SimpleWallet.createWithPrivateKey(walletName, password, privateKey);
         return this._checkIfWalletNameExists(walletName).then(
             value => {
                 if (value) {
@@ -228,6 +231,7 @@ export class NemProvider {
         return Promise.resolve(this.nem.default.crypto.helpers.decrypt(obj));
     }
 
+    // TODO: remove
     /**
      * Given an iterator and a node list.it returns a the endpoint.
      * Uri if the node is alive, or it is called again with a different node.
@@ -260,7 +264,7 @@ export class NemProvider {
         });
     }
 
-
+    // TODO: remove
     /**
      * Given an network id, it retrieves its port.
      * @param network network to provide port
@@ -276,6 +280,7 @@ export class NemProvider {
         }
     }
 
+    // TODO: remove
     /**
      * Given a network id, it provides an alive node
      * @param network mosaic namespace
