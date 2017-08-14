@@ -15,19 +15,18 @@ import {ConfigProvider} from '../../providers/config/config.provider';
 
 import {LoginPage} from "../login/login";
 
+import {SimpleWallet} from "nem-library";
 @Component({
     selector: 'page-account',
     templateUrl: 'account.html'
 })
 export class AccountPage {
     common: any;
-    selectedWallet: any;
+    selectedWallet: SimpleWallet;
     qrCode: any;
     private onResumeSubscription: Subscription;
 
     constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider,private platform: Platform, public translate: TranslateService) {
-        this.selectedWallet = {accounts: [{'address': ''}]};
-
         //Stores sensitive data.
         this.common = {};
         //Initialize common
@@ -58,7 +57,7 @@ export class AccountPage {
                         "v": this.config.defaultNetwork(),
                         "type": 1,
                         "data": {
-                            "addr": this.selectedWallet.accounts[0].address,
+                            "addr": this.selectedWallet.address,
                             "name": this.selectedWallet.name,
                         }
                     });
@@ -97,7 +96,7 @@ export class AccountPage {
      * @param transaction  transaction object
      */
     private _canShowPrivateKey() {
-        var result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address);
+        var result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.address);
         if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
         return result;
     }
@@ -106,8 +105,8 @@ export class AccountPage {
      * Share current account through apps installed on the phone
      */
     public shareAddress() {
-        var textToShare = this.selectedWallet.accounts[0].address;
-        this.socialSharing.share(textToShare, "My NEM Address", null, null).then(_ => {
+        var textToShare = this.selectedWallet.address;
+        this.socialSharing.share(textToShare.plain(), "My NEM Address", null, null).then(_ => {
 
         });
     }

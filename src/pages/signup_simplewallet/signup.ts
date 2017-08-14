@@ -7,6 +7,8 @@ import {NemProvider} from '../../providers/nem/nem.provider';
 
 import {LoginPage} from '../login/login';
 
+import {Wallet, SimpleWallet} from "nem-library";
+
 @Component({
     selector: 'page-signup-simple-wallet',
     templateUrl: 'signup.html'
@@ -29,8 +31,7 @@ export class SignupSimpleWalletPage {
         this.newAccount = {
             'name': '',
             'password': '',
-            'repeat_password': '',
-            'privateKey': ''
+            'repeat_password': ''
         };
     }
 
@@ -38,16 +39,15 @@ export class SignupSimpleWalletPage {
      * Gets private key from a wallet from password
      * @wallet wallet to get private key from password
      */
-    private _getPrivateKey(wallet) {
-        this.nem.passwordToPrivateKey(this.newAccount, wallet.accounts[0], wallet.accounts[0].algo);
+    private _getPrivateKey(wallet: SimpleWallet) {
+        this.nem.passwordToPrivateKey(this.newAccount, wallet);
     }
 
     /**
      * Shows keep private key safe message
      */
-    private _showTutorialAlert(wallet) {
-
-        //generate private key
+    private _showTutorialAlert(wallet: SimpleWallet) {
+        
         this._getPrivateKey(wallet);
 
         let alert = this.alertCtrl.create({

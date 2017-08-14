@@ -15,7 +15,7 @@
         <span class="color-less" *ngIf="address != tx.transaction.recipient">
             -
         </span>
-        {{ mos.quantity |  exponentialStrength:(mos.definition?.properties[0].value)}} {{mos.mosaicId.name}}
+        {{ mos.quantity |  exponentialStrength:(mosaic.properties.divisibility)}} {{mos.mosaicId.name}}
     </span>
 </h2>
 

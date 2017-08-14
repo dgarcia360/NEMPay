@@ -12,6 +12,8 @@ import {ToastProvider} from '../../providers/toast/toast.provider';
 import {BalancePage} from '../balance/balance';
 import {LoginPage} from '../login/login';
 
+import {SimpleWallet} from 'nem-library';
+
 import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -25,7 +27,7 @@ export class TransferPage {
     levy: any;
     common: any;
     amount: number;
-    selectedWallet: any;
+    selectedWallet: SimpleWallet;
     selectedMosaicDefinitionMetaDataPair: any;
 
     constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, private config: ConfigProvider, public translate: TranslateService) {
@@ -141,7 +143,8 @@ export class TransferPage {
     private _canSendTransaction() {
         var result = false;
         if (this.common.password) {
-            result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
+            // TODO: try to open account
+            result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet);
             if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
         }
         return result;

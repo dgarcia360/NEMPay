@@ -5,8 +5,7 @@ import CryptoJS from 'crypto-js';
 // import { Http } from '@angular/http';
 // import 'rxjs/add/operator/map';
 import * as nemSdk from "nem-sdk";
-import {NEMLibrary, NetworkTypes, SimpleWallet, Password} from "nem-library";
-import {Observable} from "rxjs/Observable";
+import {NEMLibrary, NetworkTypes, SimpleWallet, Password, Address, Account, AccountHttp, MosaicHttp, AccountOwnedMosaicsService, MosaicTransferable} from "nem-library";
 
 /*
  Generated class for the NemProvider provider.
@@ -16,11 +15,17 @@ import {Observable} from "rxjs/Observable";
  */
 @Injectable()
 export class NemProvider {
-    wallets: any;
+    wallets: SimpleWallet[];
     nem: any;
+    accountHttp: AccountHttp;
+    mosaicHttp: MosaicHttp;
+    accountOwnedMosaicsSerivce: AccountOwnedMosaicsService
 
     constructor(private storage: Storage) {
         NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
+        this.accountHttp = new AccountHttp();
+        this.mosaicHttp = new MosaicHttp();
+        this.accountOwnedMosaicsSerivce = new AccountOwnedMosaicsService(this.accountHttp, this.mosaicHttp);
         this.nem = nemSdk;
     }
 
@@ -42,18 +47,22 @@ export class NemProvider {
         return this.nem.default.utils.format.address(address);
     }
 
+
+
     /**
      * Store wallet
      * @param wallet
      * @return Promise with stored wallet
      */
-    private _storeWallet(wallet): any {
-
+    private _storeWallet(wallet: SimpleWallet): Promise<SimpleWallet> {
         var result = [];
         return this.getWallets().then(
             value => {
                 result = value;
                 result.push(wallet); // TODO: format old wallets to new format
+                result = result.map(_ => _.writeWLTFile());
+                console.log("write");
+                console.log(result);
                 this.storage.set('wallets', JSON.stringify(result));
                 return wallet;
             }
@@ -67,15 +76,14 @@ export class NemProvider {
      * @param walletName
      * @return Promise that resolves a boolean if exists
      */
-    private _checkIfWalletNameExists(walletName): any {
+    private _checkIfWalletNameExists(walletName): Promise<boolean> {
         var exists = false;
 
         return this.getWallets().then(
             value => {
-                var result = value || [];
-
-                for (var i = 0; i < result.length; i++) {
-                    if (result[i].name == walletName) {
+                var wallets = value || [];
+                for (var i = 0; i < wallets.length; i++) {
+                    if (wallets[i].name == walletName) {
                         exists = true;
                         break;
                     }
@@ -86,37 +94,14 @@ export class NemProvider {
     }
 
     /**
-     * Check if Address it is correct
-     * @param privateKey privateKey
-     * @param network account network
-     * @param address address
-     * @return checkAddress
-     */
-
-    public checkAddress(privateKey, network, address) {
-        return this.nem.default.crypto.helpers.checkAddress(privateKey, network, address);
-    }
-
-    /**
-     * Gets private key from password and account
-     * @param common sensitive data
-     * @param account account
-     * @param algo
-     * @return promise with selected wallet
-     */
-    public passwordToPrivateKey(common, account, algo) {
-        return this.nem.default.crypto.helpers.passwordToPrivatekey(common, account, algo);
-    }
-
-    /**
      * Retrieves selected wallet
      * @return promise with selected wallet
      */
-    public getSelectedWallet(): any {
+    public getSelectedWallet(): Promise<SimpleWallet> {
         return this.storage.get('selectedWallet').then(data => {
             var result = null;
             if (data) {
-                result = JSON.parse(data);
+                result = SimpleWallet.readFromWLT(JSON.parse(data));
             }
             return result;
         });
@@ -125,11 +110,12 @@ export class NemProvider {
     /**
      * Get loaded wallets from localStorage
      */
-    public getWallets(): any {
+    public getWallets(): Promise<SimpleWallet[]> {
         return this.storage.get('wallets').then(data => {
             var result = [];
             if (data) {
-                result = JSON.parse(data);
+                console.log(data);
+                result = JSON.parse(data).map(walletFile => SimpleWallet.readFromWLT(walletFile));
             }
             return result;
         });
@@ -138,8 +124,8 @@ export class NemProvider {
     /**
      * Set a selected wallet
      */
-    public setSelectedWallet(wallet) {
-        this.storage.set('selectedWallet', JSON.stringify(wallet));
+    public setSelectedWallet(wallet: SimpleWallet) {
+        this.storage.set('selectedWallet', JSON.stringify(wallet.writeWLTFile()));
     }
 
     /**
@@ -156,7 +142,7 @@ export class NemProvider {
      * @param selected network
      * @return Promise with wallet created
      */
-    public createSimpleWallet(walletName: string, password: string) {
+    public createSimpleWallet(walletName: string, password: string): Promise<SimpleWallet> {
         let wallet = SimpleWallet.create(walletName, new Password(password));
         return this._checkIfWalletNameExists(walletName).then(
             value => {
@@ -183,7 +169,7 @@ export class NemProvider {
      * * @return Promise with wallet created
      */
     public createPrivateKeyWallet(walletName, password, privateKey) {
-        let wallet = SimpleWallet.createWithPrivateKey(walletName, password, privateKey);
+        let wallet = SimpleWallet.createWithPrivateKey(walletName, new Password(password), privateKey);
         return this._checkIfWalletNameExists(walletName).then(
             value => {
                 if (value) {
@@ -201,6 +187,29 @@ export class NemProvider {
     }
 
 
+    /**
+     * Check if Address it is correct
+     * @param privateKey privateKey
+     * @param address address
+     * @return checkAddress
+     */
+
+    public checkAddress(privateKey: string, address: Address) {
+        return Account.createWithPrivateKey(privateKey).address.plain() == address.plain();
+    }
+
+    /**
+     * Gets private key from password and account
+     * @param common sensitive data
+     * @param wallet
+     * @return promise with selected wallet
+     */
+    public passwordToPrivateKey(common, wallet: SimpleWallet) {
+        return this.nem.default.crypto.helpers.passwordToPrivatekey(common, {
+            "iv": wallet.encryptedPrivateKey.iv,
+            "encrypted": wallet.encryptedPrivateKey.encryptedKey
+        }, "pass:bip32");
+    }
     /**
      * Decrypt private key
      * @param password password
@@ -304,6 +313,7 @@ export class NemProvider {
         return defaultNode;
     }
 
+    // REMOVE
     /**
      * Given a mosaic, it returns its definition
      * @param mosaicNamespaceId mosaic namespace
@@ -344,47 +354,12 @@ export class NemProvider {
     }
 
     /**
-     * Adds mosaic information to balance mosaics
-     * @param balance array of mosaics
-     * @param network selected network
-     * @return Promise with altered balance
-     */
-    private _addDivisibilityToBalance(balance, network) {
-        var promises = [];
-
-        for (let mosaic of balance.data) {
-            promises.push(this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name, network));
-        }
-
-        return Promise.all(promises).then(values => {
-                var i = 0;
-                for (let mosaic of balance.data) {
-                    mosaic.definition = values[i][mosaic.mosaicId.namespaceId + ':' + mosaic.mosaicId.name].mosaicDefinition;
-                    ++i;
-                }
-                return balance;
-            }
-        );
-    }
-
-    /**
      * Get mosaics form an account
      * @param address address to check balance
-     * @param network selected network
      * @return Promise with mosaics information
      */
-    public getBalance(address, network) {
-        return this._provideDefaultNode(network).then(node => {
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
-            // Gets account data
-            return this.nem.default.com.requests.account.mosaics(endpoint, address).then(
-                value => {
-                    return this._addDivisibilityToBalance(value, network);
-                }
-            ).catch(error => {
-                return false;
-            })
-        });
+    public getBalance(address: Address): Promise<MosaicTransferable[]> {
+        return this.accountOwnedMosaicsSerivce.fromAddress(address).toPromise();
     }
 
     /**

@@ -38,9 +38,9 @@ export class TransactionsConfirmedPage {
             });
 
             this.nem.getSelectedWallet().then(
-                value => {
-                    this.address = value.accounts[0].address;
-                    if (!value) {
+                wallet => {
+                    this.address = wallet.address;
+                    if (!wallet) {
                         if (refresher) refresher.complete();
                         this.navCtrl.push(LoginPage);
                     }
