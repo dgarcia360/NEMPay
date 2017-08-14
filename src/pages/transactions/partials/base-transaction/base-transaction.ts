@@ -20,10 +20,10 @@ export class BaseTransactionComponent {
     }
 
     ngOnInit() {
-        if (this.tx.transaction.mosaics){
+        if (this.tx.mosaics){
 
-            this.nem.addDefinitionToMosaics(this.tx.transaction.mosaics, this.config.defaultNetwork()).then(mosaics => {
-                this.tx.transaction.mosaics = mosaics;
+            this.nem.addDefinitionToMosaics(this.tx.mosaics, this.config.defaultNetwork()).then(mosaics => {
+                this.tx.mosaics = mosaics;
                 this.hasLevy = this.nem.transactionHasAtLeastOneMosaicWithLevy(mosaics);
             });
         }

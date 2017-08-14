@@ -9,7 +9,8 @@ import {
     MosaicHttp, AccountOwnedMosaicsService, 
     MosaicTransferable, TransferTransaction,
     TimeWindow, XEM, PlainMessage,
-    TransactionHttp, NemAnnounceResult 
+    TransactionHttp, NemAnnounceResult,
+    Transaction 
 } from "nem-library";
 
 import { Observable } from "nem-library/node_modules/rxjs";
@@ -38,26 +39,6 @@ export class NemProvider {
         this.accountOwnedMosaicsSerivce = new AccountOwnedMosaicsService(this.accountHttp, this.mosaicHttp);
         this.nem = nemSdk;
     }
-
-    /* Filters */
-
-    public hexMessage(msg) {
-        return this.nem.default.utils.format.hexMessage(msg);
-    }
-
-    public pubToAddress(pub, network) {
-        return this.nem.default.utils.format.pubToAddress(pub, network);
-    }
-
-    public nemDate(nemDate) {
-        return this.nem.default.utils.format.nemDate(nemDate);
-    }
-
-    public formatAddress(address) { // From TBMVIOVCN3ZQJDSLR2MPOH3LEVPIPULZPUQVBOVE to TBMVIO-VCN3ZQ-JDSLR2-MPOH3-LEVPI-PULZPU-QVBOVE
-        return this.nem.default.utils.format.address(address);
-    }
-
-
 
     /**
      * Store wallet
@@ -480,31 +461,18 @@ export class NemProvider {
     /**
      * Get all confirmed transactions of an account
      * @param address account Address
-     * @param selected Network
      * @return Promise with account transactions
      */
-    public getAllTransactionsFromAnAccount(address, network) {
-        return this._provideDefaultNode(network).then(node => {
-
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
-
-            return this.nem.default.com.requests.account.allTransactions(endpoint, address);
-
-        });
+    public getAllTransactionsFromAnAccount(address: Address): Observable<Transaction[]> {
+        return this.accountHttp.allTransactions(address);
     }
 
     /**
      * Get all unconfirmed transactions of an account
      * @param address account Address
-     * @param selected Network
      * @return Promise with account transactions
      */
-    public getUnconfirmedTransactionsFromAnAccount(address, network) {
-        return this._provideDefaultNode(network).then(node => {
-
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
-            return this.nem.default.com.requests.account.unconfirmedTransactions(endpoint, address);
-
-        });
+    public getUnconfirmedTransactionsFromAnAccount(address: Address): Observable<Transaction[]> {
+        return this.accountHttp.unconfirmedTransactions(address);
     }
 }

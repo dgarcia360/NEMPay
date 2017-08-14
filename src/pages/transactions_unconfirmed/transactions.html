@@ -10,15 +10,15 @@
 
 
     <ion-list>
-        <ion-item color="none" *ngFor="let tx of transactions" on-click="copyTransactionAddress(tx.transaction)">
+        <ion-item color="none" *ngFor="let transaction of transactions" on-click="copyTransactionAddress(transaction)">
             <!-- if multisig -->
-            <span *ngIf="tx.transaction.type == 4100">
-                <multisig-transaction [tx]="tx" [address]="address"></multisig-transaction>
+            <span *ngIf="transaction.type == 4100">
+                <multisig-transaction [tx]="transaction" [address]="address"></multisig-transaction>
             </span>
 
             <!-- if base case, in general  257 -->
-            <span *ngIf="tx.transaction.type != 4100">
-                <base-transaction [tx]="tx" [address]="address"></base-transaction>
+            <span *ngIf="transaction.type != 4100">
+                <base-transaction [tx]="transaction" [address]="address"></base-transaction>
             </span>
         </ion-item>
     </ion-list>

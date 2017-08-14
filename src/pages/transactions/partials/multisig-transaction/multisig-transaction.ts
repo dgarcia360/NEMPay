@@ -21,10 +21,10 @@ export class MultisigTransactionComponent {
 
     ngOnInit() {
 
-        if (this.tx.transaction.otherTrans.mosaics) {
+        if (this.tx.otherTrans.mosaics) {
 
-            this.nem.addDefinitionToMosaics(this.tx.transaction.otherTrans.mosaics, this.config.defaultNetwork()).then(mosaics => {
-                this.tx.transaction.otherTrans.mosaics = mosaics;
+            this.nem.addDefinitionToMosaics(this.tx.otherTrans.mosaics, this.config.defaultNetwork()).then(mosaics => {
+                this.tx.otherTrans.mosaics = mosaics;
                 this.hasLevy = this.nem.transactionHasAtLeastOneMosaicWithLevy(mosaics);
             });
         }

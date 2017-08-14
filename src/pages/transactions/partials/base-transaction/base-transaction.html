@@ -1,18 +1,18 @@
 <h2>
-    <span *ngIf='tx.transaction.amount != 0 && !tx.transaction.mosaics'>
-        <span class="color-plus" *ngIf="address == tx.transaction.recipient">
+    <span *ngIf='tx.amount != 0 && !tx.mosaics'>
+        <span class="color-plus" *ngIf="address == tx.recipient">
             +
         </span>
-        <span class="color-less" *ngIf="address != tx.transaction.recipient">
+        <span class="color-less" *ngIf="address != tx.recipient">
             -
         </span>
-        {{tx.transaction.amount/1000000}} xem
+        {{tx.amount/1000000}} xem
     </span>
-    <span *ngFor="let mos of tx.transaction.mosaics">
-        <span class="color-plus" *ngIf="address == tx.transaction.recipient">
+    <span *ngFor="let mos of tx.mosaics">
+        <span class="color-plus" *ngIf="address == tx.recipient">
             +
         </span>
-        <span class="color-less" *ngIf="address != tx.transaction.recipient">
+        <span class="color-less" *ngIf="address != tx.recipient">
             -
         </span>
         {{ mos.quantity }} {{mos.mosaicId.name}}
@@ -22,26 +22,26 @@
 <!-- Sender or recipient -->
 <p class="fit-long-address">
     <b>
-        <span *ngIf="address == tx.transaction.recipient">{{'FROM' | translate}}</span>
-        <span *ngIf="address != tx.transaction.recipient">{{'TO' | translate}}</span>:
+        <span *ngIf="address == tx.recipient">{{'FROM' | translate}}</span>
+        <span *ngIf="address != tx.recipient">{{'TO' | translate}}</span>:
     </b>
-    {{tx.transaction.signer | pubToAddress}}
+    {{tx.signer.address.plain()}}
 </p>
 
 <!-- Date (Timestamp) -->
 <p>
-    <b>{{'DATE' | translate}}:</b> {{tx.transaction.timeStamp | nemDate}}
+    <b>{{'DATE' | translate}}:</b> {{tx.timeWindow.timeStamp.toString()}}
 </p>
 
 <!-- Fee -->
-<p *ngIf="tx.transaction.fee"><b>{{'FEE' | translate}}:</b> {{tx.transaction.fee/1000000}} xem</p>
+<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{tx.fee/1000000}} xem</p>
 
 <!-- Has levy -->
 <p>
     <span *ngIf='hasLevy'>
             <b>{{'LEVY' | translate}}</b>:
     </span>
-    <span *ngFor="let mos of tx.transaction.mosaics;">
+    <span *ngFor="let mos of tx.mosaics;">
         <span *ngIf="mos.definition?.levy.mosaicId">
             {{mos | formatLevy:(mos.definition?.levy) | async}} {{mos.definition?.levy.mosaicId.name}}
         </span>
@@ -49,11 +49,11 @@
 </p>
 
 <!-- Message -->
-<p *ngIf="tx.transaction.message">
-    <span *ngIf="tx.transaction.message.payload && tx.transaction.message.type == 1">
-        <b> {{'MESSAGE' | translate}}:</b> {{tx.transaction.message | hexMessageToString}}
+<p *ngIf="tx.message">
+    <span *ngIf="!tx.message.isEncrypted() && tx.message.plain().length > 0">
+        <b> {{'MESSAGE' | translate}}:</b> {{tx.message.plain()}}
     </span>
-    <span *ngIf="tx.transaction.message.type == 2">
+    <span *ngIf="tx.message.isEncrypted()">
         <b> {{'MESSAGE' | translate}}:</b> Encrypted.
     </span>
 </p>

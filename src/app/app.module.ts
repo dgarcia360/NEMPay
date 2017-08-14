@@ -23,10 +23,6 @@ import {NemProvider} from '../providers/nem/nem.provider';
 
 
 import {DivideByExponentialBaseTenPipe} from '../pipes/divide-by-exponential-base-ten.pipe';
-import {HexMessageToStringPipe} from '../pipes/hex-message-to-string.pipe';
-import {PubToAddressPipe} from '../pipes/pub-to-address.pipe';
-import {NemDatePipe} from '../pipes/nem-date.pipe';
-import {FormatAddressPipe} from '../pipes/format-address.pipe';
 import {FormatLevyPipe} from '../pipes/format-levy.pipe';
 import {MyApp} from './app.component';
 import {BalancePage} from '../pages/balance/balance';
@@ -64,11 +60,6 @@ export function createTranslateLoader(http: Http) {
         BaseTransactionComponent,
         MultisigTransactionComponent,
         DivideByExponentialBaseTenPipe,
-        HexMessageToStringPipe,
-        PubToAddressPipe,
-        NemDatePipe,
-        FormatAddressPipe,
-        FormatLevyPipe,
         FormatLevyPipe,
     ],
     imports: [
