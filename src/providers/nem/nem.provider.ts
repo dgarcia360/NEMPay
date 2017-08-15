@@ -10,7 +10,7 @@ import {
     MosaicTransferable, TransferTransaction,
     TimeWindow, XEM, PlainMessage,
     TransactionHttp, NemAnnounceResult,
-    Transaction 
+    Transaction, Mosaic 
 } from "nem-library";
 
 import { Observable } from "nem-library/node_modules/rxjs";
@@ -385,7 +385,6 @@ export class NemProvider {
      * @return Return transfer transaction
      */
     public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
-        console.log(recipientAddress);
         return TransferTransaction.create(TimeWindow.createWithDeadline(), recipientAddress, new XEM(amount), PlainMessage.create(message));
     }
 
@@ -415,46 +414,35 @@ export class NemProvider {
 
     /**
      * Adds to a transaction data mosaic definitions
-     * @param transactions transactions object
-     * @param selected Network
+     * @param mosaics array of mosaics
      * @return Promise with altered transaction
      */
-    public addDefinitionToMosaics(mosaics, network) {
-        var promises = [];
-
-        for (let mosaic of mosaics) {
-            promises.push(this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name, network));
-        }
-
-        return Promise.all(promises).then(values => {
-                var i = 0;
-                for (let mosaic of mosaics) {
-                    mosaic.definition = values[i][mosaic.mosaicId.namespaceId + ':' + mosaic.mosaicId.name].mosaicDefinition;
-                    ++i;
-                }
-                return mosaics;
+    public addDefinitionToMosaics(mosaics: Mosaic[]): Observable<MosaicTransferable[]> {
+        return Observable.from(mosaics)
+        .flatMap((mosaic: Mosaic) => {
+            if (XEM.MOSAICID.equals(mosaic.mosaicId)) return Observable.of(new XEM(mosaic.quantity / Math.pow(10, XEM.DIVISIBILITY)));
+            else {
+              return this.mosaicHttp.getMosaicDefinition(mosaic.mosaicId).map(mosaicDefinition => {
+                return MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, mosaic.quantity / Math.pow(10, mosaicDefinition.properties.divisibility));
+              });
             }
-        );
+          })
+          .toArray();
     }
 
 
     /**
      * Returns if transaction has at least one mosaic with levy
-     * @param array of mosaics
+     * @param mosaics array of mosaics
      * @return Boolean indicating the result
      */
 
-    public transactionHasAtLeastOneMosaicWithLevy(mosaics){
-        var i = 0;
-        var result = false;
-
-        while (i < mosaics.length && !result){
-            if(mosaics[i].definition.levy.mosaicId){
-                result = true;
-            }
-            ++i;
-        }
-        return result;
+    public transactionHasAtLeastOneMosaicWithLevy(mosaics: MosaicTransferable[]): boolean{
+        var hasLevy = false;
+        mosaics.filter(mosaic => {
+            if (mosaic.levy) hasLevy = true; 
+        });
+        return hasLevy;
     }
 
 

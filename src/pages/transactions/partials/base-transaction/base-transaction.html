@@ -42,8 +42,8 @@
             <b>{{'LEVY' | translate}}</b>:
     </span>
     <span *ngFor="let mos of tx.mosaics;">
-        <span *ngIf="mos.definition?.levy.mosaicId">
-            {{mos | formatLevy:(mos.definition?.levy) | async}} {{mos.definition?.levy.mosaicId.name}}
+        <span *ngIf="mos.levy?.mosaicId">
+            {{mos | formatLevy:(mos.levy) | async}} {{mos.levy.mosaicId.name}}
         </span>
     </span>
 </p>

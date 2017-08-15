@@ -8,7 +8,7 @@ import {NemProvider} from '../../providers/nem/nem.provider';
 
 import {LoginPage} from '../login/login';
 
-import {Address, Transaction, TransferTransaction} from 'nem-library';
+import {Address, Transaction, TransferTransaction, TransactionTypes, MultisigTransaction}  from 'nem-library';
 
 @Component({
     selector: 'page-transactions',
@@ -46,7 +46,11 @@ export class TransactionsConfirmedPage {
                     }
                     else {
                         if (!refresher) loader.present();
-                        this.nem.getAllTransactionsFromAnAccount(this.address).subscribe(
+                        this.nem.getAllTransactionsFromAnAccount(this.address)
+                        .flatMap(_ => _)
+                        .filter(transaction => transaction.type == TransactionTypes.TRANSFER || (transaction.type == TransactionTypes.MULTISIG && (<MultisigTransaction>transaction).otherTransaction.type == TransactionTypes.TRANSFER))
+                        .toArray()
+                        .subscribe(
                             transactions => {
                                 console.log(transactions);
                                 if (refresher) refresher.complete();
