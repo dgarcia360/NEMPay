@@ -1,14 +1,14 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {NemProvider} from '../providers/nem/nem.provider';
-import {ConfigProvider} from '../providers/config/config.provider';
 
+import {MosaicTransferable} from 'nem-library';
 
 @Pipe({name: 'formatLevy'})
 export class FormatLevyPipe implements PipeTransform {
-    constructor(public nem: NemProvider, private  config: ConfigProvider) {
+    constructor(public nem: NemProvider) {
     }
 
-    transform(mosaic: any, levy: any): any {
-        return this.nem.formatLevy(mosaic, 1, levy, this.config.defaultNetwork());
+    transform(mosaic: MosaicTransferable): any {
+        return this.nem.formatLevy(mosaic);
     }
 }

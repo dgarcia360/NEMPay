@@ -15,7 +15,7 @@
         <span class="color-less" *ngIf="address != tx.recipient">
             -
         </span>
-        {{ mos.quantity }} {{mos.mosaicId.name}}
+        {{ mos.amount }} {{mos.mosaicId.name}}
     </span>
 </h2>
 
@@ -43,7 +43,7 @@
     </span>
     <span *ngFor="let mos of tx.mosaics;">
         <span *ngIf="mos.levy?.mosaicId">
-            {{mos | formatLevy:(mos.levy) | async}} {{mos.levy.mosaicId.name}}
+            {{mos | formatLevy:(mos) | async}} {{mos.levy.mosaicId.name}}
         </span>
     </span>
 </p>

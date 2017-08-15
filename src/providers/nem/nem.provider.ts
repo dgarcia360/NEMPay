@@ -10,7 +10,7 @@ import {
     MosaicTransferable, TransferTransaction,
     TimeWindow, XEM, PlainMessage,
     TransactionHttp, NemAnnounceResult,
-    Transaction, Mosaic 
+    Transaction, Mosaic, MosaicService 
 } from "nem-library";
 
 import { Observable } from "nem-library/node_modules/rxjs";
@@ -229,119 +229,6 @@ export class NemProvider {
         return Promise.resolve(this.nem.default.crypto.helpers.decrypt(obj));
     }
 
-    // TODO: remove
-    /**
-     * Given an iterator and a node list.it returns a the endpoint.
-     * Uri if the node is alive, or it is called again with a different node.
-     * @param iterator node index to test
-     * @param nodes node list to try
-     * @port for creating endpoint
-     */
-    private _getAvailableNodeFromNodeList(iterator, nodes, port){
-        var result = "";
-
-        //start testing first node
-        var node = nodes[iterator];
-
-        var endpoint = this.nem.default.model.objects.create("endpoint")(node.uri, port);
-
-        return this.nem.default.com.requests.endpoint.heartbeat(endpoint).then(data => {
-            //if success and is heart beat result
-            if(data.code === 1 && data.type === 2) {
-                result = node.uri;
-                console.log(result);
-                return result;
-            }
-            else {
-                var iterator2 = iterator +1;
-                if(iterator2 < nodes.length) return this._getAvailableNodeFromNodeList(iterator2, nodes, port);
-            }
-        }).catch(_ => {
-            var iterator2 = iterator +1;
-            if(iterator2 < nodes.length) return this._getAvailableNodeFromNodeList(iterator2, nodes, port);
-        });
-    }
-
-    // TODO: remove
-    /**
-     * Given an network id, it retrieves its port.
-     * @param network network to provide port
-     * @param nodes node list to try
-     */
-    private _getDefaultPort(network){
-        //If mijin
-        if(network == 96){
-            return this.nem.default.model.nodes.mijinPort;
-        }
-        else{
-            return this.nem.default.model.nodes.defaultPort;
-        }
-    }
-
-    // TODO: remove
-    /**
-     * Given a network id, it provides an alive node
-     * @param network mosaic namespace
-     * @return Promise with default node
-     */
-    private _provideDefaultNode(network){
-        var defaultNode;
-        let defaultPort = this._getDefaultPort(network);
-        var nodes;
-
-        if(network == -104){
-            nodes = this.nem.default.model.nodes.testnet;
-        }
-        else if (network == 104){
-            nodes = this.nem.default.model.nodes.mainnet;
-        }
-        else if (network == 96){
-            nodes = this.nem.default.model.nodes.mijin;
-        }
-        defaultNode =  this._getAvailableNodeFromNodeList(0, nodes, defaultPort);
-        return defaultNode;
-    }
-
-    // REMOVE
-    /**
-     * Given a mosaic, it returns its definition
-     * @param mosaicNamespaceId mosaic namespace
-     * @param mosaicId mosaic name
-     * @param selected network
-     * @return Promise with mosaic definition
-     */
-    public getMosaicsMetaDataPair(mosaicNamespaceId, mosaicId, network) {
-
-        // init endpoint
-        return this._provideDefaultNode(network).then(node => {
-
-            var endpoint = this.nem.default.model.objects.create("endpoint")(node, this._getDefaultPort(network));
-
-            var mosaicDefinitionMetaDataPair = this.nem.default.model.objects.get("mosaicDefinitionMetaDataPair");
-
-            return this.nem.default.com.requests.namespace.mosaicDefinitions(endpoint, mosaicNamespaceId).then(
-                value => {
-                    // Look for the mosaic definition(s) we want in the request response (Could use ["eur", "usd"] to return eur and usd mosaicDefinitionMetaDataPairs)
-                    var neededDefinition = this.nem.default.utils.helpers.searchMosaicDefinitionArray(value, [mosaicId]);
-
-                    // Get full name of mosaic to use as object key
-                    var fullMosaicName = mosaicNamespaceId + ':' + mosaicId;
-
-                    // Check if the mosaic was found
-                    if (undefined === neededDefinition[fullMosaicName]) {
-                        //return xem definition
-                        return mosaicDefinitionMetaDataPair;
-                    }
-                    // Set mosaic definition into mosaicDefinitionMetaDataPair
-                    mosaicDefinitionMetaDataPair[fullMosaicName] = {};
-                    mosaicDefinitionMetaDataPair[fullMosaicName].mosaicDefinition = neededDefinition[fullMosaicName];
-
-                    return mosaicDefinitionMetaDataPair;
-                }
-            );
-        });
-    }
-
     /**
      * Get mosaics form an account
      * @param address address to check balance
@@ -354,18 +241,11 @@ export class NemProvider {
     /**
      * Formats levy given mosaic object
      * @param mosaic mosaic object
-     * @param multiplier 1 by default
-     * @param levy levy object
      * @return Promise with levy fee formated
      */
-    public formatLevy(mosaic, multiplier, levy, network) {
-        this.nem.default.model.objects.get("mosaicDefinitionMetaDataPair");
-        return Promise.all([this.getMosaicsMetaDataPair(mosaic.mosaicId.namespaceId, mosaic.mosaicId.name, network), this.getMosaicsMetaDataPair(levy.mosaicId.namespaceId, levy.mosaicId.name, network)]).then(values => {
-            var mosaicDefinitionMetaDataPair = values[0];
-            mosaicDefinitionMetaDataPair[levy.mosaicId.namespaceId + ':' + levy.mosaicId.name] = values[1][levy.mosaicId.namespaceId + ':' + levy.mosaicId.name];
-            return this.nem.default.utils.format.levyFee(mosaic, multiplier, levy, mosaicDefinitionMetaDataPair);
-
-        });
+    public formatLevy(mosaic: MosaicTransferable): Promise<number> {
+        let mosaicService = new MosaicService(new MosaicHttp());
+        return mosaicService.calculateLevy(mosaic).toPromise()
     }
 
     /**

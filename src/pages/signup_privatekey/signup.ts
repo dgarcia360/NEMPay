@@ -7,7 +7,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 
-import {ConfigProvider} from '../../providers/config/config.provider';
 import {LoginPage} from '../login/login';
 
 @Component({
@@ -17,7 +16,7 @@ import {LoginPage} from '../login/login';
 export class SignupPrivateKeyPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
+    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
         //sensitive data
         this.newAccount = null;
 

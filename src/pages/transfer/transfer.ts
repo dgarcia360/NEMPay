@@ -170,7 +170,7 @@ export class TransferPage {
 
         if (this.selectedMosaic.levy != undefined && 'mosaicId' in this.selectedMosaic.levy) {
             var _levy = 0;
-            return this.nem.formatLevy(this.formData.mosaics[0], 1, this.selectedMosaic.levy, -104).then(value => { // TODO: format levy
+            return this.nem.formatLevy(this.formData.mosaics[0]).then(value => { // TODO: format levy
                 _levy = value
                 subtitle += "<br/><br/> <b>"+res['LEVY']+":</b> " + _levy + " " + this.selectedMosaic.levy.mosaicId.name;
                 return subtitle;
