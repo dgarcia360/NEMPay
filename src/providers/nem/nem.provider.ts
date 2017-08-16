@@ -183,7 +183,7 @@ export class NemProvider {
      * @return checkAddress
      */
 
-    public checkAddress(privateKey: string, address: Address) {
+    public checkAddress(privateKey: string, address: Address): boolean {
         return Account.createWithPrivateKey(privateKey).address.plain() == address.plain();
     }
 
