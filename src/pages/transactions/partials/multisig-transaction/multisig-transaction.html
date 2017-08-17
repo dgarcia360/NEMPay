@@ -15,7 +15,7 @@
         <span class="color-less" *ngIf="address != tx.otherTrans.recipient">
             -
         </span>
-        {{ mos.amount }} {{mos.mosaicId.name}}
+        {{ mos.amount?.toString() }} {{mos.mosaicId.name}}
     </span>
 </h2>
 
