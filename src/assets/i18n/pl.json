@@ -70,6 +70,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Wybrana Mozaika jest nietransferowalna",
   "ALERT_INVALID_PRIVATE_KEY": "Błędny Klucz Prywatny",
   "ALERT_ADDRESS_COPIED": "Transaction address has been copied",
+  "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Pamiętaj, że aktualnie obsługujemy tylko sieć testnet",
   "ALERT_PHONE_DISCONNECTED": "Twój telefon nie jest podłączony do internetu",

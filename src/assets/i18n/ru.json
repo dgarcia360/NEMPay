@@ -69,6 +69,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Выбранная мозаика не перемещаема",
   "ALERT_INVALID_PRIVATE_KEY": "Неверный Личный Ключ",
   "ALERT_ADDRESS_COPIED": "Transaction address has been copied",
+  "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Помните, что на данный момент работает только в тестовая сеть",
   "ALERT_PHONE_DISCONNECTED": "Ваш устройство отключено от Интернет",

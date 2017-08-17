@@ -71,6 +71,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "El Mosaic seleccionat no es pot transferir",
   "ALERT_INVALID_PRIVATE_KEY": "Clau Privada Invàlida",
   "ALERT_ADDRESS_COPIED": "L'adreça de la transacció ha sigut copiada ",
+  "ALERT_WEAK_PASSWORD": "La contrasenya de contenir com a mínim 8 caracters",
 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Recordi que en aquest moment només funciona a la Testnet",
   "ALERT_PHONE_DISCONNECTED": "El seu telèfon està desconnectat d'Internet",
