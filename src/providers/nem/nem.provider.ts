@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import CryptoJS from 'crypto-js';
+import {LocalDateTime} from "js-joda";
+import {Base64} from "js-base64";
 
 import * as nemSdk from "nem-sdk";
 import {
@@ -50,7 +52,7 @@ export class NemProvider {
         return this.getWallets().then(
             value => {
                 result = value;
-                result.push(wallet); // TODO: format old wallets to new format
+                result.push(wallet);
                 result = result.map(_ => _.writeWLTFile());
                 this.storage.set('wallets', JSON.stringify(result));
                 return wallet;
@@ -104,10 +106,30 @@ export class NemProvider {
             var result = [];
             if (data) {
                 console.log(data);
-                result = JSON.parse(data).map(walletFile => SimpleWallet.readFromWLT(walletFile));
+                result = JSON.parse(data).map(walletFile => {
+                    if (walletFile.name) {
+                        return this.convertJSONWalletToFileWallet(walletFile); 
+                    }else {
+                        return SimpleWallet.readFromWLT(walletFile);
+                    }
+                });
             }
             return result;
         });
+    }
+
+    private convertJSONWalletToFileWallet(wallet): SimpleWallet {
+        let walletString = Base64.encode(JSON.stringify({
+            "address": wallet.accounts[0].address,
+            "creationDate": LocalDateTime.now().toString(),
+            "encryptedPrivateKey": wallet.accounts[0].encrypted,
+            "iv": wallet.accounts[0].iv,
+            "network": wallet.accounts[0].network == -104 ? NetworkTypes.TEST_NET : NetworkTypes.MAIN_NET,
+            "name": wallet.name,
+            "type": "simple",
+            "schema": 1
+          }));
+        return SimpleWallet.readFromWLT(walletString);
     }
 
     /**
