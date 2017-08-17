@@ -69,6 +69,9 @@ export class SignupPrivateKeyPage {
         else if (!(this.newAccount.private_key.length != 64 || this.newAccount.private_key.length != 66)){
             this.alert.showInvalidPrivateKey();
         }
+        else if (this.newAccount.password.length < 8) {
+            this.alert.showWeakPassword()
+        }
         else{
 
 

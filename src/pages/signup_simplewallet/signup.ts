@@ -76,6 +76,9 @@ export class SignupSimpleWalletPage {
         if (this.newAccount.password != this.newAccount.repeat_password) {
             this.alert.showPasswordDoNotMatch();
         }
+        else if (this.newAccount.password.length < 8) {
+            this.alert.showWeakPassword()
+        }
         else {
 
             this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
