@@ -11,7 +11,6 @@ import * as kjua from "kjua";
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 
-import {ConfigProvider} from '../../providers/config/config.provider';
 
 import {LoginPage} from "../login/login";
 
@@ -26,7 +25,7 @@ export class AccountPage {
     qrCode: any;
     private onResumeSubscription: Subscription;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider,private platform: Platform, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private platform: Platform, public translate: TranslateService) {
         //Stores sensitive data.
         this.common = {};
         //Initialize common
@@ -53,14 +52,7 @@ export class AccountPage {
                 }
                 else {
                     this.selectedWallet = value;
-                    let infoQR = JSON.stringify({
-                        "v": this.config.defaultNetwork(),
-                        "type": 1,
-                        "data": {
-                            "addr": this.selectedWallet.address,
-                            "name": this.selectedWallet.name,
-                        }
-                    });
+                    let infoQR = this.nem.generateAddressQRText(this.selectedWallet.address);
                     this._encodeQrCode(infoQR);
                 }
             }

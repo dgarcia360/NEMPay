@@ -1,10 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
-import CryptoJS from 'crypto-js';
 import {LocalDateTime} from "js-joda";
 import {Base64} from "js-base64";
-
-import * as nemSdk from "nem-sdk";
 import {
     NEMLibrary, NetworkTypes, SimpleWallet, 
     Password, Address, Account, AccountHttp, 
@@ -13,7 +10,7 @@ import {
     TimeWindow, XEM, PlainMessage,
     TransactionHttp, NemAnnounceResult,
     Transaction, Mosaic, MosaicService, 
-    QRService, QRText  
+    QRService, QRWalletText  
 } from "nem-library";
 
 import { Observable } from "nem-library/node_modules/rxjs";
@@ -27,10 +24,10 @@ import { Observable } from "nem-library/node_modules/rxjs";
 @Injectable()
 export class NemProvider {
     wallets: SimpleWallet[];
-    nem: any;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
     transactionHttp: TransactionHttp;
+    qrService: QRService;
     accountOwnedMosaicsSerivce: AccountOwnedMosaicsService
 
     constructor(private storage: Storage) {
@@ -38,9 +35,8 @@ export class NemProvider {
         this.accountHttp = new AccountHttp();
         this.mosaicHttp = new MosaicHttp();
         this.transactionHttp = new TransactionHttp();
-
+        this.qrService = new QRService();
         this.accountOwnedMosaicsSerivce = new AccountOwnedMosaicsService(this.accountHttp, this.mosaicHttp);
-        this.nem = nemSdk;
     }
 
     /**
@@ -218,6 +214,7 @@ export class NemProvider {
     public passwordToPrivateKey(password: string, wallet: SimpleWallet): string {
         return wallet.unlockPrivateKey(new Password(password));
     }
+
     /**
      * Decrypt private key
      * @param password password
@@ -225,8 +222,17 @@ export class NemProvider {
      * @return Decrypted private key
      */
 
-    public decryptPrivateKey(password: string, encriptedData: QRText): string {
-        return new QRService().decryptPrivateKey(new Password(password), encriptedData);
+    public decryptPrivateKey(password: string, encriptedData: QRWalletText): string {
+        return this.qrService.decryptWalletQRText(new Password(password), encriptedData);
+    }
+
+    /**
+     * Generate Address QR Text
+     * @param address address
+     * @return Address QR Text
+     */
+    public generateAddressQRText(address: Address): string {
+        return this.qrService.generateAddressQRText(address);
     }
 
     /**

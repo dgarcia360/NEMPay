@@ -7,7 +7,7 @@ import {NemProvider} from '../../providers/nem/nem.provider';
 
 import {LoginPage} from '../login/login';
 
-import {Wallet, SimpleWallet} from "nem-library";
+import {SimpleWallet} from "nem-library";
 
 @Component({
     selector: 'page-signup-simple-wallet',
