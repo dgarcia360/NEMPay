@@ -69,36 +69,24 @@ export class LoginPage {
 
             loader.present().then(
                 _ => {
-
+                    console.log("hello");
+                    console.log(this.selectedWallet);
                     if (!this.selectedWallet) {
                         loader.dismiss();
                         this.alert.showWalletNotSelectedAlert();
                     }
-                    var invalidPassword = false;
+                    
                     // Decrypt/generate private key and check it. Returned private key is contained into this.common
-                    if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet)) {
-                        invalidPassword = true;
-                    }
-
-                    if (!invalidPassword && (this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) {
-
-                        if (!this.nem.checkAddress(this.common.privateKey, this.selectedWallet.address)) {
-                            invalidPassword = true;
-                        }
-                    }
-                    else {
-                        invalidPassword = true;
-                        this.common.privateKey = '';
-                    }
-
-                    if (invalidPassword) {
-                        loader.dismiss();
-                        this.alert.showInvalidPasswordAlert();
-                    }
-                    else {
+                    try {
+                        this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
                         this.nem.setSelectedWallet(this.selectedWallet);
                         loader.dismiss();
                         this.navCtrl.setRoot(BalancePage);
+                    } catch (err) {
+                        console.log(err);
+                        this.common.privateKey = '';                        
+                        loader.dismiss();
+                        this.alert.showInvalidPasswordAlert();
                     }
                 });
         });

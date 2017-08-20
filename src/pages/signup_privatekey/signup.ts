@@ -36,6 +36,8 @@ export class SignupPrivateKeyPage {
         };
     }
 
+    
+
     /**
      * Scans wallet QR and stores its private key in newAccount.privateKey
      */
@@ -50,9 +52,11 @@ export class SignupPrivateKeyPage {
                 this.alert.showPasswordDoNotMatch();
             }
             else{
-                this.nem.decryptPrivateKey(this.newAccount.password, walletInfo.data).then(privateKey =>{
-                    this.newAccount.private_key = privateKey;
-                });
+                try{
+                    this.newAccount.private_key = this.nem.decryptPrivateKey(this.newAccount.password, walletInfo);                    
+                } catch (err) {
+                    this.alert.showInvalidPasswordAlert();                    
+                }
             }
         }).catch(err => {
             console.log("Error on scan");
@@ -73,7 +77,6 @@ export class SignupPrivateKeyPage {
             this.alert.showWeakPassword()
         }
         else{
-
 
             this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
                 let loader = this.loading.create({

@@ -12,7 +12,8 @@ import {
     MosaicTransferable, TransferTransaction,
     TimeWindow, XEM, PlainMessage,
     TransactionHttp, NemAnnounceResult,
-    Transaction, Mosaic, MosaicService 
+    Transaction, Mosaic, MosaicService, 
+    QRService, QRText  
 } from "nem-library";
 
 import { Observable } from "nem-library/node_modules/rxjs";
@@ -105,7 +106,6 @@ export class NemProvider {
         return this.storage.get('wallets').then(data => {
             var result = [];
             if (data) {
-                console.log(data);
                 result = JSON.parse(data).map(walletFile => {
                     if (walletFile.name) {
                         return this.convertJSONWalletToFileWallet(walletFile); 
@@ -211,15 +211,12 @@ export class NemProvider {
 
     /**
      * Gets private key from password and account
-     * @param common sensitive data
+     * @param password
      * @param wallet
      * @return promise with selected wallet
      */
-    public passwordToPrivateKey(common, wallet: SimpleWallet) {
-        return this.nem.default.crypto.helpers.passwordToPrivatekey(common, {
-            "iv": wallet.encryptedPrivateKey.iv,
-            "encrypted": wallet.encryptedPrivateKey.encryptedKey
-        }, "pass:bip32");
+    public passwordToPrivateKey(password: string, wallet: SimpleWallet): string {
+        return wallet.unlockPrivateKey(new Password(password));
     }
     /**
      * Decrypt private key
@@ -228,27 +225,8 @@ export class NemProvider {
      * @return Decrypted private key
      */
 
-    public decryptPrivateKey(password, encriptedData){
-        let salt = CryptoJS.enc.Hex.parse(encriptedData.salt);
-        let encrypted = encriptedData.priv_key;
-
-        //generate key
-        let key = CryptoJS.PBKDF2(password, salt, {
-            keySize: 256 / 32,
-            iterations: 2000
-        }).toString();
-
-        //separated from priv_key iv and cipherdata
-        let iv = encrypted.substring(0, 32);
-        let encryptedPrvKey = encrypted.substring(32, 128);
-
-        //separated  vh from priv_key iv and cipherdata
-        let obj = {
-            ciphertext: CryptoJS.enc.Hex.parse(encryptedPrvKey),
-            iv: this.nem.default.utils.convert.hex2ua(iv),
-            key: this.nem.default.utils.convert.hex2ua(key.toString())
-        }
-        return Promise.resolve(this.nem.default.crypto.helpers.decrypt(obj));
+    public decryptPrivateKey(password: string, encriptedData: QRText): string {
+        return new QRService().decryptPrivateKey(new Password(password), encriptedData);
     }
 
     /**

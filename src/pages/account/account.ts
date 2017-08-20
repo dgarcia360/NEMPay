@@ -96,9 +96,12 @@ export class AccountPage {
      * @param transaction  transaction object
      */
     private _canShowPrivateKey() {
-        var result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet) || !this.nem.checkAddress(this.common.privateKey, this.selectedWallet.address);
-        if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
-        return result;
+        try {
+            this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
+            return true;
+        } catch (err) {
+            return false;
+        }
     }
 
     /**

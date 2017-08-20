@@ -35,25 +35,16 @@ export class SignupSimpleWalletPage {
         };
     }
 
-    /**
-     * Gets private key from a wallet from password
-     * @wallet wallet to get private key from password
-     */
-    private _getPrivateKey(wallet: SimpleWallet) {
-        this.nem.passwordToPrivateKey(this.newAccount, wallet);
-    }
 
     /**
      * Shows keep private key safe message
      */
     private _showTutorialAlert(wallet: SimpleWallet) {
         
-        this._getPrivateKey(wallet);
-
         let alert = this.alertCtrl.create({
             title: 'Keep Private Key safe',
             subTitle: 'Your private key holds all the power of your account. ' +
-            'It is a priority to make sure it is stored safely somewhere offline.<br/><br/> <span style="text-align:center"><b>' + this.newAccount.privateKey
+            'It is a priority to make sure it is stored safely somewhere offline.<br/><br/> <span style="text-align:center"><b>' + this.nem.passwordToPrivateKey(this.newAccount.password, wallet)
              + '</b></span>',
             buttons: [
                 {

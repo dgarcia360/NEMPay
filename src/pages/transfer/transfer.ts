@@ -124,13 +124,15 @@ export class TransferPage {
      * TODO: encapsulate in a service, implememntation it is duplicatedin other controllers too
      */
     private _canSendTransaction() {
-        var result = false;
         if (this.common.password) {
-            // TODO: try to open account
-            result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet);
-            if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
+            try {
+                this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
+                return true;
+            } catch (err) {
+                return false;
+            }
         }
-        return result;
+        return false;
     }
 
     /**
