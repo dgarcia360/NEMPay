@@ -149,6 +149,17 @@ export class AlertProvider {
         });
     }
 
+    showWeakPassword() {
+        this.translate.get(['ALERT_WEAK_PASSWORD', 'OK'], {}).subscribe((res) => {
+            let alert = this.alertCtrl.create({
+                title: res['ALERT_WEAK_PASSWORD'],
+                buttons: [res['OK']]
+            });
+
+            alert.present();
+        });
+    }
+
     showError(error) {
         this.translate.get('OK', {}).subscribe((res) => {
 

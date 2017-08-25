@@ -6,11 +6,13 @@ import {TranslateService} from '@ngx-translate/core';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
-import {ConfigProvider} from '../../providers/config/config.provider';
 import {ToastProvider} from '../../providers/toast/toast.provider';
 
 import {BalancePage} from '../balance/balance';
 import {LoginPage} from '../login/login';
+
+import {SimpleWallet, MosaicTransferable, Address, XEM, NemAnnounceResult} from 'nem-library';
+import {Observable} from "nem-library/node_modules/rxjs";
 
 import 'rxjs/add/operator/toPromise';
 
@@ -20,31 +22,25 @@ import 'rxjs/add/operator/toPromise';
 })
 export class TransferPage {
     formData: any;
-    selectedMosaic: any;
+    selectedMosaic: MosaicTransferable;
     divisibility: any;
     levy: any;
     common: any;
     amount: number;
-    selectedWallet: any;
+    selectedWallet: SimpleWallet;
     selectedMosaicDefinitionMetaDataPair: any;
 
-    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, private config: ConfigProvider, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, public translate: TranslateService) {
 
         this.formData = {};
         this.amount = 0;
         this.formData.recipientPubKey = '';
-        this.formData.message = '';
-        this.selectedMosaic = navParams.get('selectedMosaic');
+        this.selectedMosaic = <MosaicTransferable>navParams.get('selectedMosaic');
         this.formData.fee = 0;
-        this.formData.encryptMessage = false;
         this.formData.innerFee = 0;
-        this.formData.encryptMessage = false;
         this.formData.isMultisig = false;
         this.formData.isMosaicTransfer = false;
         this.formData.message = '';
-        this.selectedMosaicDefinitionMetaDataPair = undefined;
-        this.levy = undefined;
-        this.divisibility = undefined;
 
         //Stores sensitive data.
         this.common = {};
@@ -52,17 +48,6 @@ export class TransferPage {
         //Initializes sensitive data.
         this._clearCommon();
 
-        //Gets mosaic to transfer definition
-        if (this.selectedMosaic != 'nem:xem') {
-            this.nem.getMosaicsMetaDataPair(this.selectedMosaic.split(":")[0], this.selectedMosaic.split(":")[1], this.config.defaultNetwork()).then(
-                value => {
-                    this.selectedMosaicDefinitionMetaDataPair = value[this.selectedMosaic];
-                    this.levy = value[this.selectedMosaic].mosaicDefinition.levy;
-                    this.divisibility = value[this.selectedMosaic].mosaicDefinition.properties[0].value;
-                    this.formData.isMosaicTransfer = true;
-                }
-            )
-        }
     }
 
     ionViewWillEnter() {
@@ -105,7 +90,7 @@ export class TransferPage {
      */
     private _checkAddress(address) {
         var success = true;
-        if (this.nem.isFromNetwork(address, this.config.defaultNetwork())) {
+        if (this.nem.isFromNetwork(address)) {
             this.formData.recipient = address;
         }
         else {
@@ -129,7 +114,7 @@ export class TransferPage {
         //if raw data, clean address and check if it is from network
         if (success) {
             let recipientAddress = this.formData.rawRecipient.toUpperCase().replace(/-/g, '');
-            success = this._checkAddress(recipientAddress);
+            success = this._checkAddress(new Address(recipientAddress));
         }
         return success;
     }
@@ -139,29 +124,31 @@ export class TransferPage {
      * TODO: encapsulate in a service, implememntation it is duplicatedin other controllers too
      */
     private _canSendTransaction() {
-        var result = false;
         if (this.common.password) {
-            result = this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo);
-            if (!(this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) result = false;
+            try {
+                this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
+                return true;
+            } catch (err) {
+                return false;
+            }
         }
-        return result;
+        return false;
     }
 
     /**
      * Confirms transaction form xem and mosaicsTransactions
      */
-    private _confirmTransaction() {
+    private _confirmTransaction(): Observable<NemAnnounceResult> {
+        let transferTransaction;
 
         if (this.formData.isMosaicTransfer) {
-            return this.nem.prepareMosaicTransaction(this.common, this.formData, this.config.defaultNetwork() ).then(entity => {
-                return this.nem.confirmTransaction(this.common, entity, this.config.defaultNetwork());
-            });
+            transferTransaction = this.nem.prepareMosaicTransaction(this.formData.recipient, this.formData.mosaics, this.formData.message);
+        }
+        else {
+            transferTransaction = this.nem.prepareTransaction(this.formData.recipient, this.formData.amount, this.formData.message);
         }
 
-        else {
-            var entity = this.nem.prepareTransaction(this.common, this.formData, this.config.defaultNetwork());
-            return this.nem.confirmTransaction(this.common, entity, this.config.defaultNetwork());
-        }
+        return this.nem.confirmTransaction(transferTransaction, this.selectedWallet, this.common.password);
     }
 
     /**
@@ -171,11 +158,11 @@ export class TransferPage {
 
         var subtitle = res['YOU_ARE_GOING_TO_SEND'] + ' <br/><br/> ';
         var currency = '';
-        if (this.selectedMosaic == 'nem:xem') {
+        if (XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
             currency = "<b>"+res['AMOUNT']+":</b> " + this.amount + " xem";
         }
         else {
-            currency = "<b>"+res['AMOUNT']+"</b> " + this.amount + " " + this.selectedMosaic;
+            currency = "<b>"+res['AMOUNT']+"</b> " + this.amount + " " + this.selectedMosaic.mosaicId.description();
         }
         subtitle += currency;
 
@@ -183,11 +170,11 @@ export class TransferPage {
 
         subtitle += '<br/><br/>  <b>'+res['FEE']+':</b> ' + _fee + ' xem';
 
-        if (this.levy != undefined && 'mosaicId' in this.levy) {
+        if (this.selectedMosaic.levy != undefined && 'mosaicId' in this.selectedMosaic.levy) {
             var _levy = 0;
-            return this.nem.formatLevy(this.formData.mosaics[0], 1, this.levy, this.config.defaultNetwork()).then(value => {
+            return this.nem.formatLevy(this.formData.mosaics[0]).then(value => { // TODO: format levy
                 _levy = value
-                subtitle += "<br/><br/> <b>"+res['LEVY']+":</b> " + _levy + " " + this.levy.mosaicId.name;
+                subtitle += "<br/><br/> <b>"+res['LEVY']+":</b> " + _levy + " " + this.selectedMosaic.levy.mosaicId.name;
                 return subtitle;
             });
         }
@@ -232,25 +219,26 @@ export class TransferPage {
                                     loader.present().then(
                                         _ => {
                                             if (this._canSendTransaction()) {
-                                                this._confirmTransaction().then(value => {
-                                                    if (value.message == 'SUCCESS') {
-                                                        loader.dismiss();
-                                                        console.log("Transactions confirmed");
-                                                        this.toast.showTransactionConfirmed();
-                                                        this.navCtrl.push(BalancePage, {});
-                                                        this._clearCommon();
-                                                    }
-                                                    else if (value.message == 'FAILURE_INSUFFICIENT_BALANCE') {
+                                                this._confirmTransaction().subscribe(value => {
+                                                    console.log(value);
+                                                    loader.dismiss();
+                                                    console.log("Transactions confirmed");
+                                                    this.toast.showTransactionConfirmed();
+                                                    this.navCtrl.push(BalancePage, {});
+                                                    this._clearCommon();
+
+                                                }, error => {
+                                                    if (error.toString() == 'FAILURE_INSUFFICIENT_BALANCE') {
                                                         loader.dismiss();
                                                         this.alert.showDoesNotHaveEnoughFunds();
                                                     }
-                                                    else if (value.message == 'FAILURE_MESSAGE_TOO_LARGE') {
+                                                    else if (error.toString() == 'FAILURE_MESSAGE_TOO_LARGE') {
                                                         loader.dismiss();
                                                         this.alert.showMessageTooLarge();
                                                     }
                                                     else {
                                                         loader.dismiss();
-                                                        this.alert.showError(value.message);
+                                                        this.alert.showError(error);
                                                     }
                                                 });
                                             }
@@ -281,19 +269,16 @@ export class TransferPage {
      * TODO: Resolve both ifs with a promise, and handle presentPrompt in startTransaction
      */
     private _updateFees() {
+        var transferTransaction;
         if (this.formData.isMosaicTransfer) {
-            this.nem.prepareMosaicTransaction(this.common, this.formData, this.config.defaultNetwork()).then(entity => {
-                this.formData.innerFee = 0;
-                this.formData.fee = entity.fee;
-                this._presentPrompt();
-            });
+            transferTransaction = this.nem.prepareMosaicTransaction(this.formData.recipient, this.formData.mosaics, this.formData.message);
         }
         else {
-            var entity = this.nem.prepareTransaction(this.common, this.formData, this.config.defaultNetwork());
-            this.formData.innerFee = 0;
-            this.formData.fee = entity.fee;
-            this._presentPrompt();
+            transferTransaction = this.nem.prepareTransaction(this.formData.recipient, this.formData.amount, this.formData.message);
         }
+        this.formData.innerFee = 0;
+        this.formData.fee = transferTransaction.fee;
+        this._presentPrompt();
     }
 
     /**
@@ -303,22 +288,16 @@ export class TransferPage {
         //if is nem:xem, set amount
         if (!this.amount) this.amount = 0;
 
-        if (this.selectedMosaic == 'nem:xem') {
+        if (XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
             this.formData.mosaics = [];
             this.formData.amount = this.amount;
         }
         else {
             //if mosaic, amount represents multiplier
+            this.formData.isMosaicTransfer = true;
             this.formData.amount = 1;
-            var namespace_mosaic = this.selectedMosaic.split(":");
+            this.formData.mosaics = [new MosaicTransferable(this.selectedMosaic.mosaicId, this.selectedMosaic.properties, this.amount, this.selectedMosaic.levy)];
 
-            this.formData.mosaics = [{
-                'mosaicId': {
-                    'namespaceId': namespace_mosaic[0],
-                    'name': namespace_mosaic[1]
-                },
-                'quantity': this.amount * Math.pow(10, this.divisibility)
-            }];
         }
         if (!this._processRecipientInput()) {
             this.alert.showAlertDoesNotBelongToNetwork();

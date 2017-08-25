@@ -3,10 +3,11 @@ import {App, AlertController, LoadingController} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
 
 import {AlertProvider} from '../../providers/alert/alert.provider';
-import {ConfigProvider} from '../../providers/config/config.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 
 import {LoginPage} from '../login/login';
+
+import {SimpleWallet} from "nem-library";
 
 @Component({
     selector: 'page-signup-simple-wallet',
@@ -15,7 +16,7 @@ import {LoginPage} from '../login/login';
 export class SignupSimpleWalletPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService, private alertCtrl: AlertController) {
+    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, public translate: TranslateService, private alertCtrl: AlertController) {
         // sensitive data
         this.newAccount = null;
 
@@ -30,31 +31,20 @@ export class SignupSimpleWalletPage {
         this.newAccount = {
             'name': '',
             'password': '',
-            'repeat_password': '',
-            'privateKey': ''
+            'repeat_password': ''
         };
     }
 
-    /**
-     * Gets private key from a wallet from password
-     * @wallet wallet to get private key from password
-     */
-    private _getPrivateKey(wallet) {
-        this.nem.passwordToPrivateKey(this.newAccount, wallet.accounts[0], wallet.accounts[0].algo);
-    }
 
     /**
      * Shows keep private key safe message
      */
-    private _showTutorialAlert(wallet) {
-
-        //generate private key
-        this._getPrivateKey(wallet);
-
+    private _showTutorialAlert(wallet: SimpleWallet) {
+        
         let alert = this.alertCtrl.create({
             title: 'Keep Private Key safe',
             subTitle: 'Your private key holds all the power of your account. ' +
-            'It is a priority to make sure it is stored safely somewhere offline.<br/><br/> <span style="text-align:center"><b>' + this.newAccount.privateKey
+            'It is a priority to make sure it is stored safely somewhere offline.<br/><br/> <span style="text-align:center"><b>' + this.nem.passwordToPrivateKey(this.newAccount.password, wallet)
              + '</b></span>',
             buttons: [
                 {
@@ -77,6 +67,9 @@ export class SignupSimpleWalletPage {
         if (this.newAccount.password != this.newAccount.repeat_password) {
             this.alert.showPasswordDoNotMatch();
         }
+        else if (this.newAccount.password.length < 8) {
+            this.alert.showWeakPassword()
+        }
         else {
 
             this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
@@ -86,7 +79,7 @@ export class SignupSimpleWalletPage {
 
                 loader.present().then(
                     _ => {
-                        this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.password, this.config.defaultNetwork()).then(
+                        this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.password).then(
                             wallet => {
                                 if (wallet) {
                                     loader.dismiss();

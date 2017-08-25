@@ -69,6 +69,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Ausgewähltes Mosaik ist nicht übertragbar",
   "ALERT_INVALID_PRIVATE_KEY": "Ungültiger privater Schlüssel",
   "ALERT_ADDRESS_COPIED": "Transaktions-Adresse wurde kopiert",
+  "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Denken Sie daran, dass es momentan nur im Testnetz funktioniert",
   "ALERT_PHONE_DISCONNECTED": "Ihr Mobilteil ist vom Internet getrennt",

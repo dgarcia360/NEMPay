@@ -7,7 +7,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 
-import {ConfigProvider} from '../../providers/config/config.provider';
 import {LoginPage} from '../login/login';
 
 @Component({
@@ -17,7 +16,7 @@ import {LoginPage} from '../login/login';
 export class SignupPrivateKeyPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, private config: ConfigProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
+    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
         //sensitive data
         this.newAccount = null;
 
@@ -37,6 +36,8 @@ export class SignupPrivateKeyPage {
         };
     }
 
+    
+
     /**
      * Scans wallet QR and stores its private key in newAccount.privateKey
      */
@@ -51,9 +52,11 @@ export class SignupPrivateKeyPage {
                 this.alert.showPasswordDoNotMatch();
             }
             else{
-                this.nem.decryptPrivateKey(this.newAccount.password, walletInfo.data).then(privateKey =>{
-                    this.newAccount.private_key = privateKey;
-                });
+                try{
+                    this.newAccount.private_key = this.nem.decryptPrivateKey(this.newAccount.password, walletInfo);                    
+                } catch (err) {
+                    this.alert.showInvalidPasswordAlert();                    
+                }
             }
         }).catch(err => {
             console.log("Error on scan");
@@ -70,8 +73,10 @@ export class SignupPrivateKeyPage {
         else if (!(this.newAccount.private_key.length != 64 || this.newAccount.private_key.length != 66)){
             this.alert.showInvalidPrivateKey();
         }
+        else if (this.newAccount.password.length < 8) {
+            this.alert.showWeakPassword()
+        }
         else{
-
 
             this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
                 let loader = this.loading.create({
@@ -81,7 +86,7 @@ export class SignupPrivateKeyPage {
                 loader.present().then(
                     _ => {
 
-                        this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key, this.config.defaultNetwork()).then(
+                        this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key).then(
                             wallet => {
                                 if (wallet) {
                                     loader.dismiss();

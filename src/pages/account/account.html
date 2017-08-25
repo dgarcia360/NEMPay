@@ -19,7 +19,7 @@
     </form>
     <div class="show-list-numbers-and-dots">
         <p style="color:#000000;">
-            {{selectedWallet.accounts[0].address |formatAddress}}
+            {{selectedWallet?.address.pretty()}}
         </p>
     </div>
     <button ion-button color="positive" block on-click="shareAddress()">

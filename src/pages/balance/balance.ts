@@ -3,23 +3,24 @@ import {Component} from '@angular/core';
 import {MenuController, NavController, LoadingController} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import {ConfigProvider} from '../../providers/config/config.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 
 import {TransferPage} from '../transfer/transfer';
 import {LoginPage} from '../login/login';
 
+import {Wallet, MosaicTransferable} from 'nem-library';
+
 @Component({
     selector: 'page-balance',
     templateUrl: 'balance.html'
 })
 export class BalancePage {
-    selectedWallet: any;
-    balance: any;
-    selectedMosaic: any;
+    selectedWallet: Wallet;
+    balance: MosaicTransferable[];
+    selectedMosaic: MosaicTransferable;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private menu: MenuController, private config: ConfigProvider, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private menu: MenuController, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
 
     }
 
@@ -40,9 +41,9 @@ export class BalancePage {
 
 
             this.nem.getSelectedWallet().then(
-                value => {
+                wallet => {
 
-                    if (!value) {
+                    if (!wallet) {
                         if (refresher) refresher.complete();
                         this.navCtrl.setRoot(LoginPage);
                     }
@@ -50,9 +51,9 @@ export class BalancePage {
 
                         if (!refresher) loader.present();
 
-                        this.nem.getBalance(value.accounts[0].address, this.config.defaultNetwork()).then(
-                            value => {
-                                this.balance = value.data;
+                        this.nem.getBalance(wallet.address).then(
+                            balance => {
+                                this.balance = balance;
                                 console.log(this.balance);
                                 if (refresher) {
                                     refresher.complete();
@@ -68,24 +69,12 @@ export class BalancePage {
     }
 
     /**
-     * Check If Selected Mosaic is Transferable
-     * @param mosaic  Mosaic object to be checked if is transferable
-
-     */
-    private _checkIfSelectedMosaicIsTransferable(mosaic){
-        let isTransferable = (mosaic.definition.properties[3].value == 'true');
-        return isTransferable;
-
-    }
-
-    /**
      * Moves to transfer, by default with mosaic selected
      */
     goToTransfer(){
-        if(this._checkIfSelectedMosaicIsTransferable(this.selectedMosaic)){
+        if(this.selectedMosaic.properties.transferable){
             this.navCtrl.push(TransferPage, {
-                selectedMosaic: this.selectedMosaic.mosaicId.namespaceId + ':' + this.selectedMosaic.mosaicId.name,
-                quantity: this.selectedMosaic.quantity,
+                selectedMosaic: this.selectedMosaic
             });
         }
         else{

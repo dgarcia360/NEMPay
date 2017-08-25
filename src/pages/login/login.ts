@@ -8,14 +8,16 @@ import {AlertProvider} from '../../providers/alert/alert.provider';
 import {BalancePage} from '../balance/balance';
 import {SignupPage} from '../signup/signup';
 
+import {SimpleWallet} from 'nem-library';
+
 @Component({
     selector: 'page-login',
     templateUrl: 'login.html'
 })
 export class LoginPage {
 
-    wallets: any;
-    selectedWallet: any;
+    wallets: SimpleWallet[];
+    selectedWallet: SimpleWallet;
     common: any;
 
 
@@ -67,36 +69,24 @@ export class LoginPage {
 
             loader.present().then(
                 _ => {
-
+                    console.log("hello");
+                    console.log(this.selectedWallet);
                     if (!this.selectedWallet) {
                         loader.dismiss();
                         this.alert.showWalletNotSelectedAlert();
                     }
-                    var invalidPassword = false;
+                    
                     // Decrypt/generate private key and check it. Returned private key is contained into this.common
-                    if (!this.nem.passwordToPrivateKey(this.common, this.selectedWallet.accounts[0], this.selectedWallet.accounts[0].algo)) {
-                        invalidPassword = true;
-                    }
-
-                    if (!invalidPassword && (this.common.privateKey.length === 64 || this.common.privateKey.length === 66)) {
-
-                        if (!this.nem.checkAddress(this.common.privateKey, this.selectedWallet.accounts[0].network, this.selectedWallet.accounts[0].address)) {
-                            invalidPassword = true;
-                        }
-                    }
-                    else {
-                        invalidPassword = true;
-                        this.common.privateKey = '';
-                    }
-
-                    if (invalidPassword) {
-                        loader.dismiss();
-                        this.alert.showInvalidPasswordAlert();
-                    }
-                    else {
+                    try {
+                        this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
                         this.nem.setSelectedWallet(this.selectedWallet);
                         loader.dismiss();
                         this.navCtrl.setRoot(BalancePage);
+                    } catch (err) {
+                        console.log(err);
+                        this.common.privateKey = '';                        
+                        loader.dismiss();
+                        this.alert.showInvalidPasswordAlert();
                     }
                 });
         });

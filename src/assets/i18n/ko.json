@@ -70,6 +70,7 @@
   "ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE": "첨부된 메시지가 너무 깁니다.",
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "선택된 모자이크는 이전이 불가능한 모자이크입니다.",
   "ALERT_INVALID_PRIVATE_KEY": "프라이빗 키가 유효하지 않습니다.",
+  "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
 
   "ALERT_ADDRESS_COPIED": "트랜잭션 주소가 복사되었습니다.",
 

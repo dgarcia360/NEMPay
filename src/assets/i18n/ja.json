@@ -69,6 +69,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "送信できないモザイクを選択しています",
   "ALERT_INVALID_PRIVATE_KEY": "秘密鍵が間違っています",
   "ALERT_ADDRESS_COPIED": "トランザクションアドレスがコピーされました",
+  "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
 
   "ALERT_SUBTITLE_ONLY_TESTNET": "このソフトウェアはテストネットのみ動作します",
   "ALERT_PHONE_DISCONNECTED": "あなたのスマートフォンはインターネットへ繋がっていません",

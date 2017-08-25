@@ -69,7 +69,8 @@
   "ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE": "Attached message is too large.",
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Selected Mosaic is not transferable",
   "ALERT_INVALID_PRIVATE_KEY": "Invalid Private Key",
-  "ALERT_ADDRESS_COPIED": "Transaction address has been copied",
+  "ALERT_ADDRESS_COPIED": "Transaction address has been copied",  
+  "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters",  
 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Remember that at the moment it only works on testnet",
   "ALERT_PHONE_DISCONNECTED": "Your phone is disconnected from internet",

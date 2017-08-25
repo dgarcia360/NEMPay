@@ -11,6 +11,6 @@
   "license": "ISC",
   "repository": {},
   "dependencies": {
-    "nem-sdk": "^1.2.3"
+
   }
 }

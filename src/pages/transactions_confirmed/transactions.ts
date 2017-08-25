@@ -3,23 +3,23 @@ import {NavController, LoadingController} from 'ionic-angular';
 import {Clipboard} from '@ionic-native/clipboard';
 import {TranslateService} from '@ngx-translate/core';
 
-import {ConfigProvider} from '../../providers/config/config.provider';
 import {ToastProvider} from '../../providers/toast/toast.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 
 import {LoginPage} from '../login/login';
+
+import {Address, Transaction, TransferTransaction, TransactionTypes, MultisigTransaction}  from 'nem-library';
 
 @Component({
     selector: 'page-transactions',
     templateUrl: 'transactions.html'
 })
 export class TransactionsConfirmedPage {
-    transactions: any;
-    address: any;
+    transactions: Transaction[];
+    address: Address;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard, private config: ConfigProvider, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard, public translate: TranslateService) {
         this.transactions = [];
-        this.address = '';
     }
 
     ionViewWillEnter() {
@@ -38,21 +38,24 @@ export class TransactionsConfirmedPage {
             });
 
             this.nem.getSelectedWallet().then(
-                value => {
-                    this.address = value.accounts[0].address;
-                    if (!value) {
+                wallet => {
+                    this.address = wallet.address;
+                    if (!wallet) {
                         if (refresher) refresher.complete();
                         this.navCtrl.push(LoginPage);
                     }
                     else {
                         if (!refresher) loader.present();
-                        this.nem.getAllTransactionsFromAnAccount(this.address, this.config.defaultNetwork()).then(
-                            value => {
+                        this.nem.getAllTransactionsFromAnAccount(this.address)
+                        .flatMap(_ => _)
+                        .filter(transaction => transaction.type == TransactionTypes.TRANSFER || (transaction.type == TransactionTypes.MULTISIG && (<MultisigTransaction>transaction).otherTransaction.type == TransactionTypes.TRANSFER))
+                        .toArray()
+                        .subscribe(
+                            transactions => {
+                                console.log(transactions);
                                 if (refresher) refresher.complete();
                                 else loader.dismiss();
-                                this.transactions = value;
-                                console.log(this.transactions);
-
+                                this.transactions = transactions;
                             })
                     }
                 }
@@ -64,13 +67,13 @@ export class TransactionsConfirmedPage {
      * Copies into clipboard recipient or sender address
      * @param transaction  transaction object
      */
-    public copyTransactionAddress(transaction) {
+    public copyTransactionAddress(transaction: TransferTransaction) {
         var copiableAddress = "";
-        if (this.address == transaction.recipient) {
-            copiableAddress = this.nem.pubToAddress(transaction.signer, this.config.defaultNetwork());
+        if (this.address.plain() == transaction.recipient.plain()) {
+            copiableAddress = transaction.signer.address.plain();
         }
         else {
-            copiableAddress = transaction.recipient;
+            copiableAddress = transaction.recipient.plain();
         }
         this.clipboard.copy(copiableAddress).then(_ => {
             this.toast.showCopyCorrect();
