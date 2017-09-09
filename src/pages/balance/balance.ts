@@ -54,7 +54,9 @@ export class BalancePage {
                         this.nem.getBalance(wallet.address).then(
                             balance => {
                                 this.balance = balance;
-                                console.log(this.balance);
+                                if (this.balance.length>0){
+                                    this.selectedMosaic = this.balance[0];
+                                }
                                 if (refresher) {
                                     refresher.complete();
                                 }

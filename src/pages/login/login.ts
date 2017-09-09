@@ -69,8 +69,6 @@ export class LoginPage {
 
             loader.present().then(
                 _ => {
-                    console.log("hello");
-                    console.log(this.selectedWallet);
                     if (!this.selectedWallet) {
                         loader.dismiss();
                         this.alert.showWalletNotSelectedAlert();

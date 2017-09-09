@@ -1,7 +1,7 @@
 <ion-header>
-    <ion-navbar color="primary" hideBackButton="true">
+    <ion-navbar color="light" hideBackButton="true">
         <button ion-button menuToggle style="display:block !important;">
-            <ion-icon name="menu"></ion-icon>
+            <ion-icon name="ios-menu-outline"></ion-icon>
         </button>
         <ion-title>
             {{'BALANCE' | translate}}
@@ -34,15 +34,27 @@
         </ion-list>
 
     </form>
+
+
 </ion-content>
 
 
 
 <ion-footer no-shadow>
     <ion-toolbar position="bottom" class="background-white">
-        <button ion-button  block color="positive"
+        <div class="row">
+            <div class="col col-50">
+                <button ion-button  color="positive" class="col col-50"
+                        on-click="goToTransfer()" [disabled]="!selectedMosaic">
+                    {{'TRANSFER_BUTTON' | translate}}
+                </button>
+            </div>
+        <div class="col col-50">
+        <button ion-button  color="secondary" class="col col-50"
                 on-click="goToTransfer()" [disabled]="!selectedMosaic">
-            {{'TRANSFER_BUTTON' | translate}}
+            {{'RECEIVE_BUTTON' | translate}}
         </button>
+        </div>
+        </div>
     </ion-toolbar>
 </ion-footer>

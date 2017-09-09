@@ -17,7 +17,9 @@
   "HIDE_PRIVATE_KEY": "Hide Private Key",
 
   "BALANCE": "Balance",
-  "TRANSFER_BUTTON": "Transfer",
+  "TRANSFER_BUTTON": "Send",
+  "RECEIVE_BUTTON": "Receive",
+
   "PASSWORD": "Password",
   "CREATE_OR_IMPORT_AN_ACCOUNT": "CREATE OR IMPORT AN ACCOUNT",
   "LOGIN": "Log in",
@@ -42,7 +44,7 @@
   "PENDING_TRANSACTIONS": "Pending Transactions",
   "NOTHING_TO_SHOW": "Nothing to show",
 
-  "TRANSFER": "Transfer",
+  "TRANSFER": "Send",
   "FROM": "From",
   "TO": "To",
   "MESSAGE": "Message",
