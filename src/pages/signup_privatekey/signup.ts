@@ -6,8 +6,10 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
+import {WalletProvider} from '../../providers/wallet/wallet.provider';
 
 import {LoginPage} from '../login/login';
+import {Wallet} from "nem-library";
 
 @Component({
     selector: 'page-signup-privatekey',
@@ -16,7 +18,7 @@ import {LoginPage} from '../login/login';
 export class SignupPrivateKeyPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private loading: LoadingController, private alert: AlertProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
+    constructor(public app: App, private nem: NemProvider, private wallet: WalletProvider,private loading: LoadingController, private alert: AlertProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
         //sensitive data
         this.newAccount = null;
 
@@ -36,7 +38,7 @@ export class SignupPrivateKeyPage {
         };
     }
 
-    
+
 
     /**
      * Scans wallet QR and stores its private key in newAccount.privateKey
@@ -53,9 +55,9 @@ export class SignupPrivateKeyPage {
             }
             else{
                 try{
-                    this.newAccount.private_key = this.nem.decryptPrivateKey(this.newAccount.password, walletInfo);                    
+                    this.newAccount.private_key = this.nem.decryptPrivateKey(this.newAccount.password, walletInfo);
                 } catch (err) {
-                    this.alert.showInvalidPasswordAlert();                    
+                    this.alert.showInvalidPasswordAlert();
                 }
             }
         }).catch(err => {
@@ -85,23 +87,34 @@ export class SignupPrivateKeyPage {
 
                 loader.present().then(
                     _ => {
-
-                        this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key).then(
-                            wallet => {
-                                if (wallet) {
-                                    loader.dismiss();
-                                    this._clearNewAccount();
-                                    this.app.getRootNav().push(LoginPage);
-                                }
-                                else {
-                                    loader.dismiss();
-                                    this.alert.showWalletNameAlreadyExists();
-                                }
-                            }
-                        ).catch(_ => {
+                        var createdWallet;
+                        try {
+                            createdWallet = this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key);
+                        }
+                        catch (e){
                             loader.dismiss();
                             this.alert.showInvalidPrivateKey();
-                        });
+                        }
+
+                        if (createdWallet){
+
+                            this.wallet.checkIfWalletNameExists(createdWallet.name).then(value => {
+                                    if (value) {
+                                        loader.dismiss();
+                                        this.alert.showWalletNameAlreadyExists();
+                                    }
+                                    else {
+                                        this.wallet.storeWallet(createdWallet).then(
+                                            value => {
+                                                loader.dismiss();
+                                                this._clearNewAccount();
+                                                this.app.getRootNav().push(LoginPage);
+                                            }
+                                        )
+                                    }
+                                });
+                        }
+
                     });
             });
         }

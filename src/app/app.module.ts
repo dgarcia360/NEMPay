@@ -19,6 +19,7 @@ import { Globalization } from '@ionic-native/globalization';
 import {AlertProvider} from '../providers/alert/alert.provider';
 import {ToastProvider} from '../providers/toast/toast.provider';
 import {NemProvider} from '../providers/nem/nem.provider';
+import {WalletProvider} from '../providers/wallet/wallet.provider';
 
 
 import {DivideByExponentialBaseTenPipe} from '../pipes/divide-by-exponential-base-ten.pipe';
@@ -113,6 +114,7 @@ export function createTranslateLoader(http: Http) {
         BarcodeScanner,
         Globalization,
         NemProvider,
+        WalletProvider,
         AlertProvider,
         ToastProvider,
     ]

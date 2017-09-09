@@ -42,7 +42,7 @@
   "CONFIRMED_TRANSACTIONS": "Transacciones confirmadas",
   "PENDING_TRANSACTIONS": "Transacciones pendientes",
   "NOTHING_TO_SHOW": "Nada que mostrar",
- "REMOTE_ACCOUNT": "Remote Account",
+  "REMOTE_ACCOUNT": "Remote Account",
   "NAMPESPACE": "Namespace",
   "SUBNAMESPACE_OF": "Subnamespace of",
   "MOSAIC_CREATED": "Mosaic Created",
@@ -50,7 +50,7 @@
   "SUPPLY_DECREASED": "Supply Decreased",
   "MOSAICS": "Mosaics",
   "ENCRYPED": "Encrypted",
-  
+
   "TRANSFER": "Enviar",
   "FROM": "Remitente",
   "TO": "Receptor",

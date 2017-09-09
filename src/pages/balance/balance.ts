@@ -5,6 +5,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {WalletProvider} from '../../providers/wallet/wallet.provider';
 
 import {TransferPage} from '../transfer/transfer';
 import {ReceivePage} from '../receive/receive';
@@ -22,7 +23,7 @@ export class BalancePage {
     balance: MosaicTransferable[];
     selectedMosaic: MosaicTransferable;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private menu: MenuController, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private menu: MenuController, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
 
     }
 
@@ -42,7 +43,7 @@ export class BalancePage {
             });
 
 
-            this.nem.getSelectedWallet().then(
+            this.wallet.getSelectedWallet().then(
                 wallet => {
 
                     if (!wallet) {

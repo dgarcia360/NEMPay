@@ -4,6 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {WalletProvider} from '../../providers/wallet/wallet.provider';
 
 import {BalancePage} from '../balance/balance';
 import {SignupPage} from '../signup/signup';
@@ -21,7 +22,7 @@ export class LoginPage {
     common: any;
 
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private alert: AlertProvider, private loading: LoadingController, private menu: MenuController, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider,  private alert: AlertProvider, private loading: LoadingController, private menu: MenuController, public translate: TranslateService) {
 
         this.wallets = [];
         this.selectedWallet = null;
@@ -32,7 +33,7 @@ export class LoginPage {
             'privateKey': ''
         };
 
-        this.nem.getWallets().then(
+        this.wallet.getWallets().then(
             value => {
                 this.wallets = value;
 
@@ -77,7 +78,7 @@ export class LoginPage {
                     // Decrypt/generate private key and check it. Returned private key is contained into this.common
                     try {
                         this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
-                        this.nem.setSelectedWallet(this.selectedWallet);
+                        this.wallet.setSelectedWallet(this.selectedWallet);
                         loader.dismiss();
                         this.navCtrl.setRoot(BalancePage);
                     } catch (err) {

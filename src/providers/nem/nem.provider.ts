@@ -40,131 +40,14 @@ export class NemProvider {
     }
 
     /**
-     * Store wallet
-     * @param wallet
-     * @return Promise with stored wallet
-     */
-    private _storeWallet(wallet: SimpleWallet): Promise<SimpleWallet> {
-        var result = [];
-        return this.getWallets().then(
-            value => {
-                result = value;
-                result.push(wallet);
-                result = result.map(_ => _.writeWLTFile());
-                this.storage.set('wallets', JSON.stringify(result));
-                return wallet;
-            }
-        )
-    }
-
-    //Wallets
-
-    /**
-     * Check If Wallet Name Exists
-     * @param walletName
-     * @return Promise that resolves a boolean if exists
-     */
-    private _checkIfWalletNameExists(walletName): Promise<boolean> {
-        var exists = false;
-
-        return this.getWallets().then(
-            value => {
-                var wallets = value || [];
-                for (var i = 0; i < wallets.length; i++) {
-                    if (wallets[i].name == walletName) {
-                        exists = true;
-                        break;
-                    }
-                }
-                return exists;
-            }
-        )
-    }
-
-    /**
-     * Retrieves selected wallet
-     * @return promise with selected wallet
-     */
-    public getSelectedWallet(): Promise<SimpleWallet> {
-        return this.storage.get('selectedWallet').then(data => {
-            var result = null;
-            if (data) {
-                result = SimpleWallet.readFromWLT(JSON.parse(data));
-            }
-            return result;
-        });
-    }
-
-    /**
-     * Get loaded wallets from localStorage
-     */
-    public getWallets(): Promise<SimpleWallet[]> {
-        return this.storage.get('wallets').then(data => {
-            var result = [];
-            if (data) {
-                result = JSON.parse(data).map(walletFile => {
-                    if (walletFile.name) {
-                        return this.convertJSONWalletToFileWallet(walletFile); 
-                    }else {
-                        return SimpleWallet.readFromWLT(walletFile);
-                    }
-                });
-            }
-            return result;
-        });
-    }
-
-    private convertJSONWalletToFileWallet(wallet): SimpleWallet {
-        let walletString = Base64.encode(JSON.stringify({
-            "address": wallet.accounts[0].address,
-            "creationDate": LocalDateTime.now().toString(),
-            "encryptedPrivateKey": wallet.accounts[0].encrypted,
-            "iv": wallet.accounts[0].iv,
-            "network": wallet.accounts[0].network == -104 ? NetworkTypes.TEST_NET : NetworkTypes.MAIN_NET,
-            "name": wallet.name,
-            "type": "simple",
-            "schema": 1
-          }));
-        return SimpleWallet.readFromWLT(walletString);
-    }
-
-    /**
-     * Set a selected wallet
-     */
-    public setSelectedWallet(wallet: SimpleWallet) {
-        this.storage.set('selectedWallet', JSON.stringify(wallet.writeWLTFile()));
-    }
-
-    /**
-     * Remove selected Wallet
-     */
-    public unsetSelectedWallet() {
-        this.storage.set('selectedWallet', null);
-    }
-
-    /**
      * Create Simple Wallet
      * @param walletName wallet idenitifier for app
      * @param password wallet's password
      * @param selected network
      * @return Promise with wallet created
      */
-    public createSimpleWallet(walletName: string, password: string): Promise<SimpleWallet> {
-        let wallet = SimpleWallet.create(walletName, new Password(password));
-        return this._checkIfWalletNameExists(walletName).then(
-            value => {
-                if (value) {
-                    return null;
-                }
-                else {
-                    return this._storeWallet(wallet).then(
-                        value => {
-                            return value;
-                        }
-                    )
-                }
-            }
-        )
+    public createSimpleWallet(walletName: string, password: string): SimpleWallet {
+        return SimpleWallet.create(walletName, new Password(password));
     }
 
     /**
@@ -175,22 +58,8 @@ export class NemProvider {
      * @param selected network
      * * @return Promise with wallet created
      */
-    public createPrivateKeyWallet(walletName, password, privateKey) {
-        let wallet = SimpleWallet.createWithPrivateKey(walletName, new Password(password), privateKey);
-        return this._checkIfWalletNameExists(walletName).then(
-            value => {
-                if (value) {
-                    return null;
-                }
-                else {
-                    return this._storeWallet(wallet).then(
-                        value => {
-                            return value;
-                        }
-                    )
-                }
-            }
-        )
+    public createPrivateKeyWallet(walletName, password, privateKey): SimpleWallet {
+        return SimpleWallet.createWithPrivateKey(walletName, new Password(password), privateKey);
     }
 
 

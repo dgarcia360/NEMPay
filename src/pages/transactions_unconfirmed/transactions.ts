@@ -5,6 +5,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {ToastProvider} from '../../providers/toast/toast.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
+import {WalletProvider} from '../../providers/wallet/wallet.provider';
 
 import {LoginPage} from '../login/login';
 
@@ -20,7 +21,7 @@ export class TransactionsUnconfirmedPage {
     address: Address;
     TransactionTypes = TransactionTypes;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard, public translate: TranslateService) {
         this.transactions = [];
     }
 
@@ -37,7 +38,7 @@ export class TransactionsUnconfirmedPage {
             let loader = this.loading.create({
                 content: res
             });
-            this.nem.getSelectedWallet().then(
+            this.wallet.getSelectedWallet().then(
                 wallet => {
                     this.address = wallet.address;
                     if (!wallet) {

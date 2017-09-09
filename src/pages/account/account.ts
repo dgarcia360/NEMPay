@@ -10,6 +10,7 @@ import * as kjua from "kjua";
 
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {WalletProvider} from '../../providers/wallet/wallet.provider';
 
 
 import {LoginPage} from "../login/login";
@@ -25,7 +26,7 @@ export class AccountPage {
     qrCode: any;
     private onResumeSubscription: Subscription;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private platform: Platform, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private platform: Platform, public translate: TranslateService) {
         //Stores sensitive data.
         this.common = {};
         //Initialize common
@@ -45,7 +46,7 @@ export class AccountPage {
      * @param transaction  transaction object
      */
     ionViewWillEnter() {
-        this.nem.getSelectedWallet().then(
+        this.wallet.getSelectedWallet().then(
             value => {
                 if (!value) {
                     this.navCtrl.setRoot(LoginPage);
@@ -142,7 +143,7 @@ export class AccountPage {
      * @param transaction  transaction object
      */
     public logout() {
-        this.nem.unsetSelectedWallet();
+        this.wallet.unsetSelectedWallet();
         this._clearCommon();
         this.navCtrl.setRoot(LoginPage);
     }

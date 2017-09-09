@@ -7,6 +7,7 @@ import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {ToastProvider} from '../../providers/toast/toast.provider';
+import {WalletProvider} from '../../providers/wallet/wallet.provider';
 
 import {BalancePage} from '../balance/balance';
 import {LoginPage} from '../login/login';
@@ -30,7 +31,7 @@ export class TransferPage {
     selectedWallet: SimpleWallet;
     selectedMosaicDefinitionMetaDataPair: any;
 
-    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private wallet: WalletProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, public translate: TranslateService) {
 
         this.formData = {};
         this.amount = 0;
@@ -51,7 +52,7 @@ export class TransferPage {
     }
 
     ionViewWillEnter() {
-        this.nem.getSelectedWallet().then(
+        this.wallet.getSelectedWallet().then(
             value => {
                 if (!value) {
                     this.navCtrl.setRoot(LoginPage);
