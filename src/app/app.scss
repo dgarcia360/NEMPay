@@ -16,15 +16,11 @@
 // automatically applied to the <body> element in the app.
 
 
-.background-white .toolbar-background-md{
-  background: #fff !important;
-}
+/* Layout */
 
-.background-white.toolbar-md{
-  padding-left: 16px;
-  padding-right: 16px;
+.header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
+  background: none;
 }
-
 
 ion-content > .scroll-content {
 	margin-top: 35px !important;
@@ -34,8 +30,27 @@ ion-content > .scroll-content .scroll-content{
 	    margin-top: 0px !important;
 }
 
+ion-app.md [padding], ion-app.md [padding] .scroll-content {
+    padding: 16px 6px 16px 6px;
+}
+
+.default-padding{
+	padding: 16px !important;
+}
+
 #menu-list1{    
 	margin-top: 10px;
+}
+
+
+/* Colors */
+.background-white .toolbar-background-md{
+  background: #fff !important;
+}
+
+.background-white.toolbar-md{
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .color-plus{
@@ -46,12 +61,11 @@ ion-content > .scroll-content .scroll-content{
   color: #f53d3d;
 }
 
+
+/* Transactions */
 .fit-long-address{
   overflow:hidden;
   white-space:nowrap;
   text-overflow: ellipsis;
 }
 
-.header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
-  background: none;
-}

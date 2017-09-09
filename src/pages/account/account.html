@@ -9,6 +9,7 @@
     </ion-navbar>
 </ion-header>
 <ion-content padding id="account">
+<div  class="default-padding">
     <form>
         <div id="accountInfoQR"><img [src]="qrCode.src" style="height: 250px;margin: 0 auto;
     display: block;
@@ -67,4 +68,5 @@
     <button id="account-button2" ion-button color="positive" block on-click="logout()">
         {{'LOGOUT' | translate }}
     </button>
+    </div>
 </ion-content>
