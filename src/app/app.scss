@@ -26,9 +26,11 @@ ion-content > .scroll-content {
 	margin-top: 35px !important;
 }
 
-ion-content > .scroll-content .scroll-content{
+ion-content > .scroll-content .scroll-content,
+#login > .scroll-content{
 	    margin-top: 0px !important;
 }
+
 
 ion-app.md [padding], ion-app.md [padding] .scroll-content {
     padding: 16px 6px 16px 6px;

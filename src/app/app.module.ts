@@ -27,6 +27,7 @@ import {MyApp} from './app.component';
 import {BalancePage} from '../pages/balance/balance';
 import {TransactionsPage} from '../pages/transactions/transactions';
 import {TransferPage} from '../pages/transfer/transfer';
+import {ReceivePage} from '../pages/receive/receive';
 import {TransactionsConfirmedPage} from '../pages/transactions_confirmed/transactions';
 import {TransactionsUnconfirmedPage} from '../pages/transactions_unconfirmed/transactions';
 import {AccountPage} from '../pages/account/account';
@@ -55,6 +56,7 @@ export function createTranslateLoader(http: Http) {
         BalancePage,
         TransactionsPage,
         TransferPage,
+        ReceivePage,
         AccountPage,
         LoginPage,
         SignupPage,
@@ -91,6 +93,7 @@ export function createTranslateLoader(http: Http) {
         BalancePage,
         TransactionsPage,
         TransferPage,
+        ReceivePage,
         TransactionsConfirmedPage,
         TransactionsUnconfirmedPage,
         AccountPage,

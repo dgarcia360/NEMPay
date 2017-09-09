@@ -6,17 +6,14 @@
         <ion-title>
             {{'TRANSFER' | translate}}
         </ion-title>
+        <span style="float:right" on-click="scanQR()">
+        <ion-icon name="qr-scanner"></ion-icon> {{'SCAN_QR' | translate}}
+    </span>
     </ion-navbar>
 </ion-header>
 <ion-content padding id="transfer">
     <div class="default-padding">
-    <ion-row>
-        <ion-col>
-    <span style="float:right" on-click="scanQR()">
-        <ion-icon name="qr-scanner"></ion-icon> {{'SCAN_QR' | translate}}
-    </span>
-        </ion-col>
-    </ion-row>
+
     <form (ngSubmit)="startTransaction()">
         <ion-item id="transfer-input1">
             <ion-label stacked>
