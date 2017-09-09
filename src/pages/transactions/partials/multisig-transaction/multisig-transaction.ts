@@ -1,3 +1,5 @@
+//"type": 4100
+
 import { Component, Input } from '@angular/core';
 
 import 'rxjs/add/operator/toPromise';

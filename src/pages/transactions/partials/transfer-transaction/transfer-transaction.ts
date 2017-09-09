@@ -1,3 +1,5 @@
+//"type": 257
+
 import { Component, Input } from '@angular/core';
 
 import 'rxjs/add/operator/toPromise';
@@ -5,11 +7,11 @@ import {NemProvider} from '../../../../providers/nem/nem.provider';
 
 import {Address} from "nem-library";
 @Component({
-    selector: 'base-transaction',
-    templateUrl: 'base-transaction.html'
+    selector: 'transfer-transaction',
+    templateUrl: 'transfer-transaction.html'
 })
 
-export class BaseTransactionComponent {
+export class TransferTransactionComponent {
     @Input() tx: any;
     @Input() address: Address;
 

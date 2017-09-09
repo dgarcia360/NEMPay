@@ -11,15 +11,41 @@
 
     <ion-list>
         <ion-item color="none" *ngFor="let transaction of transactions" on-click="copyTransactionAddress(transaction)">
-            <!-- if multisig -->
-            <span *ngIf="transaction.type == 4100">
+
+            <!-- if importance transfer -->
+            <span *ngIf="transaction.type == TransactionTypes.IMPORTANCE_TRANSFER">
+                <importance-transfer-transaction [tx]="transaction"></importance-transfer-transaction>
+            </span>
+
+
+            <!-- if mosaic definition -->
+            <span *ngIf="transaction.type == TransactionTypes.MOSAIC_DEFINITION_CREATION">
+                <mosaic-definition-transaction [tx]="transaction"></mosaic-definition-transaction>
+            </span>
+
+
+            <!-- if mosaic supply change -->
+            <span *ngIf="transaction.type == TransactionTypes.MOSAIC_SUPPLY_CHANGE">
+                <mosaic-supply-change-transaction [tx]="transaction"></mosaic-supply-change-transaction>
+            </span>
+
+
+            <!-- if multisig aggregate  -->
+            <span *ngIf="transaction.type == TransactionTypes.MULTISIG">
                 <multisig-transaction [tx]="transaction" [address]="address"></multisig-transaction>
             </span>
 
-            <!-- if base case, in general  257 -->
-            <span *ngIf="transaction.type != 4100">
-                <base-transaction [tx]="transaction" [address]="address"></base-transaction>
+
+            <!-- if provision namespace  -->
+            <span *ngIf="transaction.type == TransactionTypes.PROVISION_NAMESPACE">
+                <provision-namespace-transaction [tx]="transaction"></provision-namespace-transaction>
             </span>
+
+            <!-- if transfer  -->
+            <span *ngIf="transaction.type == TransactionTypes.TRANSFER">
+                <transfer-transaction [tx]="transaction" [address]="address"></transfer-transaction>
+            </span>
+
         </ion-item>
     </ion-list>
     <div *ngIf="transactions.length == 0">

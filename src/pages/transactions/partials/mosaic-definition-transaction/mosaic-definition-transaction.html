@@ -1,0 +1,14 @@
+<!-- Date (Timestamp) -->
+<p>
+    <b>{{'DATE' | translate}}:</b> {{tx.timeWindow.timeStamp.toString()}}
+</p>
+
+<!-- Fee -->
+<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b>{{(300000 + tx.fee) /1000000}} xem</p>
+
+
+<!-- Message -->
+<p>
+    <b>{{ 'MOSAIC_CREATED' | translate}}</b>:
+    <span>{{tx.mosaicDefinition.id.description()}}</span>
+</p>

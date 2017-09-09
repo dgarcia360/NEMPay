@@ -1,0 +1,15 @@
+<!-- Date (Timestamp) -->
+<p>
+    <b>{{'DATE' | translate}}:</b> {{tx.timeWindow.timeStamp.toString()}}
+</p>
+
+<!-- Fee -->
+<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b>{{(300000 + tx.fee) /1000000}} xem</p>
+
+
+<!-- Message -->
+<p>
+    <b *ngIf="tx.supplyType == 1">{{'SUPPLY_INCREASE' | translate}}</b>:
+    <b *ngIf="tx.supplyType == 2">{{'SUPPLY_DECREASE' | translate}}</b>:
+    <span>{{tx.delta}} {{ 'MOSAICS' | translate}}</span>
+</p>

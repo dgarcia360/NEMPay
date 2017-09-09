@@ -36,8 +36,14 @@ import {SignupSimpleWalletPage} from '../pages/signup_simplewallet/signup';
 import {SignupPrivateKeyPage} from '../pages/signup_privatekey/signup';
 
 
-import {BaseTransactionComponent} from '../pages/transactions/partials/base-transaction/base-transaction';
+import {ImportanceTransferTransactionComponent} from '../pages/transactions/partials/importance-transfer-transaction/importance-transfer-transaction';
+import {MosaicDefinitionTransactionComponent} from '../pages/transactions/partials/mosaic-definition-transaction/mosaic-definition-transaction';
+import {MosaicSupplyChangeTransactionComponent} from '../pages/transactions/partials/mosaic-supply-change-transaction/mosaic-supply-change-transaction';
 import {MultisigTransactionComponent} from '../pages/transactions/partials/multisig-transaction/multisig-transaction';
+import {ProvisionNamespaceTransactionComponent} from '../pages/transactions/partials/provision-namespace-transaction/provision-namespace-transaction';
+import {TransferTransactionComponent} from '../pages/transactions/partials/transfer-transaction/transfer-transaction';
+
+
 
 export function createTranslateLoader(http: Http) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -56,8 +62,12 @@ export function createTranslateLoader(http: Http) {
         SignupPrivateKeyPage,
         TransactionsConfirmedPage,
         TransactionsUnconfirmedPage,
-        BaseTransactionComponent,
+        ImportanceTransferTransactionComponent,
+        MosaicDefinitionTransactionComponent,
+        MosaicSupplyChangeTransactionComponent,
         MultisigTransactionComponent,
+        ProvisionNamespaceTransactionComponent,
+        TransferTransactionComponent,
         DivideByExponentialBaseTenPipe,
         FormatLevyPipe,
     ],

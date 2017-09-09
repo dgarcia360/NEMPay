@@ -1,0 +1,22 @@
+<!-- Sender or recipient -->
+<p class="fit-long-address">
+    <b>
+        <span>{{ 'REMOTE_ACCOUNT' | translate}}</span>
+    </b>
+    {{tx.remoteAccount.address.pretty()}}
+</p>
+
+<!-- Date (Timestamp) -->
+<p>
+    <b>{{'DATE' | translate}}:</b> {{tx.timeWindow.timeStamp.toString()}}
+</p>
+
+<!-- Fee -->
+<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b>{{(tx.fee) /1000000}} xem</p>
+
+
+<!-- Message -->
+<p>
+    <span *ngIf="tx.mode == 1">{{ 'ACTIVATE_HARVESTING' | translate}}</span>
+    <span *ngIf="tx.mode == 2">{{ 'DEACTIVATE_HARVESTING' | translate}}</span>
+</p>

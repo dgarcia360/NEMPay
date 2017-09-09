@@ -1,0 +1,18 @@
+<!-- Date (Timestamp) -->
+<p>
+    <b>{{'DATE' | translate}}:</b> {{tx.timeWindow.timeStamp.toString()}}
+</p>
+
+<!-- Fee -->
+<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{(tx.fee) /1000000}} xem</p>
+
+
+<!-- Message -->
+<p>
+    <b> {{'NAMESPACE' | translate}}</b>: {{tx.newPart}}
+
+</p>
+
+<p *ngIf="tx.parent">
+    <b>{{'SUBNAMESPACE_OF' | translate}}</b>: {{tx.parent}}
+</p>

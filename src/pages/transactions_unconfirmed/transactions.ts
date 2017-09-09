@@ -8,7 +8,8 @@ import {NemProvider} from '../../providers/nem/nem.provider';
 
 import {LoginPage} from '../login/login';
 
-import {Address, Transaction, TransferTransaction, TransactionTypes, MultisigTransaction} from 'nem-library';
+import {Address, Transaction, TransferTransaction} from 'nem-library';
+import {TransactionTypes} from "nem-library/dist/src/models/transaction/TransactionTypes";
 
 @Component({
     selector: 'page-transactions',
@@ -17,6 +18,7 @@ import {Address, Transaction, TransferTransaction, TransactionTypes, MultisigTra
 export class TransactionsUnconfirmedPage {
     transactions: Transaction[];
     address: Address;
+    TransactionTypes = TransactionTypes;
 
     constructor(public navCtrl: NavController, private nem: NemProvider, private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard, public translate: TranslateService) {
         this.transactions = [];
@@ -46,15 +48,14 @@ export class TransactionsUnconfirmedPage {
                         if (!refresher) loader.present();
 
                         this.nem.getUnconfirmedTransactionsFromAnAccount(this.address)
-                        .flatMap(_ => _)
-                        .filter(transaction => transaction.type == TransactionTypes.TRANSFER || (transaction.type == TransactionTypes.MULTISIG && (<MultisigTransaction>transaction).otherTransaction.type == TransactionTypes.TRANSFER))
-                        .toArray()
-                        .subscribe(
-                            transactions => {
-                                if (refresher) refresher.complete();
-                                else loader.dismiss();
-                                this.transactions = transactions;
-                            });
+                            .flatMap(_ => _)
+                            .toArray()
+                            .subscribe(
+                                transactions => {
+                                    if (refresher) refresher.complete();
+                                    else loader.dismiss();
+                                    this.transactions = transactions;
+                                });
                     }
                 });
         });
