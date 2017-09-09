@@ -236,6 +236,16 @@ export class NemProvider {
     }
 
     /**
+     * Generate Address QR Text
+     * @param address address
+     * @return Address QR Text
+     */
+    public generateInvoiceQRText(address: Address, amount:number, message: string): string {
+        return this.qrService.generateTransactionQRText(address, amount, message);
+    }
+
+
+    /**
      * Get mosaics form an account
      * @param address address to check balance
      * @return Promise with mosaics information

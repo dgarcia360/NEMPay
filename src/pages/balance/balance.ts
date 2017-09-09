@@ -7,6 +7,8 @@ import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 
 import {TransferPage} from '../transfer/transfer';
+import {ReceivePage} from '../receive/receive';
+
 import {LoginPage} from '../login/login';
 
 import {Wallet, MosaicTransferable} from 'nem-library';
@@ -82,6 +84,15 @@ export class BalancePage {
         else{
             this.alert.showMosaicNotTransferable();
         }
-
     }
+
+   /**
+     * Moves to receive, by default with mosaic selected
+     */
+    goToReceive(){
+        this.navCtrl.push(ReceivePage, {
+            selectedMosaic: this.selectedMosaic
+        });
+    }
+
 }
