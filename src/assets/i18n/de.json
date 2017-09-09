@@ -18,6 +18,8 @@
 
   "BALANCE": "Kontostand",
   "TRANSFER_BUTTON": "Überweisung",
+  "RECEIVE_BUTTON": "Receive",
+
   "PASSWORD": "Passwort",
   "CREATE_OR_IMPORT_AN_ACCOUNT": "Erstellen oder importieren Sie ein Konto",
   "LOGIN": "Anmelden",
@@ -38,8 +40,15 @@
   "TRANSACTIONS": "Transaktionen",
   "CONFIRMED_TRANSACTIONS": "Bestätigte Transaktionen",
   "PENDING_TRANSACTIONS": "Ausstehende Transaktionen",
- 
   "NOTHING_TO_SHOW": "Keine Transaktionen vorhanden",
+   "REMOTE_ACCOUNT": "Remote Account",
+  "NAMPESPACE": "Namespace",
+  "SUBNAMESPACE_OF": "Subnamespace of",
+  "MOSAIC_CREATED": "Mosaic Created",
+  "SUPPLY_INCREASE": "Supply Increased",
+  "SUPPLY_DECREASED": "Supply Decreased",
+  "MOSAICS": "Mosaics",
+  "ENCRYPED": "Encrypted",
 
   "TRANSFER": "Überweisung",
   "FROM": "Absender",
@@ -48,6 +57,8 @@
   "FEE": "Gebühr",
   "LEVY": "Abgaben",
   "DATE": "Datum",
+
+  "RECEIVE": "Receive",
 
   "ADDRESS": "Adresse",
   "RECIPIENT_ADDRESS": "Empfänger Adresse",

@@ -17,7 +17,9 @@
   "HIDE_PRIVATE_KEY": "Ocultar la Clau Privada",
 
   "BALANCE": "Balanç",
-  "TRANSFER_BUTTON": "Transferir",
+  "TRANSFER_BUTTON": "Enviar",
+  "RECEIVE_BUTTON": "Rebre",
+
   "PASSWORD": "Contrasenya",
   "CREATE_OR_IMPORT_AN_ACCOUNT": "CREAR O IMPORTAR UN COMPTE",
   "LOGIN": "Iniciar sessió",
@@ -40,16 +42,25 @@
   "TRANSACTIONS": "Transaccions",
   "CONFIRMED_TRANSACTIONS": "Transaccions Confirmades",
   "PENDING_TRANSACTIONS": "Transaccions Pendents",
-
   "NOTHING_TO_SHOW": "Res per mostrar",
+  "REMOTE_ACCOUNT": "Remote Account",
+  "NAMPESPACE": "Namespace",
+  "SUBNAMESPACE_OF": "Subnamespace of",
+  "MOSAIC_CREATED": "Mosaic Created",
+  "SUPPLY_INCREASE": "Supply Increased",
+  "SUPPLY_DECREASED": "Supply Decreased",
+  "MOSAICS": "Mosaics",
+  "ENCRYPED": "Encrypted",
 
-  "TRANSFER": "Transferir",
+  "TRANSFER": "Enviar",
   "FROM": "De",
   "TO": "A",
   "MESSAGE": "Missatge",
   "FEE": "Comissió",
   "LEVY": "Impost",
   "DATE": "Data",
+
+  "RECEIVE": "Rebre",
 
   "ADDRESS": "Adreça",
   "RECIPIENT_ADDRESS": "Adreça Receptora",

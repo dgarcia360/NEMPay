@@ -18,6 +18,8 @@
 
   "BALANCE": "Баланс",
   "TRANSFER_BUTTON": "Перевод",
+  "RECEIVE_BUTTON": "Receive",
+
   "PASSWORD": "Пароль",
   "CREATE_OR_IMPORT_AN_ACCOUNT": "СОЗДАТЬ ИЛИ ИМПОРТИРОВАТЬ УЧЕТНУЮ ЗАПИСЬ",
   "LOGIN": "Войти",
@@ -40,6 +42,14 @@
   "CONFIRMED_TRANSACTIONS": "Подтвержденные Транзакции",
   "PENDING_TRANSACTIONS": "Транзакции в Ожидании",
   "NOTHING_TO_SHOW": "Nothing to show",
+  "REMOTE_ACCOUNT": "Remote Account",
+  "NAMPESPACE": "Namespace",
+  "SUBNAMESPACE_OF": "Subnamespace of",
+  "MOSAIC_CREATED": "Mosaic Created",
+  "SUPPLY_INCREASE": "Supply Increased",
+  "SUPPLY_DECREASED": "Supply Decreased",
+  "MOSAICS": "Mosaics",
+  "ENCRYPED": "Encrypted",
 
   "TRANSFER": "Перевод",
   "FROM": "Откуда",
@@ -48,6 +58,8 @@
   "FEE": "Комиссия",
   "LEVY": "Налог",
   "DATE": "Date",
+  
+  "RECEIVE": "Receive",
 
   "ADDRESS": "Адрес",
   "RECIPIENT_ADDRESS": "Адрес Получателя",

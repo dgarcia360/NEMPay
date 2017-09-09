@@ -17,7 +17,9 @@
   "HIDE_PRIVATE_KEY": "Ocultar clave privada",
 
   "BALANCE": "Saldo",
-  "TRANSFER_BUTTON": "Transferencia",
+  "TRANSFER_BUTTON": "Enviar",
+  "RECEIVE_BUTTON": "Recibir",
+
   "PASSWORD": "Contraseña",
   "CREATE_OR_IMPORT_AN_ACCOUNT": "CREAR O IMPORTAR UNA CUENTA",
   "LOGIN": "Iniciar sesión",
@@ -40,14 +42,25 @@
   "CONFIRMED_TRANSACTIONS": "Transacciones confirmadas",
   "PENDING_TRANSACTIONS": "Transacciones pendientes",
   "NOTHING_TO_SHOW": "Nada que mostrar",
-
-  "TRANSFER": "Transferir",
+ "REMOTE_ACCOUNT": "Remote Account",
+  "NAMPESPACE": "Namespace",
+  "SUBNAMESPACE_OF": "Subnamespace of",
+  "MOSAIC_CREATED": "Mosaic Created",
+  "SUPPLY_INCREASE": "Supply Increased",
+  "SUPPLY_DECREASED": "Supply Decreased",
+  "MOSAICS": "Mosaics",
+  "ENCRYPED": "Encrypted",
+  
+  "TRANSFER": "Enviar",
   "FROM": "Remitente",
   "TO": "Receptor",
   "MESSAGE": "Mensaje",
   "FEE": "Comisión",
   "LEVY": "Impuesto",
   "DATE": "Fecha",
+
+  "RECEIVE": "Recibir",
+
 
   "ADDRESS": "Dirección",
   "RECIPIENT_ADDRESS": "Dirección del receptor",

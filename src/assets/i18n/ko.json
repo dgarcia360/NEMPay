@@ -19,11 +19,11 @@
   
   "BALANCE": "잔액",
   "TRANSFER_BUTTON": "이전",
+  "RECEIVE_BUTTON": "Receive",
+
   "PASSWORD": "패스워드",
   "CREATE_OR_IMPORT_AN_ACCOUNT": "계정 생성 또는 가져오기",
   "LOGIN": "로그인",
-
-
 
   "WALLET_NAME": "월렛 이름",
   "REPEAT_PASSWORD": "패스워드 확인",
@@ -41,6 +41,14 @@
   "CONFIRMED_TRANSACTIONS": "확정된 트랜잭션",
   "PENDING_TRANSACTIONS": "처리중인 트랜잭션",
   "NOTHING_TO_SHOW": "표시할 내역이 없습니다.",
+  "REMOTE_ACCOUNT": "Remote Account",
+  "NAMPESPACE": "Namespace",
+  "SUBNAMESPACE_OF": "Subnamespace of",
+  "MOSAIC_CREATED": "Mosaic Created",
+  "SUPPLY_INCREASE": "Supply Increased",
+  "SUPPLY_DECREASED": "Supply Decreased",
+  "MOSAICS": "Mosaics",
+  "ENCRYPED": "Encrypted",
 
   "TRANSFER": "이전",
   "FROM": "보내는 이",
@@ -50,6 +58,8 @@
   "LEVY": "세금",
   "DATE": "날짜",
   
+  "RECEIVE": "Receive",
+
   "ADDRESS": "주소",
   "RECIPIENT_ADDRESS": "받는이 주소",
   "SCAN_QR": "QR 스캔",

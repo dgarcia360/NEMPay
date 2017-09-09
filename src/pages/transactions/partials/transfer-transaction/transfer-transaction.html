@@ -54,6 +54,6 @@
         <b> {{'MESSAGE' | translate}}:</b> {{tx.message.plain()}}
     </span>
     <span *ngIf="tx.message.isEncrypted()">
-        <b> {{'MESSAGE' | translate}}:</b> Encrypted.
+        <b> {{'MESSAGE' | translate}}:</b> {{'ENCRYPTED' | translate}}.
     </span>
 </p>

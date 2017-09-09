@@ -43,6 +43,14 @@
   "CONFIRMED_TRANSACTIONS": "Confirmed Transactions",
   "PENDING_TRANSACTIONS": "Pending Transactions",
   "NOTHING_TO_SHOW": "Nothing to show",
+  "REMOTE_ACCOUNT": "Remote Account",
+  "NAMPESPACE": "Namespace",
+  "SUBNAMESPACE_OF": "Subnamespace of",
+  "MOSAIC_CREATED": "Mosaic Created",
+  "SUPPLY_INCREASE": "Supply Increased",
+  "SUPPLY_DECREASED": "Supply Decreased",
+  "MOSAICS": "Mosaics",
+  "ENCRYPED": "Encrypted",
 
   "TRANSFER": "Send",
   "FROM": "From",
@@ -51,6 +59,9 @@
   "FEE": "Fee",
   "LEVY": "Levy",
   "DATE": "Date",
+
+  "RECEIVE": "Receive",
+
 
   "ADDRESS": "Address",
   "RECIPIENT_ADDRESS": "Recipient Address",

@@ -18,6 +18,8 @@
 
   "BALANCE": "数量",
   "TRANSFER_BUTTON": "送信",
+  "RECEIVE_BUTTON": "Receive",
+
   "PASSWORD": "パスワード",
   "CREATE_OR_IMPORT_AN_ACCOUNT": "アカウントの作成またはインポート",
   "LOGIN": "ログイン",
@@ -40,6 +42,14 @@
   "CONFIRMED_TRANSACTIONS": "承認済みのトランザクション",
   "PENDING_TRANSACTIONS": "未承認のトランザクション",
   "NOTHING_TO_SHOW": "何も表示しない",
+  "REMOTE_ACCOUNT": "Remote Account",
+  "NAMPESPACE": "Namespace",
+  "SUBNAMESPACE_OF": "Subnamespace of",
+  "MOSAIC_CREATED": "Mosaic Created",
+  "SUPPLY_INCREASE": "Supply Increased",
+  "SUPPLY_DECREASED": "Supply Decreased",
+  "MOSAICS": "Mosaics",
+  "ENCRYPED": "Encrypted",
 
   "TRANSFER": "送信",
   "FROM": "送り主",
@@ -48,6 +58,9 @@
   "FEE": "手数料",
   "LEVY": "徴収料",
   "DATE": "日付",
+
+  "RECEIVE": "Receive",
+
 
   "ADDRESS": "アドレス",
   "RECIPIENT_ADDRESS": "受信アドレス",
