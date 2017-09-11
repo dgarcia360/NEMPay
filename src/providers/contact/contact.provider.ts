@@ -54,4 +54,17 @@ export class ContactProvider {
     let sql = 'UPDATE contact SET name=?, address=? WHERE id=?';
     return this.db.executeSql(sql, [name, address, id]);
   }
+
+  searchContactName(owner:string, address:string){
+    let sql = 'SELECT * FROM contact WHERE owner = ?, address=?';
+      return this.db.executeSql(sql, [owner, address])
+      .then(response => {
+        let contacts = [];
+        for (let index = 0; index < response.rows.length; index++) {
+          contacts.push( response.rows.item(index) );
+        }
+        return Promise.resolve( contacts );
+      })
+      .catch(error => Promise.reject(error));
+  }
 }

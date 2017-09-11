@@ -26,6 +26,8 @@ import {ContactProvider} from '../providers/contact/contact.provider';
 
 import {DivideByExponentialBaseTenPipe} from '../pipes/divide-by-exponential-base-ten.pipe';
 import {FormatLevyPipe} from '../pipes/format-levy.pipe';
+import {SearchContactPipe} from '../pipes/search-contact.pipe';
+
 import {MyApp} from './app.component';
 import {BalancePage} from '../pages/balance/balance';
 import {TransactionsPage} from '../pages/transactions/transactions';
@@ -79,6 +81,7 @@ export function createTranslateLoader(http: Http) {
         TransferTransactionComponent,
         DivideByExponentialBaseTenPipe,
         FormatLevyPipe,
+        SearchContactPipe
     ],
     imports: [
         BrowserModule,
