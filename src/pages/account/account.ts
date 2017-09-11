@@ -101,10 +101,16 @@ export class AccountPage {
      * Share current account through apps installed on the phone
      */
     public shareAddress() {
-        var textToShare = this.selectedWallet.address;
-        this.socialSharing.share(textToShare.plain(), "My NEM Address", null, null).then(_ => {
+        if (this.platform.is('cordova')) {
 
-        });
+            var textToShare = this.selectedWallet.address;
+            this.socialSharing.share(textToShare.plain(), "My NEM Address", null, null).then(_ => {
+
+            });
+        }
+        else{
+            this.alert.showFunctionallityOnlyAvailableInMobileDevices();
+        }
     }
 
     /**
