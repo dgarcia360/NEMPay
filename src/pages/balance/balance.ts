@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 
-import {MenuController, NavController, LoadingController} from 'ionic-angular';
+import {MenuController, NavController, LoadingController, NavParams} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
 
 import {NemProvider} from '../../providers/nem/nem.provider';
@@ -22,54 +22,55 @@ export class BalancePage {
     selectedWallet: Wallet;
     balance: MosaicTransferable[];
     selectedMosaic: MosaicTransferable;
+    addressToSendAssets: string;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private menu: MenuController, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
-
+    constructor(public navCtrl: NavController, private nem: NemProvider, private navParams:NavParams, private wallet: WalletProvider, private menu: MenuController, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
+        this.addressToSendAssets = navParams.get('address') || null;
     }
 
     ionViewWillEnter() {
-        this.menu.enable(true);
-        this.getBalance(false);
+        if (!this.addressToSendAssets){
+            this.menu.enable(true);
+        }
+
+        this.wallet.getSelectedWallet().then(
+            wallet => {
+
+                if (!wallet) {
+                    this.navCtrl.setRoot(LoginPage);
+                }
+                else {
+                    this.selectedWallet = wallet;
+                    this.getBalance(false);
+                }
+            });
     }
 
     /**
      * Retrieves current account owned mosaics  into this.balance
      * @param refresher  Ionic refresher or false, if called on View Enter
      */
-    public getBalance(refresher) {
+    public getBalance(refresher:any) {
         this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
             let loader = this.loading.create({
                 content: res
             });
 
+            if (!refresher) loader.present();
 
-            this.wallet.getSelectedWallet().then(
-                wallet => {
-
-                    if (!wallet) {
-                        if (refresher) refresher.complete();
-                        this.navCtrl.setRoot(LoginPage);
+            this.nem.getBalance(this.selectedWallet.address).then(
+                balance => {
+                    this.balance = balance;
+                    if (this.balance.length > 0) {
+                        this.selectedMosaic = this.balance[0];
+                    }
+                    if (refresher) {
+                        refresher.complete();
                     }
                     else {
-
-                        if (!refresher) loader.present();
-
-                        this.nem.getBalance(wallet.address).then(
-                            balance => {
-                                this.balance = balance;
-                                if (this.balance.length>0){
-                                    this.selectedMosaic = this.balance[0];
-                                }
-                                if (refresher) {
-                                    refresher.complete();
-                                }
-                                else {
-                                    loader.dismiss();
-                                }
-                            });
+                        loader.dismiss();
                     }
-                }
-            )
+                });
         });
     }
 
@@ -79,7 +80,8 @@ export class BalancePage {
     goToTransfer(){
         if(this.selectedMosaic.properties.transferable){
             this.navCtrl.push(TransferPage, {
-                selectedMosaic: this.selectedMosaic
+                'selectedMosaic': this.selectedMosaic,
+                'address': this.addressToSendAssets
             });
         }
         else{

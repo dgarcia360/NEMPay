@@ -36,6 +36,7 @@ export class TransferPage {
         this.formData = {};
         this.amount = 0;
         this.formData.recipientPubKey = '';
+        this.formData.rawRecipient = navParams.get('address') || null;
         this.selectedMosaic = <MosaicTransferable>navParams.get('selectedMosaic');
         this.formData.fee = 0;
         this.formData.innerFee = 0;

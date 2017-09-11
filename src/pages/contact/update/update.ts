@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, LoadingController} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
+import {SocialSharing} from '@ionic-native/social-sharing';
 
 import {ToastProvider} from '../../../providers/toast/toast.provider';
 import {WalletProvider} from '../../../providers/wallet/wallet.provider';
@@ -11,6 +12,7 @@ import {NemProvider} from '../../../providers/nem/nem.provider';
 import {Address} from 'nem-library';
 
 import {ContactListPage} from '../list/list';
+import {BalancePage} from '../../balance/balance';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -25,7 +27,7 @@ export class UpdateContactPage {
     previousAddress:string;
     id : number;
 
-    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private wallet: WalletProvider, private toast: ToastProvider, private contact: ContactProvider, private loading: LoadingController, public translate: TranslateService, private alert: AlertProvider) {
+    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private wallet: WalletProvider, private toast: ToastProvider, private contact: ContactProvider, private loading: LoadingController, public translate: TranslateService, private alert: AlertProvider, private socialSharing:SocialSharing) {
        this.owner = navParams.get('owner');
        this.name = navParams.get('name');
        this.address = navParams.get('address');
@@ -37,7 +39,7 @@ export class UpdateContactPage {
      * check if an address is valid
      * @param address address to check
      */
-    isValidAddress(address:string){
+    private _isValidAddress(address:string){
        var valid;
 
        try{
@@ -57,7 +59,6 @@ export class UpdateContactPage {
     private _createContact(address:string){
 
         this.contact.searchContactName(this.owner, address).then(contacts =>{
-
             if(contacts.length > 0) this.alert.showContactAlreadyExists();
             else{
                 this.contact.create(this.owner, this.name, address).then(_=>{
@@ -88,17 +89,16 @@ export class UpdateContactPage {
                 });
             }
         });
-
     }
 
 
     /**
      * updates contact or creates it
      */
-    saveContact(){
+    public saveContact(){
         let _rawAddress = this.address.toUpperCase().replace(/-/g, '');
 
-        if (!this.isValidAddress(_rawAddress)){
+        if (!this._isValidAddress(_rawAddress)){
           this.alert.showAlertDoesNotBelongToNetwork();
         }
         else{
@@ -109,6 +109,24 @@ export class UpdateContactPage {
              this._createContact(_rawAddress);
           }
         }
+    }
+
+
+    /**
+     * moves to balance
+     * @param address address to send asset
+     */
+    public goToBalance() {
+        this.navCtrl.push(BalancePage, {'address': this.previousAddress});
+    };
+
+    /**
+     * Share current account through apps installed on the phone
+     */
+    public shareAddress() {
+        this.socialSharing.share(this.previousAddress, this.name + " Address", null, null).then(_ => {
+
+        });
     }
 
 }
