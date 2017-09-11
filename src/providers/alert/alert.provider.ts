@@ -171,6 +171,18 @@ export class AlertProvider {
         });
     }
 
+    showContactAlreadyExists() {
+        this.translate.get(['ALERT_CONTACT_ALREADY_EXISTS', 'OK'], {}).subscribe((res) => {
+            let alert = this.alertCtrl.create({
+                title: res['ALERT_CONTACT_ALREADY_EXISTS'],
+                buttons: [res['OK']]
+            });
+
+            alert.present();
+        });
+    }
+
+
 
     showOnPhoneDisconnected() {
         this.translate.get(['ALERT_PHONE_DISCONNECTED', 'ALERT_SUBTITLE_PHONE_DISCONNECTED', 'OK'], {}).subscribe((res) => {

@@ -22,6 +22,7 @@ export class UpdateContactPage {
     owner: string;
     name: string;
     address: string;
+    previousAddress:string;
     id : number;
 
     constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private wallet: WalletProvider, private toast: ToastProvider, private contact: ContactProvider, private loading: LoadingController, public translate: TranslateService, private alert: AlertProvider) {
@@ -29,11 +30,7 @@ export class UpdateContactPage {
        this.name = navParams.get('name');
        this.address = navParams.get('address');
        this.id = navParams.get('id');
-
-    }
-
-    ionViewWillEnter() {
-
+       this.previousAddress = this.address;
     }
     
     /**
@@ -54,9 +51,51 @@ export class UpdateContactPage {
     }
 
     /**
+     * creates a new contact
+     *@param address address to assign
+     */
+    private _createContact(address:string){
+
+        this.contact.searchContactName(this.owner, address).then(contacts =>{
+
+            if(contacts.length > 0) this.alert.showContactAlreadyExists();
+            else{
+                this.contact.create(this.owner, this.name, address).then(_=>{
+                    this.toast.contactCreated();
+                    this.navCtrl.push(ContactListPage, {});
+                }).catch(err => {
+                    console.log(err)
+                });
+            }
+        });
+    }
+
+    /**
+     * updates existing contact
+     * @param address address to assign
+     */
+    private _updateContact(address:string){
+
+        this.contact.searchContactName(this.owner, address).then(contacts =>{
+
+            if(contacts.length > 0 && address != this.previousAddress) this.alert.showContactAlreadyExists();
+            else{
+                this.contact.update(this.id, this.name, address).then(_=>{
+                    this.toast.contactUpdated();
+                    this.navCtrl.push(ContactListPage, {});
+                }).catch(err => {
+                    console.log(err)
+                });
+            }
+        });
+
+    }
+
+
+    /**
      * updates contact or creates it
      */
-    updateContact(){
+    saveContact(){
         let _rawAddress = this.address.toUpperCase().replace(/-/g, '');
 
         if (!this.isValidAddress(_rawAddress)){
@@ -64,20 +103,10 @@ export class UpdateContactPage {
         }
         else{
           if (this.id){
-              this.contact.update(this.id, this.name, this.address).then(_=>{
-                  this.toast.contactUpdated();
-                  this.navCtrl.push(ContactListPage, {});
-              }).catch(err => {
-                console.log(err)
-              });
+              this._updateContact(_rawAddress);
           }
           else{
-              this.contact.create(this.owner, this.name, _rawAddress).then(_=>{
-                  this.toast.contactCreated();
-                  this.navCtrl.push(ContactListPage, {});
-              }).catch(err => {
-                console.log(err)
-              });
+             this._createContact(_rawAddress);
           }
         }
     }
