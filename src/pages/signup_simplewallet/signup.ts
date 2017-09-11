@@ -41,24 +41,27 @@ export class SignupSimpleWalletPage {
      * Shows keep private key safe message
      */
     private _showTutorialAlert(wallet: SimpleWallet) {
+        this.translate.get(['KEEP_YOUR_PRIVATE_KEY_SAFE', 'PASSWORD_WARNING','IVE_COPIED_IT', 'OK'], {}).subscribe((res) => {
 
-        let alert = this.alertCtrl.create({
-            title: 'Keep Private Key safe',
-            subTitle: 'Your private key holds all the power of your account. ' +
-            'It is a priority to make sure it is stored safely somewhere offline.<br/><br/> <span style="text-align:center"><b>' + this.nem.passwordToPrivateKey(this.newAccount.password, wallet)
-            + '</b></span>',
-            buttons: [
-                {
-                    text: "I've copied it",
-                    handler: _ => {
-                        //clear private key just in case
-                        this._clearNewAccount();
-                        this.app.getRootNav().push(LoginPage);
+            let alert = this.alertCtrl.create({
+                title: res['KEEP_YOUR_PRIVATE_KEY_SAFE'],
+                subTitle: res['PASSWORD_WARNING'] + '<br/><br/> <span style="text-align:center"><b>' + this.nem.passwordToPrivateKey(this.newAccount.password, wallet)
+                + '</b></span>',
+                buttons: [
+                    {
+                        text: res['IVE_COPIED_IT'],
+                        handler: _ => {
+                            //clear private key just in case
+                            this._clearNewAccount();
+                            this.app.getRootNav().push(LoginPage);
+                        }
                     }
-                }
-            ]
-        });
-        alert.present();
+                ]
+            });
+            alert.present();
+
+
+        })
     }
 
     /**

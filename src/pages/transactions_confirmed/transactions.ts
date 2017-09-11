@@ -1,16 +1,17 @@
 import {Component} from '@angular/core';
-import {NavController, LoadingController} from 'ionic-angular';
+import {NavController, LoadingController, Platform} from 'ionic-angular';
 import {Clipboard} from '@ionic-native/clipboard';
 import {TranslateService} from '@ngx-translate/core';
 
 import {ToastProvider} from '../../providers/toast/toast.provider';
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {WalletProvider} from '../../providers/wallet/wallet.provider';
+import {AlertProvider} from '../../providers/alert/alert.provider';
 
 
 import {LoginPage} from '../login/login';
 
-import {Address, Transaction, TransferTransaction}  from 'nem-library';
+import {Wallet, Transaction, TransferTransaction}  from 'nem-library';
 import {TransactionTypes} from "nem-library/dist/src/models/transaction/TransactionTypes";
 
 @Component({
@@ -19,15 +20,24 @@ import {TransactionTypes} from "nem-library/dist/src/models/transaction/Transact
 })
 export class TransactionsConfirmedPage {
     transactions: Transaction[];
-    address: Address;
+    selectedWallet: Wallet;
     TransactionTypes = TransactionTypes;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard, public translate: TranslateService) {
+    constructor(private platform: Platform, public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private loading: LoadingController, private toast: ToastProvider, private clipboard: Clipboard, public translate: TranslateService, private alert: AlertProvider) {
         this.transactions = [];
     }
 
     ionViewWillEnter() {
-        this.getTransactions(false);
+        this.wallet.getSelectedWallet().then(
+            wallet => {
+                if (!wallet) {
+                    this.navCtrl.push(LoginPage);
+                }
+                else {
+                    this.selectedWallet = wallet;
+                    this.getTransactions(false);
+                }
+            })
     }
 
     /**
@@ -41,29 +51,19 @@ export class TransactionsConfirmedPage {
                 content: res
             });
 
-            this.wallet.getSelectedWallet().then(
-                wallet => {
-                    this.address = wallet.address;
-                    if (!wallet) {
-                        if (refresher) refresher.complete();
-                        this.navCtrl.push(LoginPage);
-                    }
-                    else {
-                        if (!refresher) loader.present();
-                        this.nem.getAllTransactionsFromAnAccount(this.address)
-                        .flatMap(_ => _)
-                        .toArray()
-                        .subscribe(
-                            transactions => {
-                                console.log(transactions);
-                                if (refresher) refresher.complete();
-                                else loader.dismiss();
-                                this.transactions = transactions;
-                            })
-                    }
-                }
-            )
-        });
+
+            if (!refresher) loader.present();
+            this.nem.getAllTransactionsFromAnAccount(this.selectedWallet.address)
+            .flatMap(_ => _)
+            .toArray()
+            .subscribe(
+                transactions => {
+                    console.log(transactions);
+                    if (refresher) refresher.complete();
+                    else loader.dismiss();
+                    this.transactions = transactions;
+                })
+        })
     }
 
     /**
@@ -71,15 +71,24 @@ export class TransactionsConfirmedPage {
      * @param transaction  transaction object
      */
     public copyTransactionAddress(transaction: TransferTransaction) {
-        var copiableAddress = "";
-        if (this.address.plain() == transaction.recipient.plain()) {
-            copiableAddress = transaction.signer.address.plain();
+
+        if (this.platform.is('cordova')) {
+            var copiableAddress = "";
+            if (this.selectedWallet.address && transaction.recipient && transaction.signer) {
+                if (this.selectedWallet.address.plain() == transaction.recipient.plain()) {
+                    copiableAddress = transaction.signer.address.plain();
+                }
+                else {
+                    copiableAddress = transaction.recipient.plain();
+                }
+                this.clipboard.copy(copiableAddress).then(_ => {
+                    this.toast.showCopyCorrect();
+                });
+            }
         }
+
         else {
-            copiableAddress = transaction.recipient.plain();
+            this.alert.showFunctionallityOnlyAvailableInMobileDevices();
         }
-        this.clipboard.copy(copiableAddress).then(_ => {
-            this.toast.showCopyCorrect();
-        });
     }
 }

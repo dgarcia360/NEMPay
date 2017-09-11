@@ -13,6 +13,7 @@
   "PRIVATE_KEY": "Privater Schlüssel",
   "PRIVATE_KEY_SUBTITLE": "Geben Sie ihr Passwort ein, um ihren privaten Schlüssel zu sehen.",
   "PASSWORD_WARNING" : "Ihr privater Schlüssel enthält die ganze Macht Ihres Kontos. Es hat oberste Priorität sicherzustellen, das es irgendwo offline sicher aufbewahrt ist.",
+  "IVE_COPIED_IT": "I've copied it",
   "SHOW_PRIVATE_KEY": "Zeige privaten Schlüssel",
   "HIDE_PRIVATE_KEY": "Verstecke privaten Schlüssel",
 

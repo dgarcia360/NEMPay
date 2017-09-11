@@ -13,6 +13,7 @@
   "PRIVATE_KEY": "Clau Privada",
   "PRIVATE_KEY_SUBTITLE": "Per a veure la seva clau privada, introdueixi la seva contrasenya.",
   "PASSWORD_WARNING" : "Amb la seva clau privada es pot realitzar qualsevol operació en el seu compte. És una prioritat assegurar-se que s'ha guardat en algun lloc fora de línia de forma segura.",
+  "IVE_COPIED_IT": "I've copied it",
   "SHOW_PRIVATE_KEY": "Mostrar la Clau Privada",
   "HIDE_PRIVATE_KEY": "Ocultar la Clau Privada",
 

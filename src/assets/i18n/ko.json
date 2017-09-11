@@ -14,6 +14,7 @@
   "PRIVATE_KEY": "프라이빗 키",
   "PRIVATE_KEY_SUBTITLE": "프라이빗 키를 보기 위해서는 패스워드를 입력하여 주세요...",
   "PASSWORD_WARNING" : "프라이빗 키는 계정을 전적으로 컨트롤할수 있는 권한을 가지고 있습니다. 프라이빗 키를 오프라인에서 안전하게 보관해 주십시오.",
+  "IVE_COPIED_IT": "I've copied it",
   "SHOW_PRIVATE_KEY": "프라이빗 키 보이기",
   "HIDE_PRIVATE_KEY": "프라이빗 키 숨기기",
   

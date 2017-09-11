@@ -13,6 +13,7 @@
   "PRIVATE_KEY": "秘密鍵",
   "PRIVATE_KEY_SUBTITLE": "秘密鍵を表示するために、パスワードまたはパスフレーズを入力します。",
   "PASSWORD_WARNING" : "秘密鍵は全ての権限を持っています。オフラインで安全な場所に保管されている事を必ず確認してください。",
+  "IVE_COPIED_IT": "I've copied it",
   "SHOW_PRIVATE_KEY": "秘密鍵の表示",
   "HIDE_PRIVATE_KEY": "秘密鍵を隠す",
 

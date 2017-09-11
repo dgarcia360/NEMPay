@@ -13,6 +13,7 @@
   "PRIVATE_KEY": "Clave privada",
   "PRIVATE_KEY_SUBTITLE": "Para ver su clave privada, introduzca su contraseña",
   "PASSWORD_WARNING" : "Su clave privada tiene toda la potencia de su cuenta. Es una prioridad para asegurarse de que se almacena en forma segura en algún lugar sin conexión.",
+  "IVE_COPIED_IT": "I've copied it",
   "SHOW_PRIVATE_KEY": "Mostrar clave privada",
   "HIDE_PRIVATE_KEY": "Ocultar clave privada",
 
