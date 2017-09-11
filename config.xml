@@ -78,7 +78,9 @@
         <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
     </platform>
+    <engine name="ios" spec="^4.4.0" />
     <plugin name="com.danielsogl.cordova.clipboard" />
+    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
     <plugin name="cordova-plugin-globalization" spec="^1.0.7" />
@@ -91,5 +93,4 @@
     <plugin name="danielsogl-cordova-plugin-clipboard" spec="^1.0.2" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="phonegap-plugin-barcodescanner" spec="^6.0.6" />
-    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
 </widget>

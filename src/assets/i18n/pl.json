@@ -71,6 +71,15 @@
   "YOU_ARE_GOING_TO_SEND": "Czy chcesz wysłać",
   "CONFIRM_TRANSACTION": "Potwierdź Transakcję",
 
+
+  "CONTACT_LIST": "Address Book",
+  "NAME": "Name",
+  "CONTACT_ADDRESS": "Contact Address",
+  "UPDATE_CONTACT": "Update Contact",
+  "ADD_CONTACT": "Add Contact",
+  "CONTACT_UPDATED": "Contact Updated",
+  "CONTACT_CREATED": "Contact Created",
+
   "ALERT_NOT_WALLET_SELECTED": "Nie wybrano Portfela",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "Podane hasło jest niepoprawne",
   "ALERT_PASSWORDS_DO_NOT_MATCH" : "Wprowadzone hasła są inne",
@@ -83,9 +92,12 @@
   "ALERT_INVALID_PRIVATE_KEY": "Błędny Klucz Prywatny",
   "ALERT_ADDRESS_COPIED": "Transaction address has been copied",
   "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
-
   "ALERT_SUBTITLE_ONLY_TESTNET": "Pamiętaj, że aktualnie obsługujemy tylko sieć testnet",
   "ALERT_PHONE_DISCONNECTED": "Twój telefon nie jest podłączony do internetu",
-  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Otwórz aplikację ponownie, po uzyskaniu dostępu do sieci internet."
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Otwórz aplikację ponownie, po uzyskaniu dostępu do sieci internet.",
+  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
+  "NOTHING_TO_SHOW": "Nothing to show"
+
+
 
 }

@@ -9,7 +9,6 @@ import {NemProvider} from '../../providers/nem/nem.provider';
 import {WalletProvider} from '../../providers/wallet/wallet.provider';
 
 import {LoginPage} from '../login/login';
-import {Wallet} from "nem-library";
 
 @Component({
     selector: 'page-signup-privatekey',

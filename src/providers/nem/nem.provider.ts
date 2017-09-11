@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
-import {LocalDateTime} from "js-joda";
-import {Base64} from "js-base64";
+
 import {
     NEMLibrary, NetworkTypes, SimpleWallet, 
     Password, Address, Account, AccountHttp, 

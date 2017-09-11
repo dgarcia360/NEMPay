@@ -6,9 +6,12 @@
         <ion-title>
             {{'TRANSFER' | translate}}
         </ion-title>
-        <span style="position:absolute; top: 20px; right: 20px;" on-click="scanQR()">
+        <ion-buttons end>
+    <span on-click="scanQR()">
         <ion-icon name="qr-scanner"></ion-icon> {{'SCAN_QR' | translate}}
     </span>
+</ion-buttons>
+
     </ion-navbar>
 </ion-header>
 <ion-content padding id="transfer">

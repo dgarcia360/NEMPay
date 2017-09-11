@@ -70,6 +70,14 @@
   "YOU_ARE_GOING_TO_SEND": "Вы отправляете",
   "CONFIRM_TRANSACTION": "Подтвердить",
 
+  "CONTACT_LIST": "Address Book",
+  "NAME": "Name",
+  "CONTACT_ADDRESS": "Contact Address",
+  "UPDATE_CONTACT": "Update Contact",
+  "ADD_CONTACT": "Add Contact",
+  "CONTACT_UPDATED": "Contact Updated",
+  "CONTACT_CREATED": "Contact Created",
+
   "ALERT_NOT_WALLET_SELECTED": "Кошелек не выбран",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "Недопустимый пароль",
   "ALERT_PASSWORDS_DO_NOT_MATCH" : "Введенные пароли не совпадают",
@@ -82,9 +90,10 @@
   "ALERT_INVALID_PRIVATE_KEY": "Неверный Личный Ключ",
   "ALERT_ADDRESS_COPIED": "Transaction address has been copied",
   "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
-
   "ALERT_SUBTITLE_ONLY_TESTNET": "Помните, что на данный момент работает только в тестовая сеть",
   "ALERT_PHONE_DISCONNECTED": "Ваш устройство отключено от Интернет",
-  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Откройте приложение снова, как только Вы подключитесь к Интернет"
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Откройте приложение снова, как только Вы подключитесь к Интернет",
+  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
+  "NOTHING_TO_SHOW": "Nothing to show"
 
 }

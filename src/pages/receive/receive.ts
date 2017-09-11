@@ -11,8 +11,7 @@ import {WalletProvider} from '../../providers/wallet/wallet.provider';
 
 import {LoginPage} from '../login/login';
 
-import {SimpleWallet, MosaicTransferable, Address, XEM, NemAnnounceResult} from 'nem-library';
-import {Observable} from "nem-library/node_modules/rxjs";
+import {SimpleWallet, MosaicTransferable} from 'nem-library';
 
 import 'rxjs/add/operator/toPromise';
 import * as kjua from "kjua";

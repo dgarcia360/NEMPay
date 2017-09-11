@@ -1,0 +1,39 @@
+<ion-header>
+    <ion-navbar color="light">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>
+            {{'CONTACT_LIST' | translate}}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding id="transfer">
+    <div class="default-padding">
+
+    <form (ngSubmit)="updateContact()">
+         <ion-item id="name-input">
+            <ion-label stacked>
+                {{'NAME' | translate}}
+            </ion-label>
+            <ion-input type="text" name="name" placeholder="" [(ngModel)]="name"></ion-input>
+        </ion-item>
+
+        <ion-item id="contact-input">
+            <ion-label stacked>
+                {{'CONTACT_ADDRESS' | translate}}
+            </ion-label>
+            <ion-input type="text" name="address" placeholder="" [(ngModel)]="address"></ion-input>
+        </ion-item>
+
+        <div class="spacer" style="height:10px;"></div>
+
+        <button ion-button color="positive" block  [disabled]="!name || !address">
+           <span *ngIf='id'> {{'UPDATE_CONTACT' | translate}}</span>
+           <span *ngIf='!id'> {{'ADD_CONTACT' | translate}}</span>
+        </button>
+    </form>
+
+    </div>
+
+</ion-content>

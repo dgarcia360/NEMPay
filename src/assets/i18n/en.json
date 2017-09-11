@@ -72,6 +72,15 @@
   "YOU_ARE_GOING_TO_SEND": "You are going to send",
   "CONFIRM_TRANSACTION": "Confirm Transaction",
 
+
+  "CONTACT_LIST": "Address Book",
+  "NAME": "Name",
+  "CONTACT_ADDRESS": "Contact Address",
+  "UPDATE_CONTACT": "Update Contact",
+  "ADD_CONTACT": "Add Contact",
+  "CONTACT_UPDATED": "Contact Updated",
+  "CONTACT_CREATED": "Contact Created",
+
   "ALERT_NOT_WALLET_SELECTED": "Wallet not selected",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "Provided password is invalid",
   "ALERT_PASSWORDS_DO_NOT_MATCH" : "Introduced Passwords are different",
@@ -84,8 +93,12 @@
   "ALERT_INVALID_PRIVATE_KEY": "Invalid Private Key",
   "ALERT_ADDRESS_COPIED": "Transaction address has been copied",  
   "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters",  
-
   "ALERT_SUBTITLE_ONLY_TESTNET": "Remember that at the moment it only works on testnet",
   "ALERT_PHONE_DISCONNECTED": "Your phone is disconnected from internet",
-  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Open the app again once you have internet connection"
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Open the app again once you have internet connection",
+  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
+
+  "NOTHING_TO_SHOW": "Nothing to show"
+
+
 }

@@ -71,6 +71,14 @@
   "YOU_ARE_GOING_TO_SEND": "Va a enviar",
   "CONFIRM_TRANSACTION": "Confirme la transacción",
 
+  "CONTACT_LIST": "Address Book",
+  "NAME": "Name",
+  "CONTACT_ADDRESS": "Contact Address",
+  "UPDATE_CONTACT": "Update Contact",
+  "ADD_CONTACT": "Add Contact",
+  "CONTACT_UPDATED": "Contact Updated",
+  "CONTACT_CREATED": "Contact Created",
+
   "ALERT_NOT_WALLET_SELECTED": "Cartera no seleccionada",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "La contraseña no es válida",
   "ALERT_PASSWORDS_DO_NOT_MATCH" : "Las contraseñas introducidas son diferentes",
@@ -83,10 +91,12 @@
   "ALERT_INVALID_PRIVATE_KEY": "Clave privada no válida",
   "ALERT_ADDRESS_COPIED": "La dirección de la transacción ha sido copiada",
   "ALERT_WEAK_PASSWORD": "La contraseña debe contener como mínimo 8 caracteres",
-  
-
   "ALERT_SUBTITLE_ONLY_TESTNET": "Recuerde que por el momento sólo funciona en testnet",
   "ALERT_PHONE_DISCONNECTED": "Su teléfono está desconectado de Internet",
-  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Abre la aplicación de nuevo una vez que tengas conexión a Internet"
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Abre la aplicación de nuevo una vez que tengas conexión a Internet",
+  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
+
+  "NOTHING_TO_SHOW": "Nothing to show"
+
 
 }

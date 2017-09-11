@@ -5,7 +5,6 @@ import { Component, Input } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import {NemProvider} from '../../../../providers/nem/nem.provider';
 
-import {Address} from "nem-library";
 @Component({
     selector: 'mosaic-supply-change-transaction',
     templateUrl: 'mosaic-supply-change-transaction.html'

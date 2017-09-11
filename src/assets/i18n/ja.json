@@ -71,6 +71,15 @@
   "YOU_ARE_GOING_TO_SEND": "以下の内容で送金します",
   "CONFIRM_TRANSACTION": "トランザクションの確認",
 
+
+  "CONTACT_LIST": "Address Book",
+  "NAME": "Name",
+  "CONTACT_ADDRESS": "Contact Address",
+  "UPDATE_CONTACT": "Update Contact",
+  "ADD_CONTACT": "Add Contact",
+  "CONTACT_UPDATED": "Contact Updated",
+  "CONTACT_CREATED": "Contact Created",
+
   "ALERT_NOT_WALLET_SELECTED": "ウォレットが選択されていません",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "パスワードが間違っています",
   "ALERT_PASSWORDS_DO_NOT_MATCH" : "パスワードが一致していません",
@@ -83,9 +92,11 @@
   "ALERT_INVALID_PRIVATE_KEY": "秘密鍵が間違っています",
   "ALERT_ADDRESS_COPIED": "トランザクションアドレスがコピーされました",
   "ALERT_WEAK_PASSWORD": "パスワードは8文字以上入力してください", 
-
   "ALERT_SUBTITLE_ONLY_TESTNET": "このソフトウェアはテストネットのみ動作します",
   "ALERT_PHONE_DISCONNECTED": "あなたのスマートフォンはインターネットへ繋がっていません",
-  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "インターネットへの接続を確認しアプリを再度起動してください"
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "インターネットへの接続を確認しアプリを再度起動してください",
+  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
+  "NOTHING_TO_SHOW": "Nothing to show"
+
 
 }

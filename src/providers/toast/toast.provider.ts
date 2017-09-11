@@ -42,4 +42,30 @@ export class ToastProvider {
             toast.present();
         });
     }
+
+    contactCreated() {
+        this.translate.get('CONTACT_CREATED', {}).subscribe((res: string) => {
+
+            let toast = this.toast.create({
+                message: res,
+                duration: 3000,
+                position: 'bottom'
+            });
+            toast.present();
+        });
+    }
+
+
+    contactUpdated() {
+        this.translate.get('CONTACT_UPDATED', {}).subscribe((res: string) => {
+
+            let toast = this.toast.create({
+                message: res,
+                duration: 3000,
+                position: 'bottom'
+            });
+            toast.present();
+        });
+    }
+
 }

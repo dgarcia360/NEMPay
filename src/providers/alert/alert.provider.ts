@@ -160,6 +160,30 @@ export class AlertProvider {
         });
     }
 
+     showFunctionallityOnlyAvailableInMobileDevices() {
+        this.translate.get(['ALERT_ONLY_MOBILE_DEVICE', 'OK'], {}).subscribe((res) => {
+            let alert = this.alertCtrl.create({
+                title: res['ALERT_ONLY_MOBILE_DEVICE'],
+                buttons: [res['OK']]
+            });
+
+            alert.present();
+        });
+    }
+
+
+    showOnPhoneDisconnected() {
+        this.translate.get(['ALERT_PHONE_DISCONNECTED', 'ALERT_SUBTITLE_PHONE_DISCONNECTED', 'OK'], {}).subscribe((res) => {
+            let alert = this.alertCtrl.create({
+                title: res['ALERT_PHONE_DISCONNECTED'],
+                subTitle: res['ALERT_SUBTITLE_PHONE_DISCONNECTED'],
+                buttons: [res['OK']]
+            });
+            alert.present();
+        });
+    }
+
+
     showError(error) {
         this.translate.get('OK', {}).subscribe((res) => {
 

@@ -69,6 +69,13 @@
   "YOU_ARE_GOING_TO_SEND": "보냅니다.",
   "CONFIRM_TRANSACTION": "트랜잭션 확인",
 
+  "CONTACT_LIST": "Address Book",
+  "NAME": "Name",
+  "CONTACT_ADDRESS": "Contact Address",
+  "UPDATE_CONTACT": "Update Contact",
+  "ADD_CONTACT": "Add Contact",
+  "CONTACT_UPDATED": "Contact Updated",
+  "CONTACT_CREATED": "Contact Created",
 
   "ALERT_NOT_WALLET_SELECTED": "월렛이 선택되지 않음",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "입력된 패스워드가 유효하지 않습니다.",
@@ -81,11 +88,13 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "선택된 모자이크는 이전이 불가능한 모자이크입니다.",
   "ALERT_INVALID_PRIVATE_KEY": "프라이빗 키가 유효하지 않습니다.",
   "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
-
   "ALERT_ADDRESS_COPIED": "트랜잭션 주소가 복사되었습니다.",
-
   "ALERT_SUBTITLE_ONLY_TESTNET": "현재에는 테스트넷에서만 작동합니다.",
   "ALERT_PHONE_DISCONNECTED": "사용자의 휴대전화가 인터넷에 연결되어 있지 않습니다.",
-  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "인터넷에 연결한 후 어플을 재 실행해 주세요."
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "인터넷에 연결한 후 어플을 재 실행해 주세요.",
+  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
+  "NOTHING_TO_SHOW": "Nothing to show"
+
+
 
 }

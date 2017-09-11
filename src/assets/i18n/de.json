@@ -69,6 +69,14 @@
   "YOU_ARE_GOING_TO_SEND": "Sie verschicken",
   "CONFIRM_TRANSACTION": "Bestätige Transaktion",
 
+  "CONTACT_LIST": "Address Book",
+  "NAME": "Name",
+  "CONTACT_ADDRESS": "Contact Address",
+  "UPDATE_CONTACT": "Update Contact",
+  "ADD_CONTACT": "Add Contact",
+  "CONTACT_UPDATED": "Contact Updated",
+  "CONTACT_CREATED": "Contact Created",
+
   "ALERT_NOT_WALLET_SELECTED": "Wallet nicht ausgewählt",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "Eingegebenes Passwort ist ungültig",
   "ALERT_PASSWORDS_DO_NOT_MATCH" : "Eingegebene Passwörter sind unterschiedlich",
@@ -81,9 +89,12 @@
   "ALERT_INVALID_PRIVATE_KEY": "Ungültiger privater Schlüssel",
   "ALERT_ADDRESS_COPIED": "Transaktions-Adresse wurde kopiert",
   "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
-
   "ALERT_SUBTITLE_ONLY_TESTNET": "Denken Sie daran, dass es momentan nur im Testnetz funktioniert",
   "ALERT_PHONE_DISCONNECTED": "Ihr Mobilteil ist vom Internet getrennt",
-  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Öffen Sie die App erneut, sobald sie eine Internetverbindung haben"
+  "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Öffen Sie die App erneut, sobald sie eine Internetverbindung haben",
+  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
+
+    "NOTHING_TO_SHOW": "Nothing to show"
+
 
 }

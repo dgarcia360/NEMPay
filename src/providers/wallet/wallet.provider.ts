@@ -6,8 +6,6 @@ import {
      SimpleWallet, NetworkTypes
 } from "nem-library";
 
-import { Observable } from "nem-library/node_modules/rxjs";
-
 /*
  Generated class for the NemProvider provider.
 

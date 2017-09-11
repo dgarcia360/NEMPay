@@ -90,9 +90,7 @@ export class SignupSimpleWalletPage {
                             else {
                                 this.wallet.storeWallet(createdWallet).then(
                                     value => {
-                                        loader.dismiss();
-                                        this._clearNewAccount();
-                                        this.app.getRootNav().push(LoginPage);
+                                        this._showTutorialAlert(createdWallet);
                                     }
                                 )
                             }

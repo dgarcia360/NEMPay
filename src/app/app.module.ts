@@ -8,6 +8,7 @@ import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {Clipboard} from '@ionic-native/clipboard';
 import {Keyboard} from '@ionic-native/keyboard';
+import { SQLite } from '@ionic-native/sqlite';
 
 import {SocialSharing} from '@ionic-native/social-sharing';
 import {Network} from '@ionic-native/network';
@@ -20,6 +21,7 @@ import {AlertProvider} from '../providers/alert/alert.provider';
 import {ToastProvider} from '../providers/toast/toast.provider';
 import {NemProvider} from '../providers/nem/nem.provider';
 import {WalletProvider} from '../providers/wallet/wallet.provider';
+import {ContactProvider} from '../providers/contact/contact.provider';
 
 
 import {DivideByExponentialBaseTenPipe} from '../pipes/divide-by-exponential-base-ten.pipe';
@@ -37,6 +39,8 @@ import {SignupPage} from '../pages/signup/signup';
 import {SignupSimpleWalletPage} from '../pages/signup_simplewallet/signup';
 import {SignupPrivateKeyPage} from '../pages/signup_privatekey/signup';
 
+import {ContactListPage} from '../pages/contact/list/list';
+import {UpdateContactPage} from '../pages/contact/update/update';
 
 import {ImportanceTransferTransactionComponent} from '../pages/transactions/partials/importance-transfer-transaction/importance-transfer-transaction';
 import {MosaicDefinitionTransactionComponent} from '../pages/transactions/partials/mosaic-definition-transaction/mosaic-definition-transaction';
@@ -54,6 +58,8 @@ export function createTranslateLoader(http: Http) {
 @NgModule({
     declarations: [
         MyApp,
+        ContactListPage,
+        UpdateContactPage,
         BalancePage,
         TransactionsPage,
         TransferPage,
@@ -91,6 +97,8 @@ export function createTranslateLoader(http: Http) {
     bootstrap: [IonicApp],
     entryComponents: [
         MyApp,
+        ContactListPage,
+        UpdateContactPage,
         BalancePage,
         TransactionsPage,
         TransferPage,
@@ -113,10 +121,12 @@ export function createTranslateLoader(http: Http) {
         Network,
         BarcodeScanner,
         Globalization,
+        SQLite,
         NemProvider,
         WalletProvider,
         AlertProvider,
         ToastProvider,
+        ContactProvider
     ]
 })
 export class AppModule {
