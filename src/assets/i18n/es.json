@@ -13,7 +13,7 @@
   "PRIVATE_KEY": "Clave privada",
   "PRIVATE_KEY_SUBTITLE": "Para ver su clave privada, introduzca su contraseña",
   "PASSWORD_WARNING" : "Su clave privada tiene toda la potencia de su cuenta. Es una prioridad para asegurarse de que se almacena en forma segura en algún lugar sin conexión.",
-  "IVE_COPIED_IT": "I've copied it",
+  "IVE_COPIED_IT": "La he copiado",
   "SHOW_PRIVATE_KEY": "Mostrar clave privada",
   "HIDE_PRIVATE_KEY": "Ocultar clave privada",
 
@@ -43,14 +43,14 @@
   "CONFIRMED_TRANSACTIONS": "Transacciones confirmadas",
   "PENDING_TRANSACTIONS": "Transacciones pendientes",
   "NOTHING_TO_SHOW": "Nada que mostrar",
-  "REMOTE_ACCOUNT": "Remote Account",
-  "NAMPESPACE": "Namespace",
-  "SUBNAMESPACE_OF": "Subnamespace of",
-  "MOSAIC_CREATED": "Mosaic Created",
-  "SUPPLY_INCREASE": "Supply Increased",
-  "SUPPLY_DECREASED": "Supply Decreased",
-  "MOSAICS": "Mosaics",
-  "ENCRYPED": "Encrypted",
+  "REMOTE_ACCOUNT": "Cuenta Remota",
+  "NAMESPACE": "Espacio de nombres",
+  "SUBNAMESPACE_OF": "Sub-espacio de nombre",
+  "MOSAIC_CREATED": "Mosaico creado",
+  "SUPPLY_INCREASE": "Cantidad Incrementada",
+  "SUPPLY_DECREASED": "Cantidad Disminuida",
+  "MOSAICS": "Mosaicos",
+  "ENCRYPED": "Encriptado",
 
   "TRANSFER": "Enviar",
   "FROM": "Remitente",
@@ -62,7 +62,6 @@
 
   "RECEIVE": "Recibir",
 
-
   "ADDRESS": "Dirección",
   "RECIPIENT_ADDRESS": "Dirección del receptor",
   "SCAN_QR": "Escanear QR",
@@ -72,13 +71,13 @@
   "YOU_ARE_GOING_TO_SEND": "Va a enviar",
   "CONFIRM_TRANSACTION": "Confirme la transacción",
 
-  "CONTACT_LIST": "Address Book",
-  "NAME": "Name",
-  "CONTACT_ADDRESS": "Contact Address",
-  "UPDATE_CONTACT": "Update Contact",
-  "ADD_CONTACT": "Add Contact",
-  "CONTACT_UPDATED": "Contact Updated",
-  "CONTACT_CREATED": "Contact Created",
+  "CONTACT_LIST": "Contactos",
+  "NAME": "Nombre",
+  "CONTACT_ADDRESS": "Dirección del Contacto",
+  "UPDATE_CONTACT": "Actualizar contacto",
+  "ADD_CONTACT": "Añadir Contacto",
+  "CONTACT_UPDATED": "Contacto Actualizado",
+  "CONTACT_CREATED": "Contacto Creado",
 
   "ALERT_NOT_WALLET_SELECTED": "Cartera no seleccionada",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "La contraseña no es válida",
@@ -95,9 +94,8 @@
   "ALERT_SUBTITLE_ONLY_TESTNET": "Recuerde que por el momento sólo funciona en testnet",
   "ALERT_PHONE_DISCONNECTED": "Su teléfono está desconectado de Internet",
   "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Abre la aplicación de nuevo una vez que tengas conexión a Internet",
-  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
-
-  "NOTHING_TO_SHOW": "Nothing to show"
+  "ALERT_ONLY_MOBILE_DEVICE": "La funcionalidad sólo está disponible en dispositivos móviles",
+  "NOTHING_TO_SHOW": "Nada que mostrar"
 
 
 }
