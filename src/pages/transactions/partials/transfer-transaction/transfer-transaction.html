@@ -25,7 +25,7 @@
         <span *ngIf="address == tx.recipient">{{'FROM' | translate}}</span>
         <span *ngIf="address != tx.recipient">{{'TO' | translate}}</span>:
     </b>
-    {{tx.signer.address.plain()}}
+    {{tx.signer.address.plain() | searchContact:owner | async}}
 </p>
 
 <!-- Date (Timestamp) -->
