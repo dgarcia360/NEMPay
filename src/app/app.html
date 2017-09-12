@@ -2,7 +2,7 @@
     <ion-header>
         <ion-toolbar color="light">
             <ion-title>
-              <img src="assets/img/logo.png" style="max-height:16px;"/> <span><b>NEM</b>Pay</span>
+              <img src="assets/img/logo.png" style="max-height:16px;"/> <span [innerHTML]="'APP_TITLE' | translate"></span>
             </ion-title>
         </ion-toolbar>
     </ion-header>
@@ -15,10 +15,10 @@
             <button ion-item color="none" menuClose="" on-click="goToContactList()" id="menu-list-item3">
                 {{"CONTACT_LIST" | translate}}
             </button>
-            <button ion-item color="none" menuClose="" on-click="goToTransactions()" id="menu-list-item3">
+            <button ion-item color="none" menuClose="" on-click="goToTransactions()" id="menu-list-item4">
                 {{"TRANSACTIONS" | translate}}
             </button>
-            <button ion-item color="none" menuClose="" on-click="goToAccount()" id="menu-list-item4">
+            <button ion-item color="none" menuClose="" on-click="goToAccount()" id="menu-list-item5">
                 {{"ACCOUNT" | translate}}
             </button>
         </ion-list>

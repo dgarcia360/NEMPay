@@ -16,9 +16,10 @@ import { Globalization } from '@ionic-native/globalization';
 @Injectable()
 export class LanguageProvider {
     availableLanguages: string[];
-
+    defaultLanguage: string;
     constructor(private translateService: TranslateService, private platform: Platform, private globalization: Globalization) {
         this.availableLanguages = ['en', 'es','ca', 'ko', 'ru', 'pl', 'ja', 'de'];
+        this.defaultLanguage = 'en';
     }
 
    setLanguage(){
@@ -44,7 +45,7 @@ export class LanguageProvider {
                .catch(e => console.log(e));
        }
        else{
-           this.translateService.use('en');
+           this.translateService.use(this.defaultLanguage);
        }
    }
 }

@@ -73,7 +73,7 @@ export class MyApp {
             }).then((db: SQLiteObject) => {
                 this.contact.setDatabase(db);
                 this.contact.createTable().then(_=>{
-                    splashScreen.hide();
+                    this.splashScreen.hide();
                 });
 
             }).catch(error =>{
