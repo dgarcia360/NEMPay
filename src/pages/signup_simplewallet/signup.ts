@@ -41,7 +41,7 @@ export class SignupSimpleWalletPage {
      * Shows keep private key safe message
      */
     private _showTutorialAlert(wallet: SimpleWallet) {
-        this.translate.get(['KEEP_YOUR_PRIVATE_KEY_SAFE', 'PASSWORD_WARNING','IVE_COPIED_IT', 'OK'], {}).subscribe((res) => {
+        this.translate.get(['KEEP_YOUR_PRIVATE_KEY_SAFE', 'PASSWORD_WARNING', 'IVE_COPIED_IT', 'OK'], {}).subscribe((res) => {
 
             let alert = this.alertCtrl.create({
                 title: res['KEEP_YOUR_PRIVATE_KEY_SAFE'],
@@ -75,32 +75,29 @@ export class SignupSimpleWalletPage {
             this.alert.showWeakPassword()
         }
         else {
-
             this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
+
                 let loader = this.loading.create({
                     content: res
                 });
 
-                loader.present().then(
-                    _ => {
-                        let createdWallet = this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.password);
+                loader.present().then(_ => {
+                    let createdWallet = this.nem.createSimpleWallet(this.newAccount.name, this.newAccount.password);
 
-                        this.wallet.checkIfWalletNameExists(createdWallet.name).then(value => {
-                            if (value) {
+                    this.wallet.checkIfWalletNameExists(createdWallet.name).then(value => {
+                        if (value) {
+                            loader.dismiss();
+                            this.alert.showWalletNameAlreadyExists();
+                        }
+                        else {
+                            this.wallet.storeWallet(createdWallet).then(value => {
                                 loader.dismiss();
-                                this.alert.showWalletNameAlreadyExists();
-                            }
-                            else {
-                                this.wallet.storeWallet(createdWallet).then(
-                                    value => {
-                                        this._showTutorialAlert(createdWallet);
-                                    }
-                                )
-                            }
-                        });
-
-                    })
-            })
+                                this._showTutorialAlert(createdWallet);
+                            });
+                        }
+                    });
+                });
+            });
         }
     }
 }

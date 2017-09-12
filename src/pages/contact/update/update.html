@@ -41,19 +41,22 @@
 <ion-footer no-shadow>
     <ion-toolbar position="bottom" class="background-white">
         <div class="row">
+
             <div class="col col-50">
-                <button ion-button  color="positive"
-                        (click)="goToBalance()">
-                    {{'TRANSFER_BUTTON' | translate}}
-                </button>
-            </div>
-            <div class="col col-50">
-                <button ion-button  color="positive"
+                <button  ion-button  block color="positive"
                         (click)="shareAddress()">
                     {{'SHARE_ADDRESS' | translate}}
                 </button>
 
             </div>
+
+            <div class="col col-50">
+                <button  ion-button  block color="positive"
+                         (click)="goToBalance()">
+                    {{'TRANSFER_BUTTON' | translate}}
+                </button>
+            </div>
+            
             </div>
     </ion-toolbar>
 </ion-footer>
