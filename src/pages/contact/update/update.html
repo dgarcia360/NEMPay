@@ -11,52 +11,51 @@
 <ion-content padding id="transfer">
     <div class="default-padding">
 
-    <form (ngSubmit)="saveContact()">
-         <ion-item id="name-input">
-            <ion-label stacked>
-                {{'NAME' | translate}}
-            </ion-label>
-            <ion-input type="text" name="name" placeholder="" [(ngModel)]="name"></ion-input>
-        </ion-item>
+        <form (ngSubmit)="saveContact()">
+            <ion-item id="name-input">
+                <ion-label stacked>
+                    {{'NAME' | translate}}
+                </ion-label>
+                <ion-input type="text" name="name" placeholder="" [(ngModel)]="name"></ion-input>
+            </ion-item>
 
-        <ion-item id="contact-input">
-            <ion-label stacked>
-                {{'CONTACT_ADDRESS' | translate}}
-            </ion-label>
-            <ion-input type="text" name="address" placeholder="" [(ngModel)]="address"></ion-input>
-        </ion-item>
+            <ion-item id="contact-input">
+                <ion-label stacked>
+                    {{'CONTACT_ADDRESS' | translate}}
+                </ion-label>
+                <ion-input type="text" name="address" placeholder="" [(ngModel)]="address"></ion-input>
+            </ion-item>
 
-        <div class="spacer" style="height:10px;"></div>
+            <div class="spacer" style="height:10px;"></div>
 
-        <button ion-button color="positive" block  [disabled]="!name || !address">
-           <span *ngIf='id'> {{'UPDATE_CONTACT' | translate}}</span>
-           <span *ngIf='!id'> {{'ADD_CONTACT' | translate}}</span>
-        </button>
-    </form>
+            <button ion-button color="positive" block  [disabled]="!name || !address">
+                <span *ngIf='id'> {{'UPDATE_CONTACT' | translate}}</span>
+                <span *ngIf='!id'> {{'ADD_CONTACT' | translate}}</span>
+            </button>
+        </form>
 
     </div>
 
 </ion-content>
 
-<ion-footer no-shadow>
+<ion-footer no-shadow *ngIf='id'>
     <ion-toolbar position="bottom" class="background-white">
-        <div class="row">
+        <div class="row" >
 
             <div class="col col-50">
-                <button  ion-button  block color="positive"
-                        (click)="shareAddress()">
+                <button ion-button  block color="positive"
+                         (click)="shareAddress()">
                     {{'SHARE_ADDRESS' | translate}}
                 </button>
 
             </div>
 
             <div class="col col-50">
-                <button  ion-button  block color="positive"
+                <button ion-button  block color="positive"
                          (click)="goToBalance()">
                     {{'TRANSFER_BUTTON' | translate}}
                 </button>
             </div>
-            
-            </div>
+        </div>
     </ion-toolbar>
 </ion-footer>

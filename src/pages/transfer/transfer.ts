@@ -115,7 +115,7 @@ export class TransferPage {
         }
         //if raw data, clean address and check if it is from network
         if (success) {
-            let recipientAddress = this.formData.rawRecipient.toUpperCase().replace(/-/g, '');
+            let recipientAddress = this.formData.rawRecipient.toUpperCase().replace('-', '');
             success = this._checkAddress(new Address(recipientAddress));
         }
         return success;
@@ -190,7 +190,6 @@ export class TransferPage {
      */
     private _presentPrompt() {
         this.translate.get(['YOU_ARE_GOING_TO_SEND','AMOUNT','FEE', 'LEVY', 'CONFIRM_TRANSACTION', 'PASSWORD','CANCEL','CONFIRM'], {}).subscribe((res) => {
-            console.log(res);
             this._subtitleBuilder(res).then(subtitle => {
 
                 let alert = this.alertCtrl.create({
@@ -222,7 +221,6 @@ export class TransferPage {
                                         _ => {
                                             if (this._canSendTransaction()) {
                                                 this._confirmTransaction().subscribe(value => {
-                                                    console.log(value);
                                                     loader.dismiss();
                                                     console.log("Transactions confirmed");
                                                     this.toast.showTransactionConfirmed();

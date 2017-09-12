@@ -17,7 +17,7 @@ import {LoginPage} from '../login/login';
 export class SignupPrivateKeyPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private wallet: WalletProvider,private loading: LoadingController, private alert: AlertProvider, public translate: TranslateService,private barcodeScanner: BarcodeScanner) {
+    constructor(public app: App, private nem: NemProvider, private wallet: WalletProvider, private loading: LoadingController, private alert: AlertProvider, public translate: TranslateService, private barcodeScanner: BarcodeScanner) {
         //sensitive data
         this.newAccount = null;
 
@@ -38,7 +38,6 @@ export class SignupPrivateKeyPage {
     }
 
 
-
     /**
      * Scans wallet QR and stores its private key in newAccount.privateKey
      */
@@ -46,14 +45,14 @@ export class SignupPrivateKeyPage {
         this.barcodeScanner.scan().then(barcode => {
 
             var walletInfo = JSON.parse(barcode.text);
-            if (!this.newAccount.password){
+            if (!this.newAccount.password) {
                 this.alert.showBarCodeScannerRequiresPassword();
             }
             else if (this.newAccount.password != this.newAccount.repeat_password) {
                 this.alert.showPasswordDoNotMatch();
             }
-            else{
-                try{
+            else {
+                try {
                     this.newAccount.private_key = this.nem.decryptPrivateKey(this.newAccount.password, walletInfo);
                 } catch (err) {
                     this.alert.showInvalidPasswordAlert();
@@ -71,50 +70,45 @@ export class SignupPrivateKeyPage {
         if (this.newAccount.password != this.newAccount.repeat_password) {
             this.alert.showPasswordDoNotMatch();
         }
-        else if (!(this.newAccount.private_key.length != 64 || this.newAccount.private_key.length != 66)){
+        else if (!(this.newAccount.private_key.length != 64 || this.newAccount.private_key.length != 66)) {
             this.alert.showInvalidPrivateKey();
         }
         else if (this.newAccount.password.length < 8) {
             this.alert.showWeakPassword()
         }
-        else{
+        else {
 
             this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
                 let loader = this.loading.create({
                     content: res
                 });
 
-                loader.present().then(
-                    _ => {
-                        var createdWallet;
-                        try {
-                            createdWallet = this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key);
-                        }
-                        catch (e){
-                            loader.dismiss();
-                            this.alert.showInvalidPrivateKey();
-                        }
+                loader.present().then(_ => {
+                    var createdWallet;
+                    try {
+                        createdWallet = this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key);
+                    }
+                    catch (e) {
+                        loader.dismiss();
+                        this.alert.showInvalidPrivateKey();
+                    }
 
-                        if (createdWallet){
-
-                            this.wallet.checkIfWalletNameExists(createdWallet.name).then(value => {
-                                    if (value) {
+                    if (createdWallet) {
+                        this.wallet.checkIfWalletNameExists(createdWallet.name).then(value => {
+                            if (value) {
+                                loader.dismiss();
+                                this.alert.showWalletNameAlreadyExists();
+                            }
+                            else {
+                                this.wallet.storeWallet(createdWallet).then(value => {
                                         loader.dismiss();
-                                        this.alert.showWalletNameAlreadyExists();
-                                    }
-                                    else {
-                                        this.wallet.storeWallet(createdWallet).then(
-                                            value => {
-                                                loader.dismiss();
-                                                this._clearNewAccount();
-                                                this.app.getRootNav().push(LoginPage);
-                                            }
-                                        )
-                                    }
+                                        this._clearNewAccount();
+                                        this.app.getRootNav().push(LoginPage);
                                 });
-                        }
-
-                    });
+                            }
+                        });
+                    }
+                });
             });
         }
     }

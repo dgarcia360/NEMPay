@@ -56,7 +56,7 @@ export class ContactProvider {
   }
 
   searchContactName(owner:string, address:string){
-    let sql = 'SELECT * FROM contact WHERE owner = ?, address=?';
+    let sql = 'SELECT * FROM contact WHERE owner = ? AND address=?';
       return this.db.executeSql(sql, [owner, address])
       .then(response => {
         let contacts = [];
@@ -65,6 +65,8 @@ export class ContactProvider {
         }
         return Promise.resolve( contacts );
       })
-      .catch(error => Promise.reject(error));
+      .catch(error => {
+        return Promise.reject(error);
+      });
   }
 }

@@ -32,7 +32,9 @@ export class UpdateContactPage {
        this.name = navParams.get('name');
        this.address = navParams.get('address');
        this.id = navParams.get('id');
-       this.previousAddress = this.address;
+
+       if (this.id) this.previousAddress = this.address.toUpperCase().replace('-', '');
+
     }
     
     /**
@@ -57,17 +59,16 @@ export class UpdateContactPage {
      *@param address address to assign
      */
     private _createContact(address:string){
-
         this.contact.searchContactName(this.owner, address).then(contacts =>{
             if(contacts.length > 0) this.alert.showContactAlreadyExists();
             else{
                 this.contact.create(this.owner, this.name, address).then(_=>{
                     this.toast.contactCreated();
                     this.navCtrl.push(ContactListPage, {});
-                }).catch(err => {
-                    console.log(err)
                 });
             }
+        }).catch(err => {
+            console.log(err)
         });
     }
 
@@ -84,10 +85,10 @@ export class UpdateContactPage {
                 this.contact.update(this.id, this.name, address).then(_=>{
                     this.toast.contactUpdated();
                     this.navCtrl.push(ContactListPage, {});
-                }).catch(err => {
-                    console.log(err)
-                });
+                })
             }
+        }).catch(err => {
+            console.log(err)
         });
     }
 
@@ -96,7 +97,7 @@ export class UpdateContactPage {
      * updates contact or creates it
      */
     public saveContact(){
-        let _rawAddress = this.address.toUpperCase().replace(/-/g, '');
+        let _rawAddress = this.address.toUpperCase().replace('-', '');
 
         if (!this._isValidAddress(_rawAddress)){
           this.alert.showAlertDoesNotBelongToNetwork();

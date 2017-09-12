@@ -71,6 +71,7 @@ export class MyApp {
                 name: 'data.db',
                 location: 'default'
             }).then((db: SQLiteObject) => {
+                console.log('INFO: Database created');
                 this.contact.setDatabase(db);
                 this.contact.createTable().then(_=>{
                     this.splashScreen.hide();
