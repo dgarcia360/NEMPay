@@ -1,6 +1,6 @@
 ## NEMPay
 
-[NEMPay](http://www.blockchaintoken.tech) is a mobile app developed by Atraura Blockchain that allows to send and receive NEM mosaics easily and securely. 
+[NEMPay](http://www.blockchaintoken.tech) is a mobile app to transfer [NEM assets](https://blog.nem.io/mosaics-and-namespaces-2/) easily and securely.
 
 Distributed as an open source solution, organizations and individuals can take advantage of NEMPay, using it as a boilerplate for creating their own NEM applications. 
 
@@ -25,7 +25,7 @@ If not, you can [contact us](http://www.blockchaintoken.tech) for further inform
 
 * Create/Import Account
 * View balance
-* Send xem / mosaics
+* Send xem / assets
 * Create bills
 * Address book
 * Scan QR
