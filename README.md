@@ -21,7 +21,7 @@ If you feel that you can customize it yourself, you can try following the instru
 If not, you can [contact us](http://www.blockchaintoken.tech) for further information.
 
 ### Provided Features
-![alt text](https://cdn-images-1.medium.com/max/1600/1*VFC6fHUrEHXfIIWkTwvX7A.png)
+![alt text](https://cdn-images-1.medium.com/max/1600/1*C8i2x0r16n202cBuxyYUpg.png)
 
 * Create/Import Account
 * View balance
