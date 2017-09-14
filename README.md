@@ -1,18 +1,24 @@
 ## NEMPay
 
-**NEMPay at the moment only works in the test net**. MainNet version will be released soon.
+[NEMPay](http://www.blockchaintoken.tech) is a mobile app developed by Atraura Blockchain that allows to send and receive NEM mosaics easily and securely. 
 
-[NEMPay](http://www.blockchaintoken.tech)  is an app that allows transfer assets in an easy way, directly from mobile devices, using NEM Blockchain.  Just selecting the asset to be sent from your balance, typing recipient address and amount to be sent, you can make a quick transaction in just few seconds.
+Distributed as an open source solution, organizations and individuals can take advantage of NEMPay, using it as a boilerplate for creating their own NEM applications. 
 
-Currently, the app is available for Android and iOS.
+An example of use case is the creation of an app to transfer assets such as tickets, coupons, stocks or even share representation, cutting cost of acquisition, as there is no need to code a new app.
+
+NEMPay has been developed in Ionic, and currently available for Android and iOS.
+
+Currently, the app is available for **Android** and **iOS**.
+
+
 
 ### Customizations
 
-Companies and individuals can take advantage of NEMPay as a boilerplate to create their NEM application.
+Customizations are requested functionality that has been developed over NEMPay in order to change the behaviour of the app, not being part of the Open Source project.
 
-A common use case would be create an app for their own mosaic and namespace. The cost of acquisition could become lower, as there is no need to code a new app. 
+If you feel that you can customize it yourself, you can try following the instructions [following our documentation](http://docs.blockchaintoken.tech).
 
-You can [contact us](http://www.blockchaintoken.tech)  for more information.
+If not, you can [contact us](http://www.blockchaintoken.tech) for further information.
 
 ### Provided Features
 ![alt text](https://cdn-images-1.medium.com/max/1600/1*rN0_HrixacfHJwk1fspeLA.png)
@@ -20,9 +26,12 @@ You can [contact us](http://www.blockchaintoken.tech)  for more information.
 * Create/Import Account
 * View balance
 * Send xem / mosaics
+* Create bills
+* Address book
 * Scan QR
 * View transactions
 * Share Address
+
 
 ### Getting Started
 * Clone this repository: `git clone https://github.com/dgarcia360/NEMPay`.
@@ -31,8 +40,6 @@ You can [contact us](http://www.blockchaintoken.tech)  for more information.
 * Run `npm install` from the project root.
 * Run `ionic serve` in a terminal from the project root.
 * Profit
-
-**Note:** How to publish an app can be found here `http://ionicframework.com/docs/v1/guide/publishing.html`.
 
 ### Contributing
 See [CONTRIBUTING.md](https://github.com/dgarcia360/NEMPay/blob/master/CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](https://github.com/dgarcia360/NEMPay/blob/master/CODE_OF_CONDUCT.md) :tada::+1:
