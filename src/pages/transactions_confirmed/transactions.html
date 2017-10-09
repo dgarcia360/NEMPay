@@ -31,7 +31,7 @@
 
             <!-- if multisig aggregate  -->
             <span *ngIf="transaction.type == TransactionTypes.MULTISIG">
-                <multisig-transaction [tx]="transaction" [address]="address"></multisig-transaction>
+                <multisig-transaction [tx]="transaction"></multisig-transaction>
             </span>
 
 
@@ -42,7 +42,7 @@
 
             <!-- if transfer  -->
             <span *ngIf="transaction.type == TransactionTypes.TRANSFER">
-                <transfer-transaction [tx]="transaction" [address]="address"></transfer-transaction>
+                <transfer-transaction [tx]="transaction"></transfer-transaction>
             </span>
 
         </ion-item>

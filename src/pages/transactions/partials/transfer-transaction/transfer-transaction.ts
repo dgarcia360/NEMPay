@@ -14,10 +14,9 @@ import {Address} from "nem-library";
 
 export class TransferTransactionComponent {
     @Input() tx: any;
-    @Input() address: Address;
 
     hasLevy:boolean;
-    owner: string;
+    owner: Address;
 
     constructor(private nem: NemProvider, private wallet: WalletProvider) {
         this.hasLevy = false;
@@ -34,7 +33,7 @@ export class TransferTransactionComponent {
 
     private _setOwner(){
         this.wallet.getSelectedWallet().then(wallet =>{
-            this.owner = wallet.address.plain();
+            this.owner = wallet.address;
         })
     }
 

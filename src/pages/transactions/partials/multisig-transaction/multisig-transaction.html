@@ -1,18 +1,18 @@
 <h2>
     <span *ngIf='tx.otherTransaction.amount != 0 && !tx.otherTransaction.mosaics'>
-        <span class="color-plus" *ngIf="address == tx.otherTransaction.recipient">
+        <span class="color-plus" *ngIf="owner?.plain() == tx?.otherTransaction.recipient.plain()">
             +
         </span>
-        <span class="color-less" *ngIf="address != tx.otherTransaction.recipient">
+        <span class="color-less" *ngIf="owner?.plain() != tx?.otherTransaction.recipient.plain()">
             -
         </span>
         {{tx.amount/1000000}} xem
     </span>
     <span *ngFor="let mos of tx.otherTransaction.mosaics">
-        <span class="color-plus" *ngIf="address == tx.otherTransaction.recipient">
+        <span class="color-plus" *ngIf="owner?.plain() == tx?.otherTransaction.recipient.plain()">
             +
         </span>
-        <span class="color-less" *ngIf="address != tx.otherTransaction.recipient">
+        <span class="color-less" *ngIf="owner?.plain() != tx?.otherTransaction.recipient.plain()">
             -
         </span>
         {{ mos.amount?.toString() }} {{mos.mosaicId.name}}
@@ -22,10 +22,10 @@
 <!-- Sender or recipient -->
 <p class="fit-long-address">
     <b>
-        <span *ngIf="address == tx.otherTransaction.recipient">{{'FROM' | translate}}</span>
-        <span *ngIf="address != tx.otherTransaction.recipient">{{'TO' | translate}}</span>:
+        <span *ngIf="owner?.plain() == tx?.otherTransaction.recipient.plain()">{{'FROM' | translate}}</span>
+        <span *ngIf="owner?.plain() != tx?.otherTransaction.recipient.plain()">{{'TO' | translate}}</span>:
     </b>
-    {{ tx.signer.address.plain() | searchContact:owner | async}}
+    {{ tx.signer.address.plain() | searchContact:owner?.plain() | async}}
 </p>
 
 <!-- Date (Timestamp) -->
