@@ -22,7 +22,7 @@
             <ion-label stacked>
                 {{'RECIPIENT_ADDRESS' | translate}}
             </ion-label>
-            <ion-input type="text" name="recipient" placeholder="" [(ngModel)]="formData.rawRecipient"></ion-input>
+            <ion-input type="text" name="recipient" placeholder="" [(ngModel)]="rawRecipient"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label>
@@ -40,7 +40,7 @@
             <ion-label stacked>
                 {{'MESSAGE' | translate}}
             </ion-label>
-            <ion-textarea rows="8" name="message" placeholder="" [(ngModel)]="formData.message"></ion-textarea>
+            <ion-textarea rows="8" name="message" placeholder="" [(ngModel)]="message"></ion-textarea>
         </ion-item>
         <div class="spacer" style="height:10px;"></div>
 
