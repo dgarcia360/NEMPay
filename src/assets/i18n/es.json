@@ -50,7 +50,8 @@
   "SUPPLY_INCREASE": "Cantidad Incrementada",
   "SUPPLY_DECREASED": "Cantidad Disminuida",
   "MOSAICS": "Mosaicos",
-  "ENCRYPED": "Encriptado",
+  "ENCRYPTED": "Encriptado",
+  "MULTISIG_AGGREGATE_MODIFICATION": "Multisig Aggregate Modification",
 
   "TRANSFER": "Enviar",
   "FROM": "Remitente",

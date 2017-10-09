@@ -51,6 +51,7 @@ import {MosaicSupplyChangeTransactionComponent} from '../pages/transactions/part
 import {MultisigTransactionComponent} from '../pages/transactions/partials/multisig-transaction/multisig-transaction';
 import {ProvisionNamespaceTransactionComponent} from '../pages/transactions/partials/provision-namespace-transaction/provision-namespace-transaction';
 import {TransferTransactionComponent} from '../pages/transactions/partials/transfer-transaction/transfer-transaction';
+import {MultisigAggregateModificationTransactionComponent} from '../pages/transactions/partials/multisig-aggregate-modification-transaction/multisig-aggregate-modification-transaction';
 
 
 
@@ -80,6 +81,7 @@ export function createTranslateLoader(http: Http) {
         MultisigTransactionComponent,
         ProvisionNamespaceTransactionComponent,
         TransferTransactionComponent,
+        MultisigAggregateModificationTransactionComponent,
         DivideByExponentialBaseTenPipe,
         FormatLevyPipe,
         SearchContactPipe

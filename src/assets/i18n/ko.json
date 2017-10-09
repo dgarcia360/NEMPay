@@ -49,7 +49,8 @@
   "SUPPLY_INCREASE": "Supply Increased",
   "SUPPLY_DECREASED": "Supply Decreased",
   "MOSAICS": "Mosaics",
-  "ENCRYPED": "Encrypted",
+  "ENCRYPTED": "Encrypted",
+  "MULTISIG_AGGREGATE_MODIFICATION": "Multisig Aggregate Modification",
 
   "TRANSFER": "이전",
   "FROM": "보내는 이",

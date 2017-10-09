@@ -9,7 +9,5 @@
 
 <!-- Message -->
 <p>
-    <b *ngIf="tx.supplyType == 1">{{'SUPPLY_INCREASE' | translate}}</b>:
-    <b *ngIf="tx.supplyType == 2">{{'SUPPLY_DECREASE' | translate}}</b>:
-    <span>{{tx.delta}} {{ 'MOSAICS' | translate}}</span>
+    <b>{{ 'MULTISIG_AGGREGATE_MODIFICATION' | translate}}</b>
 </p>

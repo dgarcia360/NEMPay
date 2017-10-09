@@ -29,10 +29,16 @@
             </span>
 
 
-            <!-- if multisig aggregate  -->
+            <!-- if multisig transaction  -->
             <span *ngIf="transaction.type == TransactionTypes.MULTISIG">
                 <multisig-transaction [tx]="transaction"></multisig-transaction>
             </span>
+
+            <!-- if multisig aggregate modification  -->
+            <span *ngIf="transaction.type == TransactionTypes.MULTISIG_AGGREGATE_MODIFICATION">
+                <multisig-aggregate-modification-transaction [tx]="transaction"></multisig-aggregate-modification-transaction>
+            </span>
+
 
 
             <!-- if provision namespace  -->

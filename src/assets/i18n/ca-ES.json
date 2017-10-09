@@ -51,8 +51,8 @@
   "SUPPLY_INCREASE": "Supply Increased",
   "SUPPLY_DECREASED": "Supply Decreased",
   "MOSAICS": "Mosaics",
-  "ENCRYPED": "Encrypted",
-
+  "ENCRYPTED": "Encrypted",
+  "MULTISIG_AGGREGATE_MODIFICATION": "Multisig Aggregate Modification",
   "TRANSFER": "Enviar",
   "FROM": "De",
   "TO": "A",
