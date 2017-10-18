@@ -133,12 +133,21 @@ export class NemProvider {
     }
 
     /**
-     * Check if acount belongs to the current Network
+     * Check if acount belongs it is valid, has 40 characters and belongs to network
      * @param address address to check
      * @return Return prepared transaction
      */
-    public isFromNetwork(address: Address): boolean  {
-        return address.network() == NEMLibrary.getNetworkType();
+    public isValidAddress(address: Address): boolean  {
+
+        // Reset recipient data
+        let success = true;
+        // From documentation: Addresses have always a length of 40 characters.
+        if (!address || address.plain().length != 40) success = false;
+
+        //if raw data, clean address and check if it is from network
+        if (address.network() != NEMLibrary.getNetworkType()) success = false;
+        return success;
+
     }
 
     /**

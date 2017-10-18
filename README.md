@@ -39,7 +39,6 @@ If not, you can [contact us](http://www.blockchaintoken.tech) for further inform
 * Install cordova (`npm install -g cordova`)
 * Run `npm install` from the project root.
 * Run `ionic serve` in a terminal from the project root.
-* Profit
 
 ### Contributing
 See [CONTRIBUTING.md](https://github.com/dgarcia360/NEMPay/blob/master/CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](https://github.com/dgarcia360/NEMPay/blob/master/CODE_OF_CONDUCT.md) :tada::+1:

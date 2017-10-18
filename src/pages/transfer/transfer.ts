@@ -75,33 +75,6 @@ export class TransferPage {
     }
 
     /**
-     * check if address is from network
-     * @param address Adress to check
-     */
-    private _checkAddress(address) {
-        var success = true;
-        if (this.nem.isFromNetwork(address)) this.recipient = address;
-        else success = false;
-        return success;
-    }
-
-    /**
-     * Cleans this.rawRecipient and check if account belongs to network
-     */
-    private _processRecipientInput() {
-        // Reset recipient data
-        var success = true;
-        // return if no value or address length < to min address length
-        if (!this.rawRecipient || this.rawRecipient.length < 40) success = false;
-        //if raw data, clean address and check if it is from network
-        if (success) {
-            let recipientAddress = this.rawRecipient.toUpperCase().replace('-', '');
-            success = this._checkAddress(new Address(recipientAddress));
-        }
-        return success;
-    }
-
-    /**
      * Check if user can send tranaction
      * TODO: encapsulate in a service, implememntation it is duplicated in other controllers too
      */
@@ -237,7 +210,7 @@ export class TransferPage {
      * Calculates fee into this.fee and presents prompt once finished
      */
     private _updateFees() {
-        var transferTransaction;
+        let transferTransaction;
         if (this.isMosaicTransfer) transferTransaction = this.nem.prepareMosaicTransaction(this.recipient, this.mosaics, this.message);
         else transferTransaction = this.nem.prepareTransaction(this.recipient, this.amount, this.message);
         this.fee = transferTransaction.fee;
@@ -256,8 +229,11 @@ export class TransferPage {
             this.mosaics = [new MosaicTransferable(this.selectedMosaic.mosaicId, this.selectedMosaic.properties, this.amount, this.selectedMosaic.levy)];
         }
 
-        if (!this._processRecipientInput()) this.alert.showAlertDoesNotBelongToNetwork();
+        let recipientAddress = this.rawRecipient.toUpperCase().replace('-', '');
+
+        if (!this.nem.isValidAddress(new Address(recipientAddress))) this.alert.showAlertDoesNotBelongToNetwork();
         else {
+            this.recipient = recipientAddress;
             this._updateFees();
             this._presentPrompt();
         }
@@ -268,7 +244,7 @@ export class TransferPage {
      */
     public scanQR() {
         this.barcodeScanner.scan().then((barcodeData) => {
-            var addresObject = JSON.parse(barcodeData.text);
+            let addresObject = JSON.parse(barcodeData.text);
             this.rawRecipient = addresObject.data.addr;
             this.amount = addresObject.data.amount;
             this.message = addresObject.data.msg;

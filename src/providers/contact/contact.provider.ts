@@ -11,12 +11,8 @@ export class ContactProvider {
   constructor() {}
 
   setDatabase(db: SQLiteObject){
-    console.log(db);
-    console.log("SETTING DB");
     if(this.db === null){
-      console.log("DB SET");
       this.db = db;
-      console.log(db);
     }
   }
 
@@ -26,8 +22,6 @@ export class ContactProvider {
   }
 
   createTable(){
-    console.log("CREATE TABLE DB" );
-    console.log(this.db);
     let sql = 'CREATE TABLE IF NOT EXISTS contact(id INTEGER PRIMARY KEY AUTOINCREMENT, owner TEXT, name TEXT, address TEXT)';
     return this.db.executeSql(sql, []);
   }

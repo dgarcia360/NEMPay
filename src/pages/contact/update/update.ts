@@ -36,23 +36,6 @@ export class UpdateContactPage {
        if (this.id) this.previousAddress = this.address.toUpperCase().replace('-', '');
 
     }
-    
-    /**
-     * check if an address is valid
-     * @param address address to check
-     */
-    private _isValidAddress(address:string){
-       var valid;
-
-       try{
-            if (this.nem.isFromNetwork(new Address(address))) valid = true;
-            else valid = false;
-       }
-       catch(e){
-         valid = false;
-       }
-       return valid;
-    }
 
     /**
      * creates a new contact
@@ -99,7 +82,7 @@ export class UpdateContactPage {
     public saveContact(){
         let _rawAddress = this.address.toUpperCase().replace('-', '');
 
-        if (!this._isValidAddress(_rawAddress)){
+        if (!this.nem.isValidAddress(new Addres(_rawAddress))){
           this.alert.showAlertDoesNotBelongToNetwork();
         }
         else{
