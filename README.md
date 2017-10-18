@@ -47,7 +47,7 @@ See [CONTRIBUTING.md](https://github.com/dgarcia360/NEMPay/blob/master/CONTRIBUT
 
 ### Collaborators
 
-| username | Role |
+| Username | Role |
 | --- | --- |
 | [dgarcia360](https://github.com/dgarcia360) | Project lead |
 | [guillemsole](https://github.com/guillemsole) | NEM Library Integration |
@@ -61,13 +61,9 @@ See [CONTRIBUTING.md](https://github.com/dgarcia360/NEMPay/blob/master/CONTRIBUT
 | [yarkitest](https://github.com/yarkitest) | Russian Translation |
 | [Jordi](https://www.behance.net/JordiBrandia) | Logo Designer |
 
-Telegram Group: [https://t.me/nemprojects][telegram-group]
+Telegram Group: [https://t.me/nemprojects](https://t.me/nemprojects)
 
 
 ### License
 
 [MIT Licence](https://github.com/dgarcia360/NEMPay/blob/master/LICENSE.md)
-
-[pull-request]:https://help.github.com/articles/about-pull-requests/
-[telegram-group]:https://t.me/nemprojects
-[github-issues]:https://github.com/aleixmorgadas/NEM-Authenticator/issues
