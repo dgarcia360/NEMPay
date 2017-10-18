@@ -32,7 +32,7 @@ export class ToastProvider {
     }
 
     showAddressCopyCorrect() {
-        this.translate.get('ALERT_ADDRESS_COPIED', {}).subscribe((res: string) => {
+        this.translate.get('ALERT_PRIVATE_KEY_COPIED', {}).subscribe((res: string) => {
 
             let toast = this.toast.create({
                 message: res,

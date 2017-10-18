@@ -47,8 +47,17 @@
                 <p>
                     {{'PASSWORD_WARNING' | translate }}
                    </p>
-                <p><b>{{ common.privateKey}}</b></p>
             </ion-list>
+
+            <ion-row *ngIf='common.privateKey'>
+                <ion-col col-8> <p><b>{{ common.privateKey}}</b></p>
+                </ion-col>
+                <ion-col col-4>
+                    <button ion-button color="stable" block on-click="copyPrivateKeyToClipboard()">
+                    {{'COPY' | translate }}
+                </button>
+                </ion-col>
+            </ion-row>
 
             <button id="show-button" ion-button color="stable" block on-click="showPrivateKey()"
                     [disabled]="!common.password" *ngIf='!common.privateKey'>

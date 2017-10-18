@@ -6,7 +6,7 @@
   "CONFIRM": "Confirm",
   "CANCEL": "Cancel",
   "OK": "OK",
-
+  "COPY": "Copy",
   "ACCOUNT": "Account",
   "YOUR_ADDRESS": "Your address",
   "SHARE_ADDRESS": "Share Address",
@@ -103,6 +103,5 @@
   "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
   "ALERT_CONTACT_ALREADY_EXISTS": "Contact with provided address already exists.",
   "NOTHING_TO_SHOW": "Nothing to show"
-
 
 }

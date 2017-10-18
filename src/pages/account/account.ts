@@ -3,6 +3,7 @@ import {NavController, Platform, LoadingController} from 'ionic-angular';
 import { Subscription } from 'rxjs';
 
 import {SocialSharing} from '@ionic-native/social-sharing';
+import { Clipboard } from '@ionic-native/clipboard';
 
 import {TranslateService} from '@ngx-translate/core';
 
@@ -11,6 +12,7 @@ import * as kjua from "kjua";
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {WalletProvider} from '../../providers/wallet/wallet.provider';
+import {ToastProvider} from '../../providers/toast/toast.provider';
 
 
 import {LoginPage} from "../login/login";
@@ -26,7 +28,7 @@ export class AccountPage {
     qrCode: any;
     private onResumeSubscription: Subscription;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private platform: Platform, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private platform: Platform, public translate: TranslateService,private toast: ToastProvider, private clipboard: Clipboard) {
         //Stores sensitive data.
         this.common = {};
         //Initialize common
@@ -136,6 +138,16 @@ export class AccountPage {
                 });
         });
     }
+
+    /**
+     * Copy private key to Clipboard
+     */
+    public copyPrivateKeyToClipboard() {
+        this.clipboard.copy(this.common.privateKey).then(_ => {
+            this.toast.showPrivateKeyCopyCorrect();
+        });
+    }
+
 
     /**
      * Removes private key
