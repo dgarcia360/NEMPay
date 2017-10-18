@@ -13,7 +13,8 @@
   "PRIVATE_KEY": "Klucz Prywatny",
   "PRIVATE_KEY_SUBTITLE": "By zobaczyć swój klucz prywatny, wprowadź swoje hasło.",
   "PASSWORD_WARNING" : "Twój klucz prywatny ma pełen nadzór nad Twoim kontem. Ważne jest by upewnić się że jest on przechowywany w bezpiecznym miejscu offline.",
-  "IVE_COPIED_IT": "I've copied it",
+  "IVE_COPIED_IT_MANUALLY": "I've copied it manually",
+  "COPY_TO_CLIPBOARD": "Copy to clipboard",
   "SHOW_PRIVATE_KEY": "Pokaż Klucz Prywatny",
   "HIDE_PRIVATE_KEY": "Ukryj Klucz Prywatny",
 
@@ -93,6 +94,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Wybrana Mozaika jest nietransferowalna",
   "ALERT_INVALID_PRIVATE_KEY": "Błędny Klucz Prywatny",
   "ALERT_ADDRESS_COPIED": "Transaction address has been copied",
+  "ALERT_PRIVATE_KEY_COPIED": "Private Key has been copied",
   "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Pamiętaj, że aktualnie obsługujemy tylko sieć testnet",
   "ALERT_PHONE_DISCONNECTED": "Twój telefon nie jest podłączony do internetu",

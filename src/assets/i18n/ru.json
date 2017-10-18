@@ -13,7 +13,8 @@
   "PRIVATE_KEY": "Личный Ключ",
   "PRIVATE_KEY_SUBTITLE": "Для просмотра личного ключа, введите Ваш пароль или парольную фразу.",
   "PASSWORD_WARNING" : "Ваш личный ключ предоставляет полный доступ к учетной записи. Важно хранить личный ключ в безопасном месте(не в сети).",
-  "IVE_COPIED_IT": "I've copied it",
+  "IVE_COPIED_IT_MANUALLY": "I've copied it manually",
+  "COPY_TO_CLIPBOARD": "Copy to clipboard",
   "SHOW_PRIVATE_KEY": "Показать Личный Ключ",
   "HIDE_PRIVATE_KEY": "Скрыть Личный Ключ",
 
@@ -90,6 +91,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Выбранная мозаика не перемещаема",
   "ALERT_INVALID_PRIVATE_KEY": "Неверный Личный Ключ",
   "ALERT_ADDRESS_COPIED": "Transaction address has been copied",
+  "ALERT_PRIVATE_KEY_COPIED": "Private Key has been copied",
   "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Помните, что на данный момент работает только в тестовая сеть",
   "ALERT_PHONE_DISCONNECTED": "Ваш устройство отключено от Интернет",

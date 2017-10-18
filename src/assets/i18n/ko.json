@@ -14,7 +14,8 @@
   "PRIVATE_KEY": "프라이빗 키",
   "PRIVATE_KEY_SUBTITLE": "프라이빗 키를 보기 위해서는 패스워드를 입력하여 주세요...",
   "PASSWORD_WARNING" : "프라이빗 키는 계정을 전적으로 컨트롤할수 있는 권한을 가지고 있습니다. 프라이빗 키를 오프라인에서 안전하게 보관해 주십시오.",
-  "IVE_COPIED_IT": "I've copied it",
+  "IVE_COPIED_IT_MANUALLY": "I've copied it manually",
+  "COPY_TO_CLIPBOARD": "Copy to clipboard",
   "SHOW_PRIVATE_KEY": "프라이빗 키 보이기",
   "HIDE_PRIVATE_KEY": "프라이빗 키 숨기기",
   
@@ -91,6 +92,7 @@
   "ALERT_INVALID_PRIVATE_KEY": "프라이빗 키가 유효하지 않습니다.",
   "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
   "ALERT_ADDRESS_COPIED": "트랜잭션 주소가 복사되었습니다.",
+  "ALERT_PRIVATE_KEY_COPIED": "Private Key has been copied",
   "ALERT_SUBTITLE_ONLY_TESTNET": "현재에는 테스트넷에서만 작동합니다.",
   "ALERT_PHONE_DISCONNECTED": "사용자의 휴대전화가 인터넷에 연결되어 있지 않습니다.",
   "ALERT_SUBTITLE_PHONE_DISCONNECTED": "인터넷에 연결한 후 어플을 재 실행해 주세요.",

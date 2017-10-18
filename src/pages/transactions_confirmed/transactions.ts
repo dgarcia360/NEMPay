@@ -82,7 +82,7 @@ export class TransactionsConfirmedPage {
                     copiableAddress = transaction.recipient.plain();
                 }
                 this.clipboard.copy(copiableAddress).then(_ => {
-                    this.toast.showCopyCorrect();
+                    this.toast.showAddressCopyCorrect();
                 });
             }
         }

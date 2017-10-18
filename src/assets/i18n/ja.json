@@ -13,7 +13,8 @@
   "PRIVATE_KEY": "秘密鍵",
   "PRIVATE_KEY_SUBTITLE": "秘密鍵を表示するために、パスワードまたはパスフレーズを入力します。",
   "PASSWORD_WARNING" : "秘密鍵は全ての権限を持っています。オフラインで安全な場所に保管されている事を必ず確認してください。",
-  "IVE_COPIED_IT": "I've copied it",
+  "IVE_COPIED_IT_MANUALLY": "I've copied it manually",
+  "COPY_TO_CLIPBOARD": "Copy to clipboard",
   "SHOW_PRIVATE_KEY": "秘密鍵の表示",
   "HIDE_PRIVATE_KEY": "秘密鍵を隠す",
 
@@ -93,6 +94,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "送信できないモザイクを選択しています",
   "ALERT_INVALID_PRIVATE_KEY": "秘密鍵が間違っています",
   "ALERT_ADDRESS_COPIED": "トランザクションアドレスがコピーされました",
+  "ALERT_PRIVATE_KEY_COPIED": "Private Key has been copied",
   "ALERT_WEAK_PASSWORD": "パスワードは8文字以上入力してください", 
   "ALERT_SUBTITLE_ONLY_TESTNET": "このソフトウェアはテストネットのみ動作します",
   "ALERT_PHONE_DISCONNECTED": "あなたのスマートフォンはインターネットへ繋がっていません",

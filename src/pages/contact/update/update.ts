@@ -46,7 +46,7 @@ export class UpdateContactPage {
             if(contacts.length > 0) this.alert.showContactAlreadyExists();
             else{
                 this.contact.create(this.owner, this.name, address).then(_=>{
-                    this.toast.contactCreated();
+                    this.toast.showContactCreated();
                     this.navCtrl.push(ContactListPage, {});
                 });
             }
@@ -66,7 +66,7 @@ export class UpdateContactPage {
             if(contacts.length > 0 && address != this.previousAddress) this.alert.showContactAlreadyExists();
             else{
                 this.contact.update(this.id, this.name, address).then(_=>{
-                    this.toast.contactUpdated();
+                    this.toast.showContactUpdated();
                     this.navCtrl.push(ContactListPage, {});
                 })
             }

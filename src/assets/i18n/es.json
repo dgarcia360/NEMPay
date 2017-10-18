@@ -13,7 +13,8 @@
   "PRIVATE_KEY": "Clave privada",
   "PRIVATE_KEY_SUBTITLE": "Para ver su clave privada, introduzca su contraseña",
   "PASSWORD_WARNING" : "Su clave privada tiene toda la potencia de su cuenta. Es una prioridad para asegurarse de que se almacena en forma segura en algún lugar sin conexión.",
-  "IVE_COPIED_IT": "La he copiado",
+  "IVE_COPIED_IT_MANUALLY": "I've copied it manually",
+  "COPY_TO_CLIPBOARD": "Copy to clipboard",
   "SHOW_PRIVATE_KEY": "Mostrar clave privada",
   "HIDE_PRIVATE_KEY": "Ocultar clave privada",
 
@@ -91,6 +92,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Mosaico seleccionado no es transferible",
   "ALERT_INVALID_PRIVATE_KEY": "Clave privada no válida",
   "ALERT_ADDRESS_COPIED": "La dirección de la transacción ha sido copiada",
+  "ALERT_PRIVATE_KEY_COPIED": "Private Key has been copied",
   "ALERT_WEAK_PASSWORD": "La contraseña debe contener como mínimo 8 caracteres",
   "ALERT_SUBTITLE_ONLY_TESTNET": "Recuerde que por el momento sólo funciona en testnet",
   "ALERT_PHONE_DISCONNECTED": "Su teléfono está desconectado de Internet",

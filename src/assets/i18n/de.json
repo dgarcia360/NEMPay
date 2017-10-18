@@ -13,7 +13,8 @@
   "PRIVATE_KEY": "Privater Schlüssel",
   "PRIVATE_KEY_SUBTITLE": "Geben Sie ihr Passwort ein, um ihren privaten Schlüssel zu sehen.",
   "PASSWORD_WARNING" : "Ihr privater Schlüssel enthält die ganze Macht Ihres Kontos. Es hat oberste Priorität sicherzustellen, das es irgendwo offline sicher aufbewahrt ist.",
-  "IVE_COPIED_IT": "I've copied it",
+  "IVE_COPIED_IT_MANUALLY": "I've copied it manually",
+  "COPY_TO_CLIPBOARD": "Copy to clipboard",
   "SHOW_PRIVATE_KEY": "Zeige privaten Schlüssel",
   "HIDE_PRIVATE_KEY": "Verstecke privaten Schlüssel",
 
@@ -89,6 +90,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "Ausgewähltes Mosaik ist nicht übertragbar",
   "ALERT_INVALID_PRIVATE_KEY": "Ungültiger privater Schlüssel",
   "ALERT_ADDRESS_COPIED": "Transaktions-Adresse wurde kopiert",
+  "ALERT_PRIVATE_KEY_COPIED": "Private Key has been copied",
   "ALERT_WEAK_PASSWORD": "Password must be at least 8 characters", 
   "ALERT_SUBTITLE_ONLY_TESTNET": "Denken Sie daran, dass es momentan nur im Testnetz funktioniert",
   "ALERT_PHONE_DISCONNECTED": "Ihr Mobilteil ist vom Internet getrennt",

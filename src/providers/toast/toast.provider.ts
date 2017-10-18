@@ -31,7 +31,7 @@ export class ToastProvider {
         });
     }
 
-    showCopyCorrect() {
+    showAddressCopyCorrect() {
         this.translate.get('ALERT_ADDRESS_COPIED', {}).subscribe((res: string) => {
 
             let toast = this.toast.create({
@@ -43,7 +43,21 @@ export class ToastProvider {
         });
     }
 
-    contactCreated() {
+
+    showPrivateKeyCopyCorrect() {
+        this.translate.get('ALERT_ADDRESS_COPIED', {}).subscribe((res: string) => {
+
+            let toast = this.toast.create({
+                message: res,
+                duration: 3000,
+                position: 'bottom'
+            });
+            toast.present();
+        });
+    }
+
+
+    showContactCreated() {
         this.translate.get('CONTACT_CREATED', {}).subscribe((res: string) => {
 
             let toast = this.toast.create({
@@ -56,7 +70,7 @@ export class ToastProvider {
     }
 
 
-    contactUpdated() {
+    showContactUpdated() {
         this.translate.get('CONTACT_UPDATED', {}).subscribe((res: string) => {
 
             let toast = this.toast.create({

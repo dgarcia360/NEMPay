@@ -1,8 +1,11 @@
 import {Component} from '@angular/core';
 import {App, AlertController, LoadingController} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
+import { Clipboard } from '@ionic-native/clipboard';
 
 import {AlertProvider} from '../../providers/alert/alert.provider';
+import {ToastProvider} from '../../providers/toast/toast.provider';
+
 import {NemProvider} from '../../providers/nem/nem.provider';
 import {WalletProvider} from '../../providers/wallet/wallet.provider';
 
@@ -17,7 +20,7 @@ import {SimpleWallet} from "nem-library";
 export class SignupSimpleWalletPage {
     newAccount: any;
 
-    constructor(public app: App, private nem: NemProvider, private wallet: WalletProvider, private loading: LoadingController, private alert: AlertProvider, public translate: TranslateService, private alertCtrl: AlertController) {
+    constructor(public app: App, private nem: NemProvider, private wallet: WalletProvider, private loading: LoadingController, private alert: AlertProvider, public translate: TranslateService, private alertCtrl: AlertController,private toast: ToastProvider, private clipboard: Clipboard) {
         // sensitive data
         this.newAccount = null;
 
@@ -41,7 +44,7 @@ export class SignupSimpleWalletPage {
      * Shows keep private key safe message
      */
     private _showTutorialAlert(wallet: SimpleWallet) {
-        this.translate.get(['KEEP_YOUR_PRIVATE_KEY_SAFE', 'PASSWORD_WARNING', 'IVE_COPIED_IT', 'OK'], {}).subscribe((res) => {
+        this.translate.get(['KEEP_YOUR_PRIVATE_KEY_SAFE', 'PASSWORD_WARNING', 'IVE_COPIED_IT_MANUALLY','COPY_TO_CLIPBOARD', 'OK'], {}).subscribe((res) => {
 
             let alert = this.alertCtrl.create({
                 title: res['KEEP_YOUR_PRIVATE_KEY_SAFE'],
@@ -49,14 +52,28 @@ export class SignupSimpleWalletPage {
                 + '</b></span>',
                 buttons: [
                     {
-                        text: res['IVE_COPIED_IT'],
+                        text: res['IVE_COPIED_IT_MANUALLY'],
                         handler: _ => {
                             //clear private key just in case
                             this._clearNewAccount();
                             this.app.getRootNav().push(LoginPage);
                         }
+                    },
+
+                    {
+                        text: res['COPY_TO_CLIPBOARD'],
+                        handler: _ => {
+
+                            this.clipboard.copy(this.nem.passwordToPrivateKey(this.newAccount.password, wallet)).then(_ => {
+                                this.toast.showPrivateKeyCopyCorrect();
+                                this._clearNewAccount();
+                                this.app.getRootNav().push(LoginPage);
+                            });
+                            //clear private key just in case
+                        }
                     }
-                ]
+                ],
+                enableBackdropDismiss: false
             });
             alert.present();
 

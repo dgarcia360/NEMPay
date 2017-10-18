@@ -13,7 +13,8 @@
   "PRIVATE_KEY": "Clau Privada",
   "PRIVATE_KEY_SUBTITLE": "Per a veure la seva clau privada, introdueixi la seva contrasenya.",
   "PASSWORD_WARNING" : "Amb la seva clau privada es pot realitzar qualsevol operació en el seu compte. És una prioritat assegurar-se que s'ha guardat en algun lloc fora de línia de forma segura.",
-  "IVE_COPIED_IT": "I've copied it",
+  "IVE_COPIED_IT_MANUALLY": "I've copied it manually",
+  "COPY_TO_CLIPBOARD": "Copy to clipboard",
   "SHOW_PRIVATE_KEY": "Mostrar la Clau Privada",
   "HIDE_PRIVATE_KEY": "Ocultar la Clau Privada",
 
@@ -91,6 +92,7 @@
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "El Mosaic seleccionat no es pot transferir",
   "ALERT_INVALID_PRIVATE_KEY": "Clau Privada Invàlida",
   "ALERT_ADDRESS_COPIED": "L'adreça de la transacció ha sigut copiada ",
+  "ALERT_PRIVATE_KEY_COPIED": "Private Key has been copied",
   "ALERT_WEAK_PASSWORD": "La contrasenya de contenir com a mínim 8 caracters",
   "ALERT_SUBTITLE_ONLY_TESTNET": "Recordi que en aquest moment només funciona a la Testnet",
   "ALERT_PHONE_DISCONNECTED": "El seu telèfon està desconnectat d'Internet",
