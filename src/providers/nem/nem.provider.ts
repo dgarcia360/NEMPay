@@ -211,7 +211,7 @@ export class NemProvider {
      */
 
     public transactionHasAtLeastOneMosaicWithLevy(mosaics: MosaicTransferable[]): boolean{
-        var hasLevy = false;
+        let hasLevy = false;
         mosaics.filter(mosaic => {
             if (mosaic.levy) hasLevy = true; 
         });

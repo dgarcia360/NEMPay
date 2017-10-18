@@ -82,7 +82,7 @@ export class UpdateContactPage {
     public saveContact(){
         let _rawAddress = this.address.toUpperCase().replace('-', '');
 
-        if (!this.nem.isValidAddress(new Addres(_rawAddress))){
+        if (!this.nem.isValidAddress(new Address(_rawAddress))){
           this.alert.showAlertDoesNotBelongToNetwork();
         }
         else{
