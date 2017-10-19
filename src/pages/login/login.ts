@@ -33,14 +33,12 @@ export class LoginPage {
             'privateKey': ''
         };
 
-        this.wallet.getWallets().then(
-            value => {
-                this.wallets = value;
+        this.wallet.getWallets().then(value => {
+            this.wallets = value;
 
-                //select first loaded wallet by default
-                if(this.wallets.length > 0) this.selectedWallet = this.wallets[0];
-            }
-        );
+            //select first loaded wallet by default
+            if(this.wallets.length > 0) this.selectedWallet = this.wallets[0];
+        });
 
     }
 
@@ -68,26 +66,25 @@ export class LoginPage {
                 content: res
             });
 
-            loader.present().then(
-                _ => {
-                    if (!this.selectedWallet) {
-                        loader.dismiss();
-                        this.alert.showWalletNotSelectedAlert();
-                    }
-                    
-                    // Decrypt/generate private key and check it. Returned private key is contained into this.common
-                    try {
-                        this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
-                        this.wallet.setSelectedWallet(this.selectedWallet);
-                        loader.dismiss();
-                        this.navCtrl.setRoot(BalancePage);
-                    } catch (err) {
-                        console.log(err);
-                        this.common.privateKey = '';                        
-                        loader.dismiss();
-                        this.alert.showInvalidPasswordAlert();
-                    }
-                });
+            loader.present().then(_ => {
+                if (!this.selectedWallet) {
+                    loader.dismiss();
+                    this.alert.showWalletNotSelectedAlert();
+                }
+
+                // Decrypt/generate private key and check it. Returned private key is contained into this.common
+                try {
+                    this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
+                    this.wallet.setSelectedWallet(this.selectedWallet);
+                    loader.dismiss();
+                    this.navCtrl.setRoot(BalancePage);
+                } catch (err) {
+                    console.log(err);
+                    this.common.privateKey = '';
+                    loader.dismiss();
+                    this.alert.showInvalidPasswordAlert();
+                }
+            });
         });
     }
 

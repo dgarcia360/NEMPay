@@ -73,7 +73,7 @@ export class TransactionsConfirmedPage {
     public copyTransactionAddress(transaction: TransferTransaction) {
 
         if (this.platform.is('cordova')) {
-            var copiableAddress = "";
+            let copiableAddress = "";
             if (this.selectedWallet.address && transaction.recipient && transaction.signer) {
                 if (this.selectedWallet.address.plain() == transaction.recipient.plain()) {
                     copiableAddress = transaction.signer.address.plain();

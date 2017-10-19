@@ -8,30 +8,26 @@
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content padding id="transfer">
+<ion-content id="receive" padding >
     <div class="default-padding">
-                <div id="invoiceInfoQR"><img [src]="qrCode.src" style="height: 250px;margin: 0 auto;
-    display: block;
-    margin-top: 20px;"></div>
+        <div id="invoiceInfoQR"><img [src]="qrCode.src"></div>
 
         <ion-item id="transfer-input1">
             <ion-label>
                 {{'RECIPIENT_ADDRESS' | translate}}
             </ion-label>
             <ion-label>
-                       {{selectedWallet?.address.pretty()}}
-
+                {{selectedWallet?.address.pretty()}}
             </ion-label>
         </ion-item>
 
         <ion-item>
-
             <ion-label>
                 {{'AMOUNT' | translate}}
             </ion-label>
             <ion-input type="number" min="0" name="amount" [(ngModel)]="amount" placeholder="" (ngModelChange)="updateQR()"></ion-input>
         </ion-item>
-        
+
         <ion-item>
             <ion-label>
                 {{selectedMosaic.mosaicId.description()}}
@@ -44,7 +40,7 @@
             </ion-label>
             <ion-textarea rows="5" name="message" placeholder="" [(ngModel)]="message" (ngModelChange)="updateQR()"></ion-textarea>
         </ion-item>
-        
+
     </div>
 
 </ion-content>

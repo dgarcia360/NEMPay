@@ -1,12 +1,12 @@
 <ion-header>
 </ion-header>
-<ion-content padding id="login">
+<ion-content id="login" padding>
     <div class="default-padding">
-    <div style="text-align: center;">
-        <div class="spacer" style="height:40px;"></div>
+    <div class="text-center">
+        <div class="spacer m"></div>
         <h1 [innerHTML]="'APP_TITLE' | translate"></h1>
     </div>
-    <div class="spacer" style="height:40px;"></div>
+    <div class="spacer m"></div>
     <ion-list>
 
         <ion-item>
@@ -31,13 +31,13 @@
                 <ion-input [(ngModel)]="common.password" type="password" name="password" placeholder=""></ion-input>
             </ion-item>
         </ion-list>
-        <div class="spacer" style="height:10px;"></div>
+        <div class="spacer xs"></div>
         <button ion-button color="positive" block type="submit"
                 [disabled]="!selectedWallet">
             {{'LOGIN' | translate}}
         </button>
     </form>
-    <div class="spacer" style="height:20px;"></div>
+    <div class="spacer s"></div>
     <button ion-button clear color="positive" block on-click="goToSignup()">
         {{'CREATE_OR_IMPORT_AN_ACCOUNT' | translate}}
     </button>

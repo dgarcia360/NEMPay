@@ -26,7 +26,7 @@ export class WalletProvider {
      * @return Promise with stored wallet
      */
     public storeWallet(wallet: SimpleWallet): Promise<SimpleWallet> {
-        var result = [];
+        let result = [];
         return this.getWallets().then(
             value => {
                 result = value;
@@ -46,11 +46,11 @@ export class WalletProvider {
      * @return Promise that resolves a boolean if exists
      */
     public checkIfWalletNameExists(walletName): Promise<boolean> {
-        var exists = false;
+        let exists = false;
 
         return this.getWallets().then(
             value => {
-                var wallets = value || [];
+                let wallets = value || [];
                 for (var i = 0; i < wallets.length; i++) {
                     if (wallets[i].name == walletName) {
                         exists = true;
@@ -68,7 +68,7 @@ export class WalletProvider {
      */
     public getSelectedWallet(): Promise<SimpleWallet> {
         return this.storage.get('selectedWallet').then(data => {
-            var result = null;
+            let result = null;
             if (data) {
                 result = SimpleWallet.readFromWLT(JSON.parse(data));
             }
@@ -81,7 +81,7 @@ export class WalletProvider {
      */
     public getWallets(): Promise<SimpleWallet[]> {
         return this.storage.get('wallets').then(data => {
-            var result = [];
+            let result = [];
             if (data) {
                 result = JSON.parse(data).map(walletFile => {
                     if (walletFile.name) {

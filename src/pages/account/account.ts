@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {NavController, Platform, LoadingController} from 'ionic-angular';
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs';
 
 import {SocialSharing} from '@ionic-native/social-sharing';
-import { Clipboard } from '@ionic-native/clipboard';
+import {Clipboard} from '@ionic-native/clipboard';
 
 import {TranslateService} from '@ngx-translate/core';
 
@@ -18,19 +18,22 @@ import {ToastProvider} from '../../providers/toast/toast.provider';
 import {LoginPage} from "../login/login";
 
 import {SimpleWallet} from "nem-library";
+
 @Component({
     selector: 'page-account',
     templateUrl: 'account.html'
 })
+
 export class AccountPage {
     common: any;
     selectedWallet: SimpleWallet;
     qrCode: any;
     private onResumeSubscription: Subscription;
 
-    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private platform: Platform, public translate: TranslateService,private toast: ToastProvider, private clipboard: Clipboard) {
+    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider, private socialSharing: SocialSharing, private loading: LoadingController, private alert: AlertProvider, private platform: Platform, public translate: TranslateService, private toast: ToastProvider, private clipboard: Clipboard) {
         //Stores sensitive data.
         this.common = {};
+
         //Initialize common
         this._clearCommon();
 
@@ -50,9 +53,7 @@ export class AccountPage {
     ionViewWillEnter() {
         this.wallet.getSelectedWallet().then(
             value => {
-                if (!value) {
-                    this.navCtrl.setRoot(LoginPage);
-                }
+                if (!value) this.navCtrl.setRoot(LoginPage);
                 else {
                     this.selectedWallet = value;
                     let infoQR = this.nem.generateAddressQRText(this.selectedWallet.address);
@@ -94,7 +95,8 @@ export class AccountPage {
         try {
             this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
             return true;
-        } catch (err) {
+        }
+        catch (err) {
             return false;
         }
     }
@@ -104,15 +106,10 @@ export class AccountPage {
      */
     public shareAddress() {
         if (this.platform.is('cordova')) {
-
-            var textToShare = this.selectedWallet.address;
-            this.socialSharing.share(textToShare.plain(), "My NEM Address", null, null).then(_ => {
-
-            });
+            let textToShare = this.selectedWallet.address;
+            this.socialSharing.share(textToShare.plain(), "My NEM Address", null, null).then(_ => {});
         }
-        else{
-            this.alert.showFunctionallityOnlyAvailableInMobileDevices();
-        }
+        else this.alert.showFunctionallityOnlyAvailableInMobileDevices();
     }
 
     /**
@@ -125,34 +122,34 @@ export class AccountPage {
                 content: res
             });
 
-            loader.present().then(
-                _ => {
-                    if (!this._canShowPrivateKey()) {
-                        loader.dismiss();
-                        this._clearCommon();
-                        this.alert.showInvalidPasswordAlert();
-                    }
-                    else {
-                        loader.dismiss();
-                    }
-                });
+            loader.present().then(_ => {
+                if (!this._canShowPrivateKey()) {
+                    loader.dismiss();
+                    this._clearCommon();
+                    this.alert.showInvalidPasswordAlert();
+                }
+                else loader.dismiss();
+            });
         });
     }
 
     /**
      * Copy private key to Clipboard
      */
-    public copyPrivateKeyToClipboard() {
-        this.clipboard.copy(this.common.privateKey).then(_ => {
-            this.toast.showPrivateKeyCopyCorrect();
-        });
+    public copyPrivateKeyToClipboard(){
+        if (this.platform.is('cordova')) {
+            this.clipboard.copy(this.common.privateKey).then(_ => {
+                this.toast.showPrivateKeyCopyCorrect();
+            });
+        }
+        else this.alert.showFunctionallityOnlyAvailableInMobileDevices();
     }
 
 
     /**
      * Removes private key
      */
-    public hidePrivateKey(){
+    public hidePrivateKey() {
         this._clearCommon();
     }
 
@@ -160,7 +157,7 @@ export class AccountPage {
      * Clears data and moves to login screen
      * @param transaction  transaction object
      */
-    public logout() {
+    public logout(){
         this.wallet.unsetSelectedWallet();
         this._clearCommon();
         this.navCtrl.setRoot(LoginPage);

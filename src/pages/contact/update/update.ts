@@ -28,12 +28,12 @@ export class UpdateContactPage {
     id : number;
 
     constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private wallet: WalletProvider, private toast: ToastProvider, private contact: ContactProvider, private loading: LoadingController, public translate: TranslateService, private alert: AlertProvider, private socialSharing:SocialSharing) {
-       this.owner = navParams.get('owner');
-       this.name = navParams.get('name');
-       this.address = navParams.get('address');
-       this.id = navParams.get('id');
+        this.owner = navParams.get('owner');
+        this.name = navParams.get('name');
+        this.address = navParams.get('address') || '';
+        this.id = navParams.get('id');
 
-       if (this.id) this.previousAddress = this.address.toUpperCase().replace('-', '');
+        if (this.id) this.previousAddress = this.address.toUpperCase().replace('-', '');
 
     }
 
@@ -81,20 +81,19 @@ export class UpdateContactPage {
      */
     public saveContact(){
         let _rawAddress = this.address.toUpperCase().replace('-', '');
-
-        if (!this.nem.isValidAddress(new Address(_rawAddress))){
-          this.alert.showAlertDoesNotBelongToNetwork();
+        try{
+            if (!this.nem.isValidAddress(new Address(_rawAddress))){
+                this.alert.showAlertDoesNotBelongToNetwork();
+            }
+            else{
+                if (this.id) this._updateContact(_rawAddress);
+                else this._createContact(_rawAddress);
+            }
         }
-        else{
-          if (this.id){
-              this._updateContact(_rawAddress);
-          }
-          else{
-             this._createContact(_rawAddress);
-          }
+        catch (err) {
+            this.alert.showAlertDoesNotBelongToNetwork();
         }
     }
-
 
     /**
      * moves to balance

@@ -8,7 +8,7 @@
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content padding id="transfer">
+<ion-content id="contact-update" padding >
     <div class="default-padding">
 
         <form (ngSubmit)="saveContact()">
@@ -26,7 +26,7 @@
                 <ion-input type="text" name="address" placeholder="" [(ngModel)]="address"></ion-input>
             </ion-item>
 
-            <div class="spacer" style="height:10px;"></div>
+            <div class="spacer"></div>
 
             <button ion-button color="positive" block  [disabled]="!name || !address">
                 <span *ngIf='id'> {{'UPDATE_CONTACT' | translate}}</span>
@@ -44,7 +44,7 @@
 
             <div class="col col-50">
                 <button ion-button  block color="positive"
-                         (click)="goToBalance()">
+                        (click)="goToBalance()">
                     {{'TRANSFER_BUTTON' | translate}}
                 </button>
             </div>

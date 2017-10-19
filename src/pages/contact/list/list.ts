@@ -26,17 +26,13 @@ export class ContactListPage {
     }
 
     ionViewWillEnter() {
-        this.wallet.getSelectedWallet().then(
-            value => {
-                if (!value) {
-                    this.navCtrl.setRoot(LoginPage);
-                }
-                else {
-                    this.selectedWallet = value;
-                    this._getContactsByOwner(value.address.plain());
-                }
+        this.wallet.getSelectedWallet().then(value => {
+            if (!value) this.navCtrl.setRoot(LoginPage);
+            else {
+                this.selectedWallet = value;
+                this._getContactsByOwner(value.address.plain());
             }
-        )
+        })
     }
 
 
@@ -64,19 +60,15 @@ export class ContactListPage {
     };
 
 
-     /**
+    /**
      * moves to update contact
      * @param id address
      * @param name name to edit
      * @param address address to edit
      */
     public goToUpdateContact(id?:number, name?:string, address?:string) {
-        if(id){
-            this.navCtrl.push(UpdateContactPage, {'id': id, 'owner': this.selectedWallet.address.plain(),'name': name, 'address': address});
-        }
-        else{
-            this.navCtrl.push(UpdateContactPage, {'id': null, 'owner': this.selectedWallet.address.plain(), 'name': null, 'address': null});
-        }
+        if(id) this.navCtrl.push(UpdateContactPage, {'id': id, 'owner': this.selectedWallet.address.plain(),'name': name, 'address': address});
+        else this.navCtrl.push(UpdateContactPage, {'id': null, 'owner': this.selectedWallet.address.plain(), 'name': null, 'address': null});
     };
 
 }

@@ -28,7 +28,6 @@ export class MyApp {
     constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, private network: Network, private alert: AlertProvider,  private contact: ContactProvider, private language: LanguageProvider, private sqlite: SQLite) {
         platform.ready().then(() => {
 
-
             network.onDisconnect().subscribe(() => {
                 this.alert.showOnPhoneDisconnected();
             });

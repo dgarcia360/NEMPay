@@ -29,21 +29,15 @@ export class BalancePage {
     }
 
     ionViewWillEnter() {
-        if (!this.addressToSendAssets){
-            this.menu.enable(true);
-        }
+        if (!this.addressToSendAssets) this.menu.enable(true);
 
-        this.wallet.getSelectedWallet().then(
-            wallet => {
-
-                if (!wallet) {
-                    this.navCtrl.setRoot(LoginPage);
-                }
-                else {
-                    this.selectedWallet = wallet;
-                    this.getBalance(false);
-                }
-            });
+        this.wallet.getSelectedWallet().then(wallet => {
+            if (!wallet) this.navCtrl.setRoot(LoginPage);
+            else {
+                this.selectedWallet = wallet;
+                this.getBalance(false);
+            }
+        });
     }
 
     /**
@@ -58,19 +52,14 @@ export class BalancePage {
 
             if (!refresher) loader.present();
 
-            this.nem.getBalance(this.selectedWallet.address).then(
-                balance => {
-                    this.balance = balance;
-                    if (this.balance.length > 0) {
-                        this.selectedMosaic = this.balance[0];
-                    }
-                    if (refresher) {
-                        refresher.complete();
-                    }
-                    else {
-                        loader.dismiss();
-                    }
-                });
+            this.nem.getBalance(this.selectedWallet.address).then(balance => {
+                this.balance = balance;
+                if (this.balance.length > 0) {
+                    this.selectedMosaic = this.balance[0];
+                }
+                if (refresher) refresher.complete();
+                else loader.dismiss();
+            });
         });
     }
 
@@ -84,9 +73,7 @@ export class BalancePage {
                 'address': this.addressToSendAssets
             });
         }
-        else{
-            this.alert.showMosaicNotTransferable();
-        }
+        else this.alert.showMosaicNotTransferable();
     }
 
    /**

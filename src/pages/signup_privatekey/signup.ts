@@ -71,22 +71,21 @@ export class SignupPrivateKeyPage {
                                     content: res['PLEASE_WAIT']
                                 });
 
-                                loader.present().then(
-                                    _ => {
-                                        if (data.password < 8) {
-                                            this.alert.showWeakPassword();
+                                loader.present().then(_ => {
+                                    if (data.password < 8) {
+                                        this.alert.showWeakPassword();
+                                        loader.dismiss();
+                                    }
+                                    else {
+                                        try {
+                                            this.newAccount.private_key = this.nem.decryptPrivateKey(data.password, walletInfo);
+                                            loader.dismiss();
+                                        } catch (err) {
+                                            this.alert.showInvalidPasswordAlert();
                                             loader.dismiss();
                                         }
-                                        else {
-                                            try {
-                                                this.newAccount.private_key = this.nem.decryptPrivateKey(data.password, walletInfo);
-                                                loader.dismiss();
-                                            } catch (err) {
-                                                this.alert.showInvalidPasswordAlert();
-                                                loader.dismiss();
-                                            }
-                                        }
-                                    });
+                                    }
+                                });
                             }
                         }
                     ]

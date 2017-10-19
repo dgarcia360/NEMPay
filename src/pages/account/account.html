@@ -8,35 +8,40 @@
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content padding id="account">
-<div  class="default-padding">
-    <form>
-        <div id="accountInfoQR"><img [src]="qrCode.src" style="height: 250px;margin: 0 auto;
-    display: block;
-    margin-top: 20px;"></div>
-        <h1 style="color:#000000;">
-            {{'YOUR_ADDRESS' | translate }}
-        </h1>
-    </form>
-    <div class="show-list-numbers-and-dots">
-        <p style="color:#000000;">
-            {{selectedWallet?.address.pretty()}}
-        </p>
-    </div>
-    <button ion-button color="positive" block on-click="shareAddress()">
-        {{'SHARE_ADDRESS' | translate }}
-    </button>
-    <div class="spacer" style="width:300px;height:40px;" id="account-spacer1"></div>
-    <div class="private-key">
-        <h2 >
-            {{'PRIVATE_KEY' | translate }}
-        </h2>
-        <div  class="show-list-numbers-and-dots">
-            <p style="color:#000000;">
+<ion-content id="account" padding >
+    <div  class="default-padding">
+
+        <!-- QR -->
+        <div id="accountInfoQR"><img [src]="qrCode.src"></div>
+
+        <!-- ADDRESS -->
+
+        <div id="address">
+            <h1 class="black-color">
+                {{'YOUR_ADDRESS' | translate }}
+            </h1>
+
+            <p class="black-color">
+                {{selectedWallet?.address.pretty()}}
+            </p>
+
+            <button ion-button color="positive" block on-click="shareAddress()">
+                {{'SHARE_ADDRESS' | translate }}
+            </button>
+        </div>
+
+        <div id="account-spacer1" class="spacer" ></div>
+
+        <!-- PRIVATE KEY -->
+
+        <div class="private-key">
+            <h2>
+                {{'PRIVATE_KEY' | translate }}
+            </h2>
+            <p class="black-color">
                 {{'PRIVATE_KEY_SUBTITLE' | translate }}
             </p>
-        </div>
-        <form id="private-key-form">
+
             <ion-list id="private-key-list">
                 <ion-item id="password-input" *ngIf='!common.privateKey'>
                     <ion-label>
@@ -46,7 +51,7 @@
                 </ion-item>
                 <p>
                     {{'PASSWORD_WARNING' | translate }}
-                   </p>
+                </p>
             </ion-list>
 
             <ion-row *ngIf='common.privateKey'>
@@ -54,8 +59,8 @@
                 </ion-col>
                 <ion-col col-4>
                     <button ion-button color="stable" block on-click="copyPrivateKeyToClipboard()">
-                    {{'COPY' | translate }}
-                </button>
+                        {{'COPY' | translate }}
+                    </button>
                 </ion-col>
             </ion-row>
 
@@ -68,14 +73,16 @@
                     *ngIf='common.privateKey'>
                 {{'HIDE_PRIVATE_KEY' | translate }}
             </button>
+        </div>
 
-        </form>
-    </div>
+        <div id="account-spacer2" class="spacer"></div>
+        <!-- LOGOUT  -->
 
-    <div class="spacer" style="width:300px;height:40px;" id="account-spacer2"></div>
+        <div id="logout">
 
-    <button id="account-button2" ion-button color="positive" block on-click="logout()">
-        {{'LOGOUT' | translate }}
-    </button>
+            <button ion-button color="positive" block on-click="logout()">
+                {{'LOGOUT' | translate }}
+            </button>
+        </div>
     </div>
 </ion-content>

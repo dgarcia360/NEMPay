@@ -1,56 +1,56 @@
 <ion-content padding id="signup-private-key">
     <div class="default-padding">
 
-    <ion-row>
-        <ion-col>
-            <span style="float:right" on-click="scanWalletQR()">
+        <ion-row>
+            <ion-col>
+            <span class="pull-right">
                 <ion-icon name="qr-scanner"></ion-icon> {{'SCAN_QR' | translate}}
             </span>
-        </ion-col>
-    </ion-row>
-    <form>
-        <ion-list>
-            <ion-item>
-                <ion-label>
-                    {{'WALLET_NAME' | translate}}
-                </ion-label>
-                <ion-input [(ngModel)]="newAccount.name" name="name" type="text" placeholder=""></ion-input>
-            </ion-item>
-            <ion-item type="text" [(ngModel)]="newAccount.private_key" name="private_key">
-                <ion-label>
-                    {{'PRIVATE_KEY' | translate}}
-                </ion-label>
-                <ion-input type="text" placeholder=""></ion-input>
-            </ion-item>
+            </ion-col>
+        </ion-row>
+        <form>
+            <ion-list>
+                <ion-item>
+                    <ion-label>
+                        {{'WALLET_NAME' | translate}}
+                    </ion-label>
+                    <ion-input [(ngModel)]="newAccount.name" name="name" type="text" placeholder=""></ion-input>
+                </ion-item>
+                <ion-item type="text" [(ngModel)]="newAccount.private_key" name="private_key">
+                    <ion-label>
+                        {{'PRIVATE_KEY' | translate}}
+                    </ion-label>
+                    <ion-input type="text" placeholder=""></ion-input>
+                </ion-item>
 
-            <ion-item>
-                <ion-label>
-                    {{'PASSWORD' | translate}}
-                </ion-label>
-                <ion-input type="password" [(ngModel)]="newAccount.password" name="password"></ion-input>
-            </ion-item>
+                <ion-item>
+                    <ion-label>
+                        {{'PASSWORD' | translate}}
+                    </ion-label>
+                    <ion-input type="password" [(ngModel)]="newAccount.password" name="password"></ion-input>
+                </ion-item>
 
-            <ion-item >
-                <ion-label>
-                    {{'REPEAT_PASSWORD' | translate}}
-                </ion-label>
-                <ion-input type="password" [(ngModel)]="newAccount.repeat_password"
-                           name="repeat_password"></ion-input>
-            </ion-item>
-        </ion-list>
-        <div class="spacer" style="height:10px;"></div>
+                <ion-item >
+                    <ion-label>
+                        {{'REPEAT_PASSWORD' | translate}}
+                    </ion-label>
+                    <ion-input type="password" [(ngModel)]="newAccount.repeat_password"
+                               name="repeat_password"></ion-input>
+                </ion-item>
+            </ion-list>
+            <div class="spacer xs"></div>
 
-        <div id="signup-markdown2" class="show-list-numbers-and-dots">
-            <p style="color:#000000;">
-                {{'PRIVATE_KEY_WALLET_WARNING' | translate}}
-            </p>
-        </div>
-        <div class="spacer" style="height:10px;" ></div>
+            <div>
+                <p class="black-color">
+                    {{'PRIVATE_KEY_WALLET_WARNING' | translate}}
+                </p>
+            </div>
+            <div class="spacer xs"></div>
 
-        <button ion-button color="stable" block on-click="createPrivateKeyWallet()"
-                [disabled]="!newAccount.password || !newAccount.repeat_password || !newAccount.name">
-            {{'IMPORT' | translate}}
-        </button>
-    </form>
+            <button ion-button color="stable" block on-click="createPrivateKeyWallet()"
+                    [disabled]="!newAccount.password || !newAccount.repeat_password || !newAccount.name">
+                {{'IMPORT' | translate}}
+            </button>
+        </form>
     </div>
 </ion-content>

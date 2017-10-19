@@ -24,14 +24,15 @@
                            name="repeat_password"></ion-input>
             </ion-item>
         </ion-list>
-        <div class="spacer" style="height:10px;"></div>
+        <div class="spacer xs"></div>
 
-        <div class="show-list-numbers-and-dots">
-            <p style="color:#000000;">
+        <div>
+            <p class="black-color">
                 {{'SIMPLE_WALLET_WARNING' | translate}}
             </p>
         </div>
-        <div class="spacer" style="height:10px;"></div>
+
+        <div class="spacer xs"></div>
 
         <button ion-button color="stable" block on-click="createSimpleWallet()"
                 [disabled]="!newAccount.password || !newAccount.repeat_password || !newAccount.name">
