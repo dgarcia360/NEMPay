@@ -36,7 +36,7 @@ export class TransferPage {
     constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private wallet: WalletProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, public translate: TranslateService) {
 
         this.amount = 0;
-        this.rawRecipient = navParams.get('address') || null;
+        this.rawRecipient = navParams.get('address') || '';
         this.selectedMosaic = <MosaicTransferable>navParams.get('selectedMosaic');
         this.fee = 0;
         this.isMosaicTransfer = false;
@@ -161,42 +161,41 @@ export class TransferPage {
                                     content: res['PLEASE_WAIT']
                                 });
 
-                                loader.present().then(
-                                    _ => {
-                                        if (this._canSendTransaction()) {
-                                            this._confirmTransaction().subscribe(value => {
-                                                loader.dismiss();
-                                                console.log("Transactions confirmed");
-                                                this.toast.showTransactionConfirmed();
-                                                this.navCtrl.push(BalancePage, {});
-                                                this._clearCommon();
-
-                                            }, error => {
-
-                                                if (error.toString() == 'FAILURE_INSUFFICIENT_BALANCE') {
-                                                    loader.dismiss();
-                                                    this.alert.showDoesNotHaveEnoughFunds();
-                                                }
-                                                else if (error.toString() == 'FAILURE_MESSAGE_TOO_LARGE') {
-                                                    loader.dismiss();
-                                                    this.alert.showMessageTooLarge();
-                                                }
-                                                else if(error.statusCode == 404){
-                                                    loader.dismiss();
-                                                    this.alert.showAlertDoesNotBelongToNetwork();
-                                                }
-                                                else {
-                                                    loader.dismiss();
-                                                    this.alert.showError(error);
-                                                }
-                                            });
-                                        }
-                                        else {
-                                            this._clearCommon();
+                                loader.present().then(_ => {
+                                    if (this._canSendTransaction()) {
+                                        this._confirmTransaction().subscribe(value => {
                                             loader.dismiss();
-                                            this.alert.showInvalidPasswordAlert();
-                                        }
-                                    });
+                                            console.log("Transactions confirmed");
+                                            this.toast.showTransactionConfirmed();
+                                            this.navCtrl.push(BalancePage, {});
+                                            this._clearCommon();
+
+                                        }, error => {
+                                            console.log(error);
+                                            if (error.toString().indexOf('FAILURE_INSUFFICIENT_BALANCE') >= 0) {
+                                                loader.dismiss();
+                                                this.alert.showDoesNotHaveEnoughFunds();
+                                            }
+                                            else if (error.toString().indexOf('FAILURE_MESSAGE_TOO_LARGE') >= 0) {
+                                                loader.dismiss();
+                                                this.alert.showMessageTooLarge();
+                                            }
+                                            else if (error.statusCode == 404) {
+                                                loader.dismiss();
+                                                this.alert.showAlertDoesNotBelongToNetwork();
+                                            }
+                                            else {
+                                                loader.dismiss();
+                                                this.alert.showError(error);
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        this._clearCommon();
+                                        loader.dismiss();
+                                        this.alert.showInvalidPasswordAlert();
+                                    }
+                                });
                             }
                         }
                     ]
@@ -234,13 +233,18 @@ export class TransferPage {
             this.mosaics = [new MosaicTransferable(this.selectedMosaic.mosaicId, this.selectedMosaic.properties, this.amount, this.selectedMosaic.levy)];
         }
 
-        let recipientAddress = new Address(this.rawRecipient.toUpperCase().replace('-', ''));
-
-        if (!this.nem.isValidAddress(recipientAddress)) this.alert.showAlertDoesNotBelongToNetwork();
-        else {
-            this.recipient = recipientAddress;
-            this._updateFees();
-            this._presentPrompt();
+        let recipientAddress;
+        try{
+            recipientAddress = new Address(this.rawRecipient.toUpperCase().replace('-', ''));
+            if (!this.nem.isValidAddress(recipientAddress)) this.alert.showAlertDoesNotBelongToNetwork();
+            else {
+                this.recipient = recipientAddress;
+                this._updateFees();
+                this._presentPrompt();
+            }
+        }
+        catch (err) {
+            this.alert.showAlertDoesNotBelongToNetwork();
         }
     }
 
