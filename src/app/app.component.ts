@@ -25,7 +25,7 @@ import {Network} from '@ionic-native/network';
 export class MyApp {
     @ViewChild(Nav) navCtrl: Nav;
     rootPage: any = LoginPage;
-    version: '';
+    version: string = "";
 
     constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, private network: Network, private alert: AlertProvider,  private contact: ContactProvider, private language: LanguageProvider, private sqlite: SQLite, private appVersion: AppVersion) {
         platform.ready().then(() => {
@@ -44,9 +44,10 @@ export class MyApp {
         // this.version = this.appVersion.getVersionNumber();
         if (this.platform.is('cordova')) {
             this.appVersion.getVersionNumber().then((v) => {
-                this.version = v;
+                this.version = "V. "+v;
             });
         }
+        else this.version = "Web Version";
     }
 
     goToBalance(params) {
@@ -69,7 +70,6 @@ export class MyApp {
         if (this.platform.is('cordova')) {
          this.navCtrl.setRoot(ContactListPage);
 
-            
         }else {
             this.alert.showFunctionallityOnlyAvailableInMobileDevices();
         }
