@@ -6,21 +6,21 @@
   "CONFIRM": "承認",
   "CANCEL": "キャンセル",
   "OK": "OK",
-  "COPY": "Copy",
+  "COPY": "コピー",
   "ACCOUNT": "アカウント",
   "YOUR_ADDRESS": "あなたのアドレス",
   "SHARE_ADDRESS": "アドレスのシェア",
   "PRIVATE_KEY": "秘密鍵",
   "PRIVATE_KEY_SUBTITLE": "秘密鍵を表示するために、パスワードまたはパスフレーズを入力します。",
   "PASSWORD_WARNING" : "秘密鍵は全ての権限を持っています。オフラインで安全な場所に保管されている事を必ず確認してください。",
-  "IVE_COPIED_IT_MANUALLY": "I've copied it manually",
-  "COPY_TO_CLIPBOARD": "Copy to clipboard",
+  "IVE_COPIED_IT_MANUALLY": "手動でコピーしました",
+  "COPY_TO_CLIPBOARD": "クリップボードにコピー",
   "SHOW_PRIVATE_KEY": "秘密鍵の表示",
   "HIDE_PRIVATE_KEY": "秘密鍵を隠す",
 
   "BALANCE": "数量",
   "TRANSFER_BUTTON": "送信",
-  "RECEIVE_BUTTON": "Receive",
+  "RECEIVE_BUTTON": "受信",
 
   "PASSWORD": "パスワード",
   "CREATE_OR_IMPORT_AN_ACCOUNT": "アカウントの作成またはインポート",
@@ -44,15 +44,15 @@
   "CONFIRMED_TRANSACTIONS": "承認済みのトランザクション",
   "PENDING_TRANSACTIONS": "未承認のトランザクション",
   "NOTHING_TO_SHOW": "何も表示しない",
-  "REMOTE_ACCOUNT": "Remote Account",
-  "NAMESPACE": "Namespace",
+  "REMOTE_ACCOUNT": "リモートアカウント",
+  "NAMESPACE": "ネームスペース",
   "SUBNAMESPACE_OF": "Subnamespace of",
-  "MOSAIC_CREATED": "Mosaic Created",
+  "MOSAIC_CREATED": "モザイクを作成しました",
   "SUPPLY_INCREASE": "Supply Increased",
   "SUPPLY_DECREASED": "Supply Decreased",
-  "MOSAICS": "Mosaics",
-  "ENCRYPTED": "Encrypted",
-  "MULTISIG_AGGREGATE_MODIFICATION": "Multisig Aggregate Modification",
+  "MOSAICS": "モザイク",
+  "ENCRYPTED": "暗号化されています",
+  "MULTISIG_AGGREGATE_MODIFICATION": "マルチシグアグリゲートモディフィケーション",
 
   "TRANSFER": "送信",
   "FROM": "送り主",
@@ -62,7 +62,7 @@
   "LEVY": "徴収料",
   "DATE": "日付",
 
-  "RECEIVE": "Receive",
+  "RECEIVE": "受信",
 
 
   "ADDRESS": "アドレス",
@@ -75,13 +75,13 @@
   "CONFIRM_TRANSACTION": "トランザクションの確認",
 
 
-  "CONTACT_LIST": "Address Book",
-  "NAME": "Name",
-  "CONTACT_ADDRESS": "Contact Address",
-  "UPDATE_CONTACT": "Update Contact",
-  "ADD_CONTACT": "Add Contact",
-  "CONTACT_UPDATED": "Contact Updated",
-  "CONTACT_CREATED": "Contact Created",
+  "CONTACT_LIST": "アドレスブック",
+  "NAME": "名前",
+  "CONTACT_ADDRESS": "連絡先アドレス",
+  "UPDATE_CONTACT": "連絡先を更新",
+  "ADD_CONTACT": "連絡先を追加",
+  "CONTACT_UPDATED": "連絡先を更新しました",
+  "CONTACT_CREATED": "連絡先を作成しました",
 
   "ALERT_NOT_WALLET_SELECTED": "ウォレットが選択されていません",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "パスワードが間違っています",
@@ -93,14 +93,14 @@
   "ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE": "メッセージが長すぎます",
   "ALERT_MOSAIC_IS_NOT_TRANSFERABLE": "送信できないモザイクを選択しています",
   "ALERT_INVALID_PRIVATE_KEY": "秘密鍵が間違っています",
-  "ALERT_ADDRESS_COPIED": "トランザクションアドレスがコピーされました",
-  "ALERT_PRIVATE_KEY_COPIED": "Private Key has been copied",
+  "ALERT_ADDRESS_COPIED": "アドレスがコピーされました",
+  "ALERT_PRIVATE_KEY_COPIED": "秘密鍵をコピーしました",
   "ALERT_WEAK_PASSWORD": "パスワードは8文字以上入力してください", 
   "ALERT_SUBTITLE_ONLY_TESTNET": "このソフトウェアはテストネットのみ動作します",
   "ALERT_PHONE_DISCONNECTED": "あなたのスマートフォンはインターネットへ繋がっていません",
   "ALERT_SUBTITLE_PHONE_DISCONNECTED": "インターネットへの接続を確認しアプリを再度起動してください",
-  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
-  "NOTHING_TO_SHOW": "Nothing to show"
+  "ALERT_ONLY_MOBILE_DEVICE": "この機能はモバイルデバイスでのみ利用可能です",
+  "NOTHING_TO_SHOW": "表示するものがありません"
 
 
 }
