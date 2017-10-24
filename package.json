@@ -20,7 +20,7 @@
         "@angular/http": "4.1.3",
         "@angular/platform-browser": "4.1.3",
         "@angular/platform-browser-dynamic": "4.1.3",
-        "@ionic-native/app-version": "^4.1.0",
+        "@ionic-native/app-version": "^4.3.2",
         "@ionic-native/barcode-scanner": "^3.12.1",
         "@ionic-native/clipboard": "^3.14.0",
         "@ionic-native/core": "3.10.2",

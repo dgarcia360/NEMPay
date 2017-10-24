@@ -11,7 +11,6 @@
             <button  ion-item color="none" menuClose="" on-click="goToBalance()" id="menu-list-item1">
                 {{"BALANCE" | translate}}
             </button>
-            
             <button ion-item color="none" menuClose="" on-click="goToContactList()" id="menu-list-item3">
                 {{"CONTACT_LIST" | translate}}
             </button>
@@ -23,6 +22,13 @@
             </button>
         </ion-list>
     </ion-content>
+    <ion-footer>
+        <ion-toolbar color="light">
+            <ion-title class="text-center">
+              <span [innerHTML]="version"></span>
+            </ion-title>
+        </ion-toolbar>
+    </ion-footer>
 </ion-menu>
 
 <ion-nav #mainContent [root]="rootPage"></ion-nav>
