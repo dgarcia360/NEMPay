@@ -4,6 +4,7 @@ import {Platform, Nav} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { AppVersion } from '@ionic-native/app-version';
 
 import {ContactProvider} from '../providers/contact/contact.provider';
 import {AlertProvider} from '../providers/alert/alert.provider';
@@ -24,8 +25,9 @@ import {Network} from '@ionic-native/network';
 export class MyApp {
     @ViewChild(Nav) navCtrl: Nav;
     rootPage: any = LoginPage;
+    version: string = "";
 
-    constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, private network: Network, private alert: AlertProvider,  private contact: ContactProvider, private language: LanguageProvider, private sqlite: SQLite) {
+    constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, private network: Network, private alert: AlertProvider,  private contact: ContactProvider, private language: LanguageProvider, private sqlite: SQLite, private appVersion: AppVersion) {
         platform.ready().then(() => {
 
             network.onDisconnect().subscribe(() => {
@@ -38,6 +40,14 @@ export class MyApp {
             //ionic default
             statusBar.styleDefault();
         });
+
+        // this.version = this.appVersion.getVersionNumber();
+        if (this.platform.is('cordova')) {
+            this.appVersion.getVersionNumber().then((v) => {
+                this.version = "V. "+v;
+            });
+        }
+        else this.version = "Web Version";
     }
 
     goToBalance(params) {
@@ -57,9 +67,10 @@ export class MyApp {
 
     goToContactList(params) {
         if (!params) params = {};
-        if (this.platform.is('cordova')) this.navCtrl.setRoot(ContactListPage);
+        if (this.platform.is('cordova')) {
+         this.navCtrl.setRoot(ContactListPage);
 
-        else {
+        }else {
             this.alert.showFunctionallityOnlyAvailableInMobileDevices();
         }
     }
