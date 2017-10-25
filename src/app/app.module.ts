@@ -9,6 +9,7 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {Clipboard} from '@ionic-native/clipboard';
 import {Keyboard} from '@ionic-native/keyboard';
 import { SQLite } from '@ionic-native/sqlite';
+import { AppVersion } from '@ionic-native/app-version';
 
 import {SocialSharing} from '@ionic-native/social-sharing';
 import {Network} from '@ionic-native/network';
@@ -128,6 +129,7 @@ export function createTranslateLoader(http: Http) {
         BarcodeScanner,
         Globalization,
         SQLite,
+        AppVersion,
         NemProvider,
         WalletProvider,
         AlertProvider,
