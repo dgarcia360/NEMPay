@@ -13,8 +13,8 @@
   "PRIVATE_KEY": "Clau Privada",
   "PRIVATE_KEY_SUBTITLE": "Per a veure la seva clau privada, introdueixi la seva contrasenya.",
   "PASSWORD_WARNING" : "Amb la seva clau privada es pot realitzar qualsevol operació en el seu compte. És una prioritat assegurar-se que s'ha guardat en algun lloc fora de línia de forma segura.",
-  "IVE_COPIED_IT_MANUALLY": "I've copied it manually",
-  "COPY_TO_CLIPBOARD": "Copy to clipboard",
+  "IVE_COPIED_IT_MANUALLY": "L'he copiada manualment",
+  "COPY_TO_CLIPBOARD": "Copiar al porta-retalls",
   "SHOW_PRIVATE_KEY": "Mostrar la Clau Privada",
   "HIDE_PRIVATE_KEY": "Ocultar la Clau Privada",
 
@@ -39,21 +39,21 @@
   "PRIVATE_KEY_WALLET_WARNING": "Les carteres de clau privada utilitzen només una contrasenya per encriptar la clau privada. Per això, és crucial utilitzar una contrasenya SEGURA.",
 
 
-  "IMPORT_ACCOUNT_QR_WARNING": "Per utilitzar l'escàner QR, has d'utilitzar la mateixa contrasenya que a la vostra actual",
+  "IMPORT_ACCOUNT_QR_WARNING": "Per utilitzar l'escàner QR, has d'utilitzar la mateixa contrasenya que al vostre compte actual",
 
   "TRANSACTIONS": "Transaccions",
   "CONFIRMED_TRANSACTIONS": "Transaccions Confirmades",
   "PENDING_TRANSACTIONS": "Transaccions Pendents",
   "NOTHING_TO_SHOW": "Res per mostrar",
-  "REMOTE_ACCOUNT": "Remote Account",
-  "NAMESPACE": "Namespace",
-  "SUBNAMESPACE_OF": "Subnamespace of",
-  "MOSAIC_CREATED": "Mosaic Created",
-  "SUPPLY_INCREASE": "Supply Increased",
-  "SUPPLY_DECREASED": "Supply Decreased",
+  "REMOTE_ACCOUNT": "Compte remot",
+  "NAMESPACE": "Espai de noms",
+  "SUBNAMESPACE_OF": "Subespai de noms de",
+  "MOSAIC_CREATED": "Mosaic Creat",
+  "SUPPLY_INCREASE": "Subministrament incrementat",
+  "SUPPLY_DECREASED": "Submnistrament decrementat",
   "MOSAICS": "Mosaics",
-  "ENCRYPTED": "Encrypted",
-  "MULTISIG_AGGREGATE_MODIFICATION": "Multisig Aggregate Modification",
+  "ENCRYPTED": "Encriptat",
+  "MULTISIG_AGGREGATE_MODIFICATION": "Modificació agregada multisigna",
   "TRANSFER": "Enviar",
   "FROM": "De",
   "TO": "A",
@@ -73,13 +73,13 @@
   "YOU_ARE_GOING_TO_SEND": "Enviaràs",
   "CONFIRM_TRANSACTION": "Confirmar Transacció",
 
-  "CONTACT_LIST": "Address Book",
-  "NAME": "Name",
-  "CONTACT_ADDRESS": "Contact Address",
-  "UPDATE_CONTACT": "Update Contact",
-  "ADD_CONTACT": "Add Contact",
-  "CONTACT_UPDATED": "Contact Updated",
-  "CONTACT_CREATED": "Contact Created",
+  "CONTACT_LIST": "Llista de contactes",
+  "NAME": "Nom",
+  "CONTACT_ADDRESS": "Adreça de Contacte",
+  "UPDATE_CONTACT": "Actualitzar Contacte",
+  "ADD_CONTACT": "Afegir Contacte",
+  "CONTACT_UPDATED": "Contact Actualitzat",
+  "CONTACT_CREATED": "Contact Creat",
 
   "ALERT_NOT_WALLET_SELECTED": "Compte no seleccionat",
   "ALERT_PROVIDED_PASSWORD_INVALID" : "La contrasenya introduïda és invàlida",
@@ -97,7 +97,7 @@
   "ALERT_SUBTITLE_ONLY_TESTNET": "Recordi que en aquest moment només funciona a la Testnet",
   "ALERT_PHONE_DISCONNECTED": "El seu telèfon està desconnectat d'Internet",
   "ALERT_SUBTITLE_PHONE_DISCONNECTED": "Torneu a obrir l'aplicació una vegada tingueu connexió a Internet",
-  "ALERT_ONLY_MOBILE_DEVICE": "This functionallity it is only available in mobile devices",
+  "ALERT_ONLY_MOBILE_DEVICE": "Aquesta funcionalitat nomès està disponible per a dispositius mòbils",
 
-  "NOTHING_TO_SHOW": "Nothing to show"
+  "NOTHING_TO_SHOW": "Res per mostrar"
 }
