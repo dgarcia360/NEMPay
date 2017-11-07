@@ -2,46 +2,46 @@
 </ion-header>
 <ion-content id="login" padding>
     <div class="default-padding">
-    <div class="text-center">
+        <div class="text-center">
+            <div class="spacer m"></div>
+            <h1 [innerHTML]="'APP_TITLE' | translate"></h1>
+        </div>
         <div class="spacer m"></div>
-        <h1 [innerHTML]="'APP_TITLE' | translate"></h1>
-    </div>
-    <div class="spacer m"></div>
-    <ion-list>
-
-        <ion-item>
-            <ion-label>
-                {{'ACCOUNT' | translate}}
-            </ion-label>
-
-            <ion-select [(ngModel)]="selectedWallet" [compareWith]="compareFn" name="selected_wallet">
-                <ion-option *ngFor="let selectedWallet of wallets" [value]="selectedWallet">{{selectedWallet.name}}
-                </ion-option>
-            </ion-select>
-        </ion-item>
-    </ion-list>
-
-    <form (ngSubmit)="login()">
         <ion-list>
 
             <ion-item>
                 <ion-label>
-                    {{'PASSWORD' | translate}}
+                    {{'ACCOUNT' | translate}}
                 </ion-label>
-                <ion-input [(ngModel)]="common.password" type="password" name="password" placeholder=""></ion-input>
+
+                <ion-select [(ngModel)]="selectedWallet" [compareWith]="compareFn" name="selected_wallet" [disabled]="wallets.length == 0">
+                    <ion-option *ngFor="let selectedWallet of wallets" [value]="selectedWallet">{{selectedWallet.name}}
+                    </ion-option>
+                </ion-select>
             </ion-item>
         </ion-list>
-        <div class="spacer xs"></div>
-        <button ion-button color="positive" block type="submit"
-                [disabled]="!selectedWallet">
-            {{'LOGIN' | translate}}
+
+        <form (ngSubmit)="login()">
+            <ion-list>
+
+                <ion-item>
+                    <ion-label>
+                        {{'PASSWORD' | translate}}
+                    </ion-label>
+                    <ion-input [(ngModel)]="common.password" type="password" name="password" placeholder="" [disabled]="wallets.length == 0"></ion-input>
+                </ion-item>
+            </ion-list>
+            <div class="spacer xs"></div>
+            <button ion-button color="positive" block type="submit"
+                    [disabled]="!selectedWallet">
+                {{'LOGIN' | translate}}
+            </button>
+        </form>
+        <div class="spacer s"></div>
+        <button ion-button clear color="positive" block on-click="goToSignup()">
+            {{'CREATE_OR_IMPORT_AN_ACCOUNT' | translate}}
         </button>
-    </form>
-    <div class="spacer s"></div>
-    <button ion-button clear color="positive" block on-click="goToSignup()">
-        {{'CREATE_OR_IMPORT_AN_ACCOUNT' | translate}}
-    </button>
-</div>
+    </div>
 </ion-content>
 
 <img src="assets/img/waves.png" class="waves"/>
