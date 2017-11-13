@@ -27,7 +27,7 @@ export class NemProvider {
     mosaicHttp: MosaicHttp;
     transactionHttp: TransactionHttp;
     qrService: QRService;
-    accountOwnedMosaicsSerivce: AccountOwnedMosaicsService
+    accountOwnedMosaicsService: AccountOwnedMosaicsService;
 
     constructor(private storage: Storage) {
         NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
@@ -35,7 +35,7 @@ export class NemProvider {
         this.mosaicHttp = new MosaicHttp();
         this.transactionHttp = new TransactionHttp();
         this.qrService = new QRService();
-        this.accountOwnedMosaicsSerivce = new AccountOwnedMosaicsService(this.accountHttp, this.mosaicHttp);
+        this.accountOwnedMosaicsService = new AccountOwnedMosaicsService(this.accountHttp, this.mosaicHttp);
     }
 
     /**
@@ -119,7 +119,7 @@ export class NemProvider {
      * @return Promise with mosaics information
      */
     public getBalance(address: Address): Promise<MosaicTransferable[]> {
-        return this.accountOwnedMosaicsSerivce.fromAddress(address).toPromise();
+        return this.accountOwnedMosaicsService.fromAddress(address).toPromise();
     }
 
     /**
