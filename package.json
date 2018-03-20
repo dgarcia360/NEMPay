@@ -56,7 +56,7 @@
         "js-joda": "^1.5.4",
         "kjua": "^0.1.2",
         "marked": "^0.3.12",
-        "nem-library": "^0.8.2",
+        "nem-library": "0.8.2",
         "phonegap-plugin-barcodescanner": "^6.0.6",
         "rxjs": "5.4.0",
         "sw-toolbox": "3.6.0",
