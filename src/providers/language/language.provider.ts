@@ -18,7 +18,7 @@ export class LanguageProvider {
     availableLanguages: string[];
     defaultLanguage: string;
     constructor(private translateService: TranslateService, private platform: Platform, private globalization: Globalization) {
-        this.availableLanguages = ['en', 'es','ca', 'ko', 'ru', 'pl', 'ja', 'de'];
+        this.availableLanguages = ['en', 'es','ca', 'ko', 'ru', 'pl', 'ja', 'de','cmn-Hans-CN'];
         this.defaultLanguage = 'en';
     }
 
