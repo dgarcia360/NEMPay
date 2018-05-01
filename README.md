@@ -43,6 +43,7 @@ See [CONTRIBUTING.md](https://github.com/dgarcia360/NEMPay/blob/master/CONTRIBUT
 | [mizunashi](https://github.com/mizunashi) | Quality assurance & Japanese Translation|
 | [acastellana](https://github.com/acastellana ) | Quality assurance |
 | [jabo38](https://twitter.com/thejabo38) | Quality assurance |
+| [AnthonyLaw](https://github.com/AnthonyLaw) | Chinese Translation |
 | [cyrus1683](https://github.com/cyrus1683) | German Translation |
 | [shenrgc](https://github.com/shenrgc) | Spanish & Catalan Translation |
 | [tongokongo](https://github.com/tongokongo) | Polish Translation |
