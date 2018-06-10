@@ -16,9 +16,6 @@ export class MultisigAggregateModificationTransactionComponent {
 
     constructor(private nem: NemProvider) {
     }
-
-    ngOnInit(){
-
-    }
-
 }
+
+

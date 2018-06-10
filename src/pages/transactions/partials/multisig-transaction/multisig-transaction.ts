@@ -6,7 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import {NemProvider} from '../../../../providers/nem/nem.provider';
 import {WalletProvider} from '../../../../providers/wallet/wallet.provider'
 
-import {Address, TransferTransaction} from "nem-library";
+import {Address, CosignatoryModification, Mosaic, MosaicTransferable, TransferTransaction} from "nem-library";
 @Component({
     selector: 'multisig-transaction',
     templateUrl: 'multisig-transaction.html'
@@ -15,19 +15,40 @@ import {Address, TransferTransaction} from "nem-library";
 export class MultisigTransactionComponent {
     @Input() tx: any;
 
-    hasLevy:boolean;
     owner: Address;
+    amount: number;
+    mosaics: MosaicTransferable[];
+    hasLevy:boolean;
+    modifications: CosignatoryModification[];
 
-    constructor(private nem: NemProvider, private wallet: WalletProvider) {
-        this.hasLevy = false;
+    private _getAmount(){
+
+        try {
+            this.amount = (<TransferTransaction>this.tx.otherTransaction).xem().amount;
+        }
+        catch(e) {
+            this.amount = 0;
+        }
     }
 
-    private _populateMosaicsWithDefinitionData(){
-        if ((<TransferTransaction>this.tx.otherTransaction).mosaics) {
-            this.nem.addDefinitionToMosaics(this.tx.otherTransaction.mosaics).subscribe(mosaics => {
-                this.tx.otherTransaction.mosaics = mosaics;
-                this.hasLevy = this.nem.transactionHasAtLeastOneMosaicWithLevy(mosaics);
+    private _getMosaics(){
+        try {
+            this.nem.getMosaicsDefinition((<TransferTransaction>this.tx.otherTransaction).mosaics()).subscribe(mosaics => {
+                this.mosaics = mosaics;
+                this.hasLevy =  this.mosaics.filter(mosaic => mosaic.levy).length ? true : false;
             });
+        }
+        catch(e) {
+            this.mosaics = [];
+        }
+    }
+
+    private _getCosignatoryModification(){
+        try {
+            this.modifications = this.tx.otherTransaction.modifications;
+        }
+        catch(e) {
+            this.modifications = [];
         }
     }
 
@@ -37,9 +58,17 @@ export class MultisigTransactionComponent {
         })
     }
 
+    constructor(private nem: NemProvider, private wallet: WalletProvider) {
+        this.amount = 0;
+        this.mosaics = [];
+        this.hasLevy = false;
+    }
+
     ngOnInit() {
-        this._populateMosaicsWithDefinitionData();
+        this._getMosaics();
         this._setOwner();
+        this._getAmount();
+        this._getCosignatoryModification();
     }
 
 

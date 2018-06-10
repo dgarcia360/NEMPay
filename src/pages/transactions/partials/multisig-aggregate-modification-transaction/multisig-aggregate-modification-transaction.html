@@ -4,10 +4,21 @@
 </p>
 
 <!-- Fee -->
-<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{(tx.fee) /1000000}} xem</p>
+<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{(tx.fee) /1000000}} nem:xem</p>
 
 
 <!-- Message -->
 <p>
     <b>{{ 'MULTISIG_AGGREGATE_MODIFICATION' | translate}}</b>
+</p>
+
+<!-- Has modifications -->
+<p *ngFor="let modification of tx.modifications;" class="fit-long-address">
+        <span *ngIf="modification.action === 1">
+            Add
+        </span>
+    <span *ngIf="modification.action === 2">
+            Remove
+        </span>
+    <span>{{modification.cosignatoryAccount.address.pretty()}}</span>
 </p>

@@ -1,14 +1,14 @@
 <h2>
-    <span *ngIf='tx.amount != 0 && !tx.mosaics'>
+    <span [hidden]="!mosaics || amount == 0">
         <span class="color-plus" *ngIf="owner?.plain() == tx?.recipient.plain()">
             +
         </span>
         <span class="color-less" *ngIf="owner?.plain() != tx?.recipient.plain()">
             -
         </span>
-        {{tx.amount/1000000}} xem
+        {{amount}} nem:xem
     </span>
-    <span *ngFor="let mos of tx.mosaics">
+    <span *ngFor="let mosaic of mosaics">
 
         <span class="color-plus" *ngIf="owner?.plain() == tx?.recipient.plain()">
             +
@@ -16,7 +16,7 @@
         <span class="color-less" *ngIf="owner?.plain() != tx?.recipient.plain()">
             -
         </span>
-        {{ mos.amount?.toString() }} {{mos.mosaicId.name}}
+        {{ mosaic.amount?.toString() }} {{mosaic.mosaicId.toString()}}
     </span>
 </h2>
 
@@ -35,16 +35,16 @@
 </p>
 
 <!-- Fee -->
-<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{tx.fee/1000000}} xem</p>
+<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{tx.fee/1000000}} nem:xem</p>
 
 <!-- Has levy -->
 <p>
     <span *ngIf='hasLevy'>
             <b>{{'LEVY' | translate}}</b>:
     </span>
-    <span *ngFor="let mos of tx.mosaics;">
-        <span *ngIf="mos.levy?.mosaicId">
-            {{mos | formatLevy:(mos) | async}} {{mos.levy.mosaicId.name}}
+    <span *ngFor="let mosaic of mosaics;">
+        <span *ngIf="mosaic.levy?.mosaicId">
+            {{mosaic | formatLevy:(mosaic) | async}} {{mosaic.levy.mosaicId.toString()}}
         </span>
     </span>
 </p>

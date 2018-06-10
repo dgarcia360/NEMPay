@@ -155,7 +155,7 @@ export class AccountPage {
 
     /**
      * Clears data and moves to login screen
-     * @param transaction  transaction object
+     * @param transaction transaction object
      */
     public logout(){
         this.wallet.unsetSelectedWallet();

@@ -190,7 +190,7 @@ export class NemProvider {
      * @param mosaics array of mosaics
      * @return Promise with altered transaction
      */
-    public addDefinitionToMosaics(mosaics: Mosaic[]): Observable<MosaicTransferable[]> {
+    public getMosaicsDefinition(mosaics: Mosaic[]): Observable<MosaicTransferable[]> {
         return Observable.from(mosaics)
         .flatMap((mosaic: Mosaic) => {
             if (XEM.MOSAICID.equals(mosaic.mosaicId)) return Observable.of(new XEM(mosaic.quantity / Math.pow(10, XEM.DIVISIBILITY)));
@@ -202,22 +202,6 @@ export class NemProvider {
           })
           .toArray();
     }
-
-
-    /**
-     * Returns if transaction has at least one mosaic with levy
-     * @param mosaics array of mosaics
-     * @return Boolean indicating the result
-     */
-
-    public transactionHasAtLeastOneMosaicWithLevy(mosaics: MosaicTransferable[]): boolean{
-        let hasLevy = false;
-        mosaics.filter(mosaic => {
-            if (mosaic.levy) hasLevy = true; 
-        });
-        return hasLevy;
-    }
-
 
     /**
      * Get all confirmed transactions of an account

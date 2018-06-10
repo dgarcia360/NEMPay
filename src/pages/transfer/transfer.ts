@@ -108,14 +108,14 @@ export class TransferPage {
         var subtitle = res['YOU_ARE_GOING_TO_SEND'] + ' <br/><br/> ';
         var currency = '';
         if (XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
-            currency = "<b>" + res['AMOUNT'] + ":</b> " + this.amount + " xem";
+            currency = "<b>" + res['AMOUNT'] + ":</b> " + this.amount + " nem:xem";
         }
         else {
             currency = "<b>" + res['AMOUNT'] + "</b> " + this.amount + " " + this.selectedMosaic.mosaicId.description();
         }
         subtitle += currency;
         var _fee = this.fee / 1000000;
-        subtitle += '<br/><br/>  <b>' + res['FEE'] + ':</b> ' + _fee + ' xem';
+        subtitle += '<br/><br/>  <b>' + res['FEE'] + ':</b> ' + _fee + ' nem:xem';
 
         if (this.selectedMosaic.levy != undefined && 'mosaicId' in this.selectedMosaic.levy) {
             var _levy = 0;

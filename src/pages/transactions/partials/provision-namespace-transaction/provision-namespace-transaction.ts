@@ -15,9 +15,4 @@ export class ProvisionNamespaceTransactionComponent {
 
     constructor(private nem: NemProvider) {
     }
-
-    ngOnInit() {
-
-    }
-
 }

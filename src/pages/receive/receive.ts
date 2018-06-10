@@ -70,7 +70,6 @@ export class ReceivePage {
     public updateQR() {
         let infoQR = this.nem.generateInvoiceQRText(this.selectedWallet.address, this.amount, this.message);
         this._encodeQrCode(infoQR);
-
     }
 
 

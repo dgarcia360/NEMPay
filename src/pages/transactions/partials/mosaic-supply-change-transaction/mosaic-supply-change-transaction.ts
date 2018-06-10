@@ -17,8 +17,4 @@ export class MosaicSupplyChangeTransactionComponent {
     constructor(private nem: NemProvider) {
     }
 
-    ngOnInit(){
-
-    }
-
 }

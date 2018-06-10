@@ -1,29 +1,29 @@
 <h2>
-    <span *ngIf='tx.otherTransaction.amount != 0 && !tx.otherTransaction.mosaics'>
-        <span class="color-plus" *ngIf="owner?.plain() == tx?.otherTransaction.recipient.plain()">
+    <span [hidden]="!mosaics || amount === 0">
+        <span class="color-plus" *ngIf="owner?.plain() == tx?.otherTransaction.recipient?.plain()">
             +
         </span>
-        <span class="color-less" *ngIf="owner?.plain() != tx?.otherTransaction.recipient.plain()">
+        <span class="color-less" *ngIf="owner?.plain() != tx?.otherTransaction.recipient?.plain()">
             -
         </span>
-        {{tx.amount/1000000}} xem
+        {{amount}} nem:xem
     </span>
-    <span *ngFor="let mos of tx.otherTransaction.mosaics">
-        <span class="color-plus" *ngIf="owner?.plain() == tx?.otherTransaction.recipient.plain()">
+    <span *ngFor="let mosaic of mosaics">
+        <span class="color-plus" *ngIf="owner?.plain() == tx?.otherTransaction.recipient?.plain()">
             +
         </span>
-        <span class="color-less" *ngIf="owner?.plain() != tx?.otherTransaction.recipient.plain()">
+        <span class="color-less" *ngIf="owner?.plain() != tx?.otherTransaction.recipient?.plain()">
             -
         </span>
-        {{ mos.amount?.toString() }} {{mos.mosaicId.name}}
+        {{ mosaic.amount?.toString() }} {{mosaic.mosaicId.toString()}}
     </span>
 </h2>
 
 <!-- Sender or recipient -->
 <p class="fit-long-address">
     <b>
-        <span *ngIf="owner?.plain() == tx?.otherTransaction.recipient.plain()">{{'FROM' | translate}}</span>
-        <span *ngIf="owner?.plain() != tx?.otherTransaction.recipient.plain()">{{'TO' | translate}}</span>:
+        <span *ngIf="owner?.plain() == tx?.otherTransaction.recipient?.plain()">{{'FROM' | translate}}</span>
+        <span *ngIf="owner?.plain() != tx?.otherTransaction.recipient?.plain()">{{'TO' | translate}}</span>:
     </b>
     {{ tx.signer.address.plain() | searchContact:owner?.plain() | async}}
 </p>
@@ -35,23 +35,39 @@
 
 <!-- Fee -->
 
-<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{(tx.fee+tx.otherTransaction.fee) /1000000}} xem</p>
+<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{(tx.fee+tx.otherTransaction.fee) /1000000}} nem:xem</p>
 
 <!-- Has levy -->
 <p>
     <span *ngIf='hasLevy'>
             <b>{{'LEVY' | translate}}</b>:
     </span>
-    <span *ngFor="let mos of tx.otherTransaction.mosaics;">
-        <span *ngIf="mos.levy?.mosaicId">
-            {{mos | formatLevy:(mos) | async}} {{mos.levy.mosaicId.name}}
+    <span *ngFor="let mosaic of mosaics;">
+        <span *ngIf="mosaic.levy?.mosaicId">
+            {{mosaic | formatLevy:(mosaic) | async}} {{mosaic.levy.mosaicId.toString()}}
         </span>
     </span>
 </p>
 
+<!-- Has modifications -->
+<p>
+    <span *ngIf='modifications'>
+            <b>{{'Modifications' | translate}}</b>:
+    </span>
+</p>
+    <p *ngFor="let modification of modifications;" class="fit-long-address">
+        <span *ngIf="modification.action === 1">
+            Add
+        </span>
+        <span *ngIf="modification.action === 2">
+            Remove
+        </span>
+        <span>{{modification.cosignatoryAccount.address.pretty()}}</span>
+    </p>
+
 <!-- Message -->
 <p *ngIf="tx.otherTransaction.message">
-    <span *ngIf="!tx.otherTransaction.message.isEncrypted() && tx.otherTransaction.message.plain().length > 0">
+    <<span *ngIf="!tx.otherTransaction.message.isEncrypted() && tx.otherTransaction.message.plain().length > 0">
         <b> {{'MESSAGE' | translate}}:</b> {{tx.otherTransaction.message.plain()}}
     </span>
     <span *ngIf="tx.otherTransaction.message.isEncrypted()">

@@ -15,10 +15,6 @@ export class ImportanceTransferTransactionComponent {
 
 
     constructor(private nem: NemProvider) {
-    }
-
-    ngOnInit(){
 
     }
-
 }

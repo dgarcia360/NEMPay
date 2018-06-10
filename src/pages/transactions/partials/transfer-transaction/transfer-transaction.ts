@@ -6,7 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import {NemProvider} from '../../../../providers/nem/nem.provider';
 import {WalletProvider} from '../../../../providers/wallet/wallet.provider'
 
-import {Address} from "nem-library";
+import {Address, MosaicTransferable} from "nem-library";
 @Component({
     selector: 'transfer-transaction',
     templateUrl: 'transfer-transaction.html'
@@ -15,19 +15,31 @@ import {Address} from "nem-library";
 export class TransferTransactionComponent {
     @Input() tx: any;
 
-    hasLevy:boolean;
     owner: Address;
+    amount: number;
+    mosaics: MosaicTransferable[];
+    hasLevy:boolean;
 
-    constructor(private nem: NemProvider, private wallet: WalletProvider) {
-        this.hasLevy = false;
+
+    private _getAmount(){
+
+        try {
+            this.amount = this.tx.xem().amount;
+        }
+        catch(e) {
+            this.amount = 0;
+        }
     }
 
-    private _populateMosaicsWithDefinitionData(){
-        if (this.tx.mosaics){
-            this.nem.addDefinitionToMosaics(this.tx.mosaics).subscribe(mosaics => {
-                this.tx.mosaics = mosaics;
-                this.hasLevy = this.nem.transactionHasAtLeastOneMosaicWithLevy(mosaics);
+    private _getMosaics(){
+        try {
+            this.nem.getMosaicsDefinition(this.tx.mosaics()).subscribe(mosaics => {
+                this.mosaics = mosaics;
+                this.hasLevy =  this.mosaics.filter(mosaic => mosaic.levy).length ? true : false;
             });
+        }
+        catch(e) {
+            this.mosaics = [];
         }
     }
 
@@ -37,8 +49,15 @@ export class TransferTransactionComponent {
         })
     }
 
+    constructor(private nem: NemProvider, private wallet: WalletProvider) {
+        this.hasLevy = false;
+        this.amount = 0;
+        this.mosaics = [];
+    }
+
     ngOnInit() {
-        this._populateMosaicsWithDefinitionData();
+        this._getAmount();
+        this._getMosaics();
         this._setOwner();
     }
 
