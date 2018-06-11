@@ -8,7 +8,7 @@ export class FormatLevyPipe implements PipeTransform {
     constructor(public nem: NemProvider) {
     }
 
-    transform(mosaic: MosaicTransferable): any {
-        return this.nem.formatLevy(mosaic);
+    transform(value): any {
+        return this.nem.formatLevy(value);
     }
 }

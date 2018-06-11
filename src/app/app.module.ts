@@ -28,6 +28,7 @@ import {LanguageProvider} from '../providers/language/language.provider';
 
 import {DivideByExponentialBaseTenPipe} from '../pipes/divide-by-exponential-base-ten.pipe';
 import {FormatLevyPipe} from '../pipes/format-levy.pipe';
+import {FormatXEMPipe} from "../pipes/format-XEM";
 import {SearchContactPipe} from '../pipes/search-contact.pipe';
 
 import {MyApp} from './app.component';
@@ -85,6 +86,7 @@ export function createTranslateLoader(http: Http) {
         MultisigAggregateModificationTransactionComponent,
         DivideByExponentialBaseTenPipe,
         FormatLevyPipe,
+        FormatXEMPipe,
         SearchContactPipe
     ],
     imports: [

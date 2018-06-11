@@ -35,7 +35,7 @@
 
 <!-- Fee -->
 
-<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{(tx.fee+tx.otherTransaction.fee) /1000000}} nem:xem</p>
+<p *ngIf="tx.fee"><b>{{'FEE' | translate}}:</b> {{(tx.fee+tx.otherTransaction.fee) | formatXEM}} nem:xem</p>
 
 <!-- Has levy -->
 <p>
