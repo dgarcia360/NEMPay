@@ -18,18 +18,19 @@ import {Wallet, MosaicTransferable} from 'nem-library';
     selector: 'page-balance',
     templateUrl: 'balance.html'
 })
+
 export class BalancePage {
     selectedWallet: Wallet;
     balance: MosaicTransferable[];
     selectedMosaic: MosaicTransferable;
-    addressToSendAssets: string;
+    rawRecipient: string;
 
     constructor(public navCtrl: NavController, private nem: NemProvider, private navParams:NavParams, private wallet: WalletProvider, private menu: MenuController, public translate: TranslateService, private alert: AlertProvider, private loading: LoadingController) {
-        this.addressToSendAssets = navParams.get('address') || null;
+        this.rawRecipient = navParams.get('address') || null;
     }
 
     ionViewWillEnter() {
-        if (!this.addressToSendAssets) this.menu.enable(true);
+        if (!this.rawRecipient) this.menu.enable(true);
 
         this.wallet.getSelectedWallet().then(wallet => {
             if (!wallet) this.navCtrl.setRoot(LoginPage);
@@ -70,13 +71,13 @@ export class BalancePage {
         if(this.selectedMosaic.properties.transferable){
             this.navCtrl.push(TransferPage, {
                 'selectedMosaic': this.selectedMosaic,
-                'address': this.addressToSendAssets
+                'address': this.rawRecipient
             });
         }
         else this.alert.showMosaicNotTransferable();
     }
 
-   /**
+    /**
      * Moves to receive, by default with mosaic selected
      */
     goToReceive(){

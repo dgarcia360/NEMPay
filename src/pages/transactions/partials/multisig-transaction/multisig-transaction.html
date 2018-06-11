@@ -15,7 +15,7 @@
         <span class="color-less" *ngIf="owner?.plain() != tx?.otherTransaction.recipient?.plain()">
             -
         </span>
-        {{ mosaic.amount?.toString() }} {{mosaic.mosaicId.toString()}}
+        {{ mosaic.amount?.toString() }} {{mosaic.mosaicId.description()}}
     </span>
 </h2>
 
@@ -44,7 +44,7 @@
     </span>
     <span *ngFor="let mosaic of mosaics;">
         <span *ngIf="mosaic.levy?.mosaicId">
-            {{mosaic | formatLevy:(mosaic) | async}} {{mosaic.levy.mosaicId.toString()}}
+            {{mosaic | formatLevy:(mosaic) | async}} {{mosaic.levy.mosaicId.description()}}
         </span>
     </span>
 </p>

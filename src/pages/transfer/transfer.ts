@@ -12,8 +12,7 @@ import {WalletProvider} from '../../providers/wallet/wallet.provider';
 import {BalancePage} from '../balance/balance';
 import {LoginPage} from '../login/login';
 
-import {SimpleWallet, MosaicTransferable, Address, XEM, NemAnnounceResult} from 'nem-library';
-import {Observable} from "nem-library/node_modules/rxjs";
+import {SimpleWallet, MosaicTransferable, Address, XEM, TransferTransaction} from 'nem-library';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -24,7 +23,6 @@ import 'rxjs/add/operator/toPromise';
 export class TransferPage {
     amount: number;
     rawRecipient: string;
-    recipient: Address;
     selectedMosaic: MosaicTransferable;
     isMosaicTransfer: boolean;
     common: any;
@@ -75,8 +73,7 @@ export class TransferPage {
     }
 
     /**
-     * Check if user can send tranaction
-     * TODO: encapsulate in a service, implememntation it is duplicated in other controllers too
+     * Check if user can send transaction
      */
     private _canSendTransaction() {
         if (this.common.password) {
@@ -91,37 +88,64 @@ export class TransferPage {
     }
 
     /**
-     * Confirms transaction form xem and mosaicsTransactions
+     * Calculates fee into this.fee and returns prepared Transaction
      */
-    private _confirmTransaction(): Observable<NemAnnounceResult> {
+    private _prepareTransaction(recipient:Address) {
         let transferTransaction;
-        if (this.isMosaicTransfer) transferTransaction = this.nem.prepareMosaicTransaction(this.recipient, this.mosaics, this.message);
-        else transferTransaction = this.nem.prepareTransaction(this.recipient, this.amount, this.message);
-        return this.nem.confirmTransaction(transferTransaction, this.selectedWallet, this.common.password);
+        if (this.isMosaicTransfer) transferTransaction = this.nem.prepareMosaicTransaction(recipient, this.mosaics, this.message);
+        else transferTransaction = this.nem.prepareTransaction(recipient, this.amount, this.message);
+        this.fee = transferTransaction.fee;
+        return transferTransaction;
     }
+
+
+    /**
+     * Sets transaction amount and determine if it is mosaic or xem transaction, updating fees
+     */
+    public startTransaction() {
+        if (!this.amount) this.amount = 0;
+
+        if (!XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
+            this.isMosaicTransfer = true;
+            this.mosaics = [new MosaicTransferable(this.selectedMosaic.mosaicId, this.selectedMosaic.properties, this.amount, this.selectedMosaic.levy)];
+        }
+
+        try{
+            let recipient = new Address(this.rawRecipient.toUpperCase().replace('-', ''));
+            if (!this.nem.isValidAddress(recipient)) this.alert.showAlertDoesNotBelongToNetwork();
+            else {
+                let transferTransaction = this._prepareTransaction(recipient);
+                this._presentPrompt(transferTransaction);
+            }
+        }
+        catch (err) {
+            this.alert.showAlertDoesNotBelongToNetwork();
+        }
+    }
+
 
     /**
      * alert Confirmation subtitle builder
      */
-    private _subtitleBuilder(res) {
+    private _subtitleBuilder(translate:string[]) {
 
-        var subtitle = res['YOU_ARE_GOING_TO_SEND'] + ' <br/><br/> ';
+        var subtitle = translate['YOU_ARE_GOING_TO_SEND'] + ' <br/><br/> ';
         var currency = '';
         if (XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
-            currency = "<b>" + res['AMOUNT'] + ":</b> " + this.amount + " nem:xem";
+            currency = "<b>" + translate['AMOUNT'] + ":</b> " + this.amount + " xem";
         }
         else {
-            currency = "<b>" + res['AMOUNT'] + "</b> " + this.amount + " " + this.selectedMosaic.mosaicId.description();
+            currency = "<b>" + translate['AMOUNT'] + "</b> " + this.amount + " " + this.selectedMosaic.mosaicId.description();
         }
         subtitle += currency;
-        var _fee = this.fee / 1000000;
-        subtitle += '<br/><br/>  <b>' + res['FEE'] + ':</b> ' + _fee + ' nem:xem';
+        var _fee = this.fee / Math.pow(10,XEM.DIVISIBILITY);
+        subtitle += '<br/><br/>  <b>' + translate['FEE'] + ':</b> ' + _fee + ' xem';
 
         if (this.selectedMosaic.levy != undefined && 'mosaicId' in this.selectedMosaic.levy) {
-            var _levy = 0;
-            return this.nem.formatLevy(this.mosaics[0]).then(value => { // TODO: format levy
-                _levy = value;
-                subtitle += "<br/><br/> <b>" + res['LEVY'] + ":</b> " + _levy + " " + this.selectedMosaic.levy.mosaicId.name;
+            var levy = 0;
+            return this.nem.formatLevy(this.mosaics[0]).then(value => {
+                levy = value;
+                subtitle += "<br/><br/> <b>" + translate['LEVY'] + ":</b> " + levy + " " + this.selectedMosaic.levy.mosaicId.description();
                 return subtitle;
             });
         }
@@ -133,37 +157,38 @@ export class TransferPage {
     /**
      * Presents prompt to confirm the transaction, handling confirmation
      */
-    private _presentPrompt() {
-        this.translate.get(['YOU_ARE_GOING_TO_SEND', 'AMOUNT', 'FEE', 'LEVY', 'CONFIRM_TRANSACTION', 'PASSWORD', 'CANCEL', 'CONFIRM', 'PLEASE_WAIT'], {}).subscribe((res) => {
-            this._subtitleBuilder(res).then(subtitle => {
+    private _presentPrompt(transferTransaction:TransferTransaction) {
+        this.translate.get(['YOU_ARE_GOING_TO_SEND', 'AMOUNT', 'FEE', 'LEVY', 'CONFIRM_TRANSACTION', 'PASSWORD', 'CANCEL', 'CONFIRM', 'PLEASE_WAIT'], {}).subscribe((translate) => {
+            this._subtitleBuilder(translate).then(subtitle => {
 
                 let alert = this.alertCtrl.create({
-                    title: res['CONFIRM_TRANSACTION'],
+                    title: translate['CONFIRM_TRANSACTION'],
                     subTitle: subtitle,
                     inputs: [
                         {
                             name: 'password',
-                            placeholder: res['PASSWORD'],
+                            placeholder: translate['PASSWORD'],
                             type: 'password'
                         },
                     ],
                     buttons: [
                         {
-                            text: res['CANCEL'],
+                            text: translate['CANCEL'],
                             role: 'cancel'
                         },
                         {
-                            text: res['CONFIRM'],
+                            text: translate['CONFIRM'],
                             handler: data => {
                                 this.keyboard.close();
                                 this.common.password = data.password;
                                 let loader = this.loading.create({
-                                    content: res['PLEASE_WAIT']
+                                    content: translate['PLEASE_WAIT']
                                 });
 
                                 loader.present().then(_ => {
                                     if (this._canSendTransaction()) {
-                                        this._confirmTransaction().subscribe(value => {
+
+                                        this.nem.confirmTransaction(transferTransaction, this.selectedWallet, this.common.password).subscribe(value => {
                                             loader.dismiss();
                                             console.log("Transactions confirmed");
                                             this.toast.showTransactionConfirmed();
@@ -204,49 +229,11 @@ export class TransferPage {
                 alert.onDidDismiss(() => {
                     this.keyboard.close()
                 });
-
                 alert.present();
             });
         });
     }
 
-    /**
-     * Calculates fee into this.fee and presents prompt once finished
-     */
-    private _updateFees() {
-        let transferTransaction;
-        if (this.isMosaicTransfer) transferTransaction = this.nem.prepareMosaicTransaction(this.recipient, this.mosaics, this.message);
-        else transferTransaction = this.nem.prepareTransaction(this.recipient, this.amount, this.message);
-        this.fee = transferTransaction.fee;
-    }
-
-    /**
-     * Sets transaction amount and determine if it is mosaic or xem transaction, updating fees
-     */
-    public startTransaction() {
-        //if is nem:xem, set amount
-        if (!this.amount) this.amount = 0;
-
-        if (!XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
-            //if mosaic, amount represents multiplier
-            this.isMosaicTransfer = true;
-            this.mosaics = [new MosaicTransferable(this.selectedMosaic.mosaicId, this.selectedMosaic.properties, this.amount, this.selectedMosaic.levy)];
-        }
-
-        let recipientAddress;
-        try{
-            recipientAddress = new Address(this.rawRecipient.toUpperCase().replace('-', ''));
-            if (!this.nem.isValidAddress(recipientAddress)) this.alert.showAlertDoesNotBelongToNetwork();
-            else {
-                this.recipient = recipientAddress;
-                this._updateFees();
-                this._presentPrompt();
-            }
-        }
-        catch (err) {
-            this.alert.showAlertDoesNotBelongToNetwork();
-        }
-    }
 
     /**
      * Scans Account QR and sets account into this.rawRecipient
