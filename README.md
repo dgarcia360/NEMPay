@@ -1,18 +1,8 @@
 ## NEMPay
 
-NEMPay is a mobile app to transfer [NEM assets](https://blog.nem.io/mosaics-and-namespaces-2/) easily.
+NEMPay is a mobile app to transfer [NEM mosaics](https://blog.nem.io/mosaics-and-namespaces-2/) easily.
 
 NEMPay has been developed in Ionic, and currently available for **Android** and **iOS**.
-
-### Customizations
-
-Distributed as an open source solution, organizations and individuals can take advantage of NEMPay, using it as a boilerplate for creating their own NEM applications.
-
-An example of use case is the creation of an app to transfer assets such as tickets, coupons, stocks or even share representation, cutting costs of acquisition, as there is no need to code a new app. 
-
-Customize NEMPay following the [documentation](http://blockchaintoken.tech/).
-
-
 
 ### Provided Features
 ![alt text](https://cdn-images-1.medium.com/max/1600/1*C8i2x0r16n202cBuxyYUpg.png)
