@@ -205,6 +205,10 @@ export class TransferPage {
                                                 loader.dismiss();
                                                 this.alert.showMessageTooLarge();
                                             }
+                                            else if (error.toString().indexOf('FAILURE_MOSAIC_NOT_TRANSFERABLE') >= 0){
+                                                loader.dismiss();
+                                                this.alert.showMosaicNotTransferable();
+                                            }
                                             else if (error.statusCode == 404) {
                                                 loader.dismiss();
                                                 this.alert.showAlertDoesNotBelongToNetwork();

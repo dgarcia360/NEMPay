@@ -6,7 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import {NemProvider} from '../../../../providers/nem/nem.provider';
 import {WalletProvider} from '../../../../providers/wallet/wallet.provider'
 
-import {Address, CosignatoryModification, Mosaic, MosaicTransferable, TransferTransaction} from "nem-library";
+import {Address, CosignatoryModification, MosaicTransferable, TransferTransaction} from "nem-library";
 @Component({
     selector: 'multisig-transaction',
     templateUrl: 'multisig-transaction.html'
