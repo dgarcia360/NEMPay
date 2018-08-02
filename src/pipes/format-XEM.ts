@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {NemProvider} from '../providers/nem/nem.provider';
 
-import {MosaicTransferable, XEM} from 'nem-library';
+import {XEM} from 'nem-library';
 
 @Pipe({name: 'formatXEM'})
 export class FormatXEMPipe implements PipeTransform {

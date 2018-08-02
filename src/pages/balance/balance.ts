@@ -68,13 +68,10 @@ export class BalancePage {
      * Moves to transfer, by default with mosaic selected
      */
     goToTransfer(){
-        if(this.selectedMosaic.properties.transferable){
-            this.navCtrl.push(TransferPage, {
-                'selectedMosaic': this.selectedMosaic,
-                'address': this.rawRecipient
-            });
-        }
-        else this.alert.showMosaicNotTransferable();
+        this.navCtrl.push(TransferPage, {
+            'selectedMosaic': this.selectedMosaic,
+            'address': this.rawRecipient
+        });
     }
 
     /**
