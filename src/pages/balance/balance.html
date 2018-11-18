@@ -18,9 +18,7 @@
                 refreshingText="{{'REFRESHING' | translate}} ">
         </ion-refresher-content>
     </ion-refresher>
-
     <form>
-
         <ion-list radio-group [(ngModel)]="selectedMosaic" name="selected-mosaic">
             <ion-item *ngFor="let mosaic of balance">
                 <ion-radio [value]="mosaic"></ion-radio>
@@ -32,12 +30,8 @@
 
             </ion-item>
         </ion-list>
-
     </form>
-
-
 </ion-content>
-
 
 <ion-footer no-shadow>
     <ion-toolbar position="bottom" class="background-white">

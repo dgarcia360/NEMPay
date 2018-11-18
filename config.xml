@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.blockchaintoken.nempay" version="0.9.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.nempay.app" version="0.10.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>NEMPay</name>
-    <description>Simple Mobile wallet for nem blockchain.</description>
+    <description>Simple mobile wallet for NEM blockchain.</description>
     <author email="dgarcia360@outlook.com" href="https://github.com/dgarcia360/NEMPay/">NEMPay</author>
     <content src="index.html" />
     <access origin="*" />

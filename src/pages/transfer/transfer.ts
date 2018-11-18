@@ -1,255 +1,263 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 David Garcia <dgarcia360@outlook.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+import {FormControl, FormGroup} from '@angular/forms';
 import {Component} from '@angular/core';
-import {NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
+import {AlertController, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {Keyboard} from '@ionic-native/keyboard';
 import {TranslateService} from '@ngx-translate/core';
-
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
-import {NemProvider} from '../../providers/nem/nem.provider';
+import {NemUtils} from '../../providers/nem/nem.utils';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {ToastProvider} from '../../providers/toast/toast.provider';
 import {WalletProvider} from '../../providers/wallet/wallet.provider';
-
 import {BalancePage} from '../balance/balance';
 import {LoginPage} from '../login/login';
-
-import {SimpleWallet, MosaicTransferable, Address, XEM, TransferTransaction} from 'nem-library';
-
-import 'rxjs/add/operator/toPromise';
+import {
+    Address,
+    MosaicHttp,
+    MosaicService,
+    MosaicTransferable,
+    Password,
+    PlainMessage,
+    SimpleWallet,
+    TimeWindow,
+    TransactionHttp,
+    TransferTransaction,
+    XEM
+} from 'nem-library';
+import {NemValidator} from "../../validators/nem.validator";
 
 @Component({
     selector: 'page-transfer',
     templateUrl: 'transfer.html'
 })
 export class TransferPage {
-    amount: number;
-    rawRecipient: string;
-    selectedMosaic: MosaicTransferable;
-    isMosaicTransfer: boolean;
-    common: any;
-    selectedWallet: SimpleWallet;
-    fee: number;
-    message: string;
-    mosaics: any;
+    private transactionHttp: TransactionHttp;
+    private mosaicHttp: MosaicHttp;
+    private mosaicService: MosaicService;
+    private transferTransactionForm: FormGroup;
+    private transferTransaction: TransferTransaction;
+    private selectedWallet: SimpleWallet;
+    private selectedMosaic: MosaicTransferable;
+    private fee: number;
 
-    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private wallet: WalletProvider, private alert: AlertProvider, private toast: ToastProvider, private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController, private loading: LoadingController, private keyboard: Keyboard, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private navParams: NavParams, private nemUtils: NemUtils,
+                private wallet: WalletProvider, private alert: AlertProvider, private toast: ToastProvider,
+                private barcodeScanner: BarcodeScanner, private alertCtrl: AlertController,
+                private loading: LoadingController, private keyboard: Keyboard, public translate: TranslateService) {
 
-        this.amount = 0;
-        this.rawRecipient = navParams.get('address') || '';
-        this.selectedMosaic = <MosaicTransferable>navParams.get('selectedMosaic');
-        this.fee = 0;
-        this.isMosaicTransfer = false;
-        this.message = '';
-        this.mosaics = [];
+        this.transactionHttp = new TransactionHttp();
+        this.mosaicHttp = new MosaicHttp();
+        this.mosaicService = new MosaicService(this.mosaicHttp);
+        this.selectedMosaic =  navParams.get('selectedMosaic');
 
-        //Stores sensitive data.
-        this.common = {};
-
-        //Initializes sensitive data.
-        this._clearCommon();
-
+        this.transferTransactionForm = new FormGroup ({
+            amount: new FormControl(0, NemValidator.isValidTransferAmount),
+            rawRecipient: new FormControl(navParams.get('address') || '', NemValidator.isValidAddress),
+            message: new FormControl('')
+        });
     }
 
     ionViewWillEnter() {
-        this.wallet.getSelectedWallet().then(
-            value => {
-                if (!value) {
-                    this.navCtrl.setRoot(LoginPage);
-                }
-                else {
-                    this.selectedWallet = value;
-                }
-            }
-        )
-    }
-
-    /**
-     * Clears sensitive data
-     */
-    private _clearCommon() {
-        this.common = {
-            'password': '',
-            'privateKey': ''
-        };
-    }
-
-    /**
-     * Check if user can send transaction
-     */
-    private _canSendTransaction() {
-        if (this.common.password) {
-            try {
-                this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
-                return true;
-            } catch (err) {
-                return false;
-            }
+        this.selectedWallet = this.wallet.getSelectedWallet();
+        if (!this.selectedWallet) {
+            this.navCtrl.setRoot(LoginPage);
         }
-        return false;
     }
 
     /**
-     * Calculates fee into this.fee and returns prepared Transaction
+     * Scans QR
      */
-    private _prepareTransaction(recipient:Address) {
-        let transferTransaction;
-        if (this.isMosaicTransfer) transferTransaction = this.nem.prepareMosaicTransaction(recipient, this.mosaics, this.message);
-        else transferTransaction = this.nem.prepareTransaction(recipient, this.amount, this.message);
-        this.fee = transferTransaction.fee;
-        return transferTransaction;
+    public scanQR() {
+        this.barcodeScanner.scan().then((barcodeData) => {
+            const addressObject = JSON.parse(barcodeData.text);
+            this.transferTransactionForm.patchValue({rawRecipient: addressObject.data.addr});
+            const amount =  addressObject.data.amount / Math.pow(10, this.selectedMosaic.properties.divisibility);
+            this.transferTransactionForm.patchValue({amount: amount });
+            this.transferTransactionForm.patchValue({message: addressObject.data.msg});
+        }, (err) => {
+            console.log("Error on scan");
+        });
     }
 
-
     /**
-     * Sets transaction amount and determine if it is mosaic or xem transaction, updating fees
+     * Prepares the TransferTransaction
      */
-    public startTransaction() {
-        if (!this.amount) this.amount = 0;
+    public prepareTransaction() {
+
+        const formValue = this.transferTransactionForm.value;
+        const recipient = new Address(formValue.rawRecipient);
 
         if (!XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
-            this.isMosaicTransfer = true;
-            this.mosaics = [new MosaicTransferable(this.selectedMosaic.mosaicId, this.selectedMosaic.properties, this.amount, this.selectedMosaic.levy)];
-        }
 
-        try{
-            let recipient = new Address(this.rawRecipient.toUpperCase().replace('-', ''));
-            if (!this.nem.isValidAddress(recipient)) this.alert.showAlertDoesNotBelongToNetwork();
-            else {
-                let transferTransaction = this._prepareTransaction(recipient);
-                this._presentPrompt(transferTransaction);
-            }
+            this.selectedMosaic = new MosaicTransferable(
+                this.selectedMosaic.mosaicId,
+                this.selectedMosaic.properties,
+                formValue.amount,
+                this.selectedMosaic.levy);
+
+            this.transferTransaction = TransferTransaction
+                .createWithMosaics(
+                    TimeWindow.createWithDeadline(),
+                    recipient,
+                    [this.selectedMosaic],
+                    PlainMessage.create(formValue.message));
+        } else {
+            this.transferTransaction = TransferTransaction
+                .create(
+                    TimeWindow.createWithDeadline(),
+                    recipient,
+                    new XEM(formValue.amount),
+                    PlainMessage.create(formValue.message));
         }
-        catch (err) {
-            this.alert.showAlertDoesNotBelongToNetwork();
-        }
+        this.fee = this.transferTransaction.fee;
+        this.presentPrompt();
     }
 
-
     /**
-     * alert Confirmation subtitle builder
+     * Builds confirmation subtitle
      */
-    private _subtitleBuilder(translate:string[]) {
+    private subtitleBuilder(translate:string[]) {
 
-        var subtitle = translate['YOU_ARE_GOING_TO_SEND'] + ' <br/><br/> ';
-        var currency = '';
+        let subtitle = translate['YOU_ARE_GOING_TO_SEND'] + ' <br/><br/> ';
+        const formValue = this.transferTransactionForm.value;
+
+        subtitle +=  "<b>" + translate['AMOUNT'] + ":</b> ";
         if (XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
-            currency = "<b>" + translate['AMOUNT'] + ":</b> " + this.amount + " xem";
+            subtitle += formValue.amount + " xem";
+        } else {
+            subtitle += formValue.amount + " " + this.selectedMosaic.mosaicId.description();
         }
-        else {
-            currency = "<b>" + translate['AMOUNT'] + "</b> " + this.amount + " " + this.selectedMosaic.mosaicId.description();
-        }
-        subtitle += currency;
-        var _fee = this.fee / Math.pow(10,XEM.DIVISIBILITY);
-        subtitle += '<br/><br/>  <b>' + translate['FEE'] + ':</b> ' + _fee + ' xem';
+
+        const fee = this.fee / Math.pow(10, XEM.DIVISIBILITY);
+        subtitle += "<br/><br/>";
+        subtitle += " <b>" + translate['FEE'] + ":</b> " + fee + " xem";
 
         if (this.selectedMosaic.levy != undefined && 'mosaicId' in this.selectedMosaic.levy) {
-            var levy = 0;
-            return this.nem.formatLevy(this.mosaics[0]).then(value => {
-                levy = value;
-                subtitle += "<br/><br/> <b>" + translate['LEVY'] + ":</b> " + levy + " " + this.selectedMosaic.levy.mosaicId.description();
-                return subtitle;
-            });
-        }
-        else {
+            return this.mosaicService
+                .calculateLevy(this.selectedMosaic)
+                .toPromise()
+                .then(levy => {
+                    subtitle += "<br/><br/> <b>" + translate['LEVY'] + ":</b> ";
+                    subtitle += levy + " " + this.selectedMosaic.levy.mosaicId.description();
+                    return subtitle;
+                });
+        } else {
             return Promise.resolve(subtitle);
         }
     }
 
     /**
-     * Presents prompt to confirm the transaction, handling confirmation
+     * Presents prompt to confirm the transaction
      */
-    private _presentPrompt(transferTransaction:TransferTransaction) {
-        this.translate.get(['YOU_ARE_GOING_TO_SEND', 'AMOUNT', 'FEE', 'LEVY', 'CONFIRM_TRANSACTION', 'PASSWORD', 'CANCEL', 'CONFIRM', 'PLEASE_WAIT'], {}).subscribe((translate) => {
-            this._subtitleBuilder(translate).then(subtitle => {
+    private presentPrompt() {
+        this.translate
+            .get(['YOU_ARE_GOING_TO_SEND', 'AMOUNT', 'FEE', 'LEVY', 'CONFIRM_TRANSACTION', 'PASSWORD', 'CANCEL',
+                'CONFIRM', 'PLEASE_WAIT'], {})
+            .subscribe((translate) => {
 
-                let alert = this.alertCtrl.create({
-                    title: translate['CONFIRM_TRANSACTION'],
-                    subTitle: subtitle,
-                    inputs: [
-                        {
-                            name: 'password',
-                            placeholder: translate['PASSWORD'],
-                            type: 'password'
-                        },
-                    ],
-                    buttons: [
-                        {
-                            text: translate['CANCEL'],
-                            role: 'cancel'
-                        },
-                        {
-                            text: translate['CONFIRM'],
-                            handler: data => {
-                                this.keyboard.close();
-                                this.common.password = data.password;
-                                let loader = this.loading.create({
-                                    content: translate['PLEASE_WAIT']
-                                });
+                this.subtitleBuilder(translate).then(subtitle => {
 
-                                loader.present().then(_ => {
-                                    if (this._canSendTransaction()) {
-
-                                        this.nem.confirmTransaction(transferTransaction, this.selectedWallet, this.common.password).subscribe(value => {
-                                            loader.dismiss();
-                                            console.log("Transactions confirmed");
-                                            this.toast.showTransactionConfirmed();
-                                            this.navCtrl.push(BalancePage, {});
-                                            this._clearCommon();
-
-                                        }, error => {
-                                            console.log(error);
-                                            if (error.toString().indexOf('FAILURE_INSUFFICIENT_BALANCE') >= 0) {
-                                                loader.dismiss();
-                                                this.alert.showDoesNotHaveEnoughFunds();
-                                            }
-                                            else if (error.toString().indexOf('FAILURE_MESSAGE_TOO_LARGE') >= 0) {
-                                                loader.dismiss();
-                                                this.alert.showMessageTooLarge();
-                                            }
-                                            else if (error.toString().indexOf('FAILURE_MOSAIC_NOT_TRANSFERABLE') >= 0){
-                                                loader.dismiss();
-                                                this.alert.showMosaicNotTransferable();
-                                            }
-                                            else if (error.statusCode == 404) {
-                                                loader.dismiss();
-                                                this.alert.showAlertDoesNotBelongToNetwork();
-                                            }
-                                            else {
-                                                loader.dismiss();
-                                                this.alert.showError(error);
-                                            }
-                                        });
-                                    }
-                                    else {
-                                        this._clearCommon();
-                                        loader.dismiss();
+                    let alert = this.alertCtrl.create({
+                        title: translate['CONFIRM_TRANSACTION'],
+                        subTitle: subtitle,
+                        inputs: [
+                            {
+                                name: 'password',
+                                placeholder: translate['PASSWORD'],
+                                type: 'password'
+                            },
+                        ],
+                        buttons: [
+                            {
+                                text: translate['CANCEL'],
+                                role: 'cancel'
+                            },
+                            {
+                                text: translate['CONFIRM'],
+                                handler: data => {
+                                    this.keyboard.close();
+                                    if (this.wallet.passwordMatchesWallet(data.password, this.selectedWallet)) {
+                                        this.announceTransaction(data.password)
+                                    } else {
                                         this.alert.showInvalidPasswordAlert();
                                     }
-                                });
+                                }
                             }
-                        }
-                    ]
+                        ]
+                    });
+                    alert.onDidDismiss(() => {
+                        this.keyboard.close()
+                    });
+                    alert.present();
                 });
-
-                alert.onDidDismiss(() => {
-                    this.keyboard.close()
-                });
-                alert.present();
             });
+    }
+
+    /**
+     * Announces transaction
+     * @param password  string
+     */
+    private announceTransaction(password: string){
+
+        let loader = this.loading.create({
+            content: this.translate['PLEASE_WAIT']
+        });
+
+        loader.present().then(_ => {
+
+            const signedTransaction = this.selectedWallet
+                .open(new Password(password))
+                .signTransaction(this.transferTransaction);
+
+            this.transactionHttp
+                .announceTransaction(signedTransaction)
+                .subscribe(value => {
+                    loader.dismiss();
+                    this.toast.showTransactionConfirmed();
+                    this.navCtrl.push(BalancePage, {});
+                }, err => {
+                    this.throwError(err);
+                    loader.dismiss();
+                });
         });
     }
 
-
     /**
-     * Scans Account QR and sets account into this.rawRecipient
+     * Shows error
      */
-    public scanQR() {
-        this.barcodeScanner.scan().then((barcodeData) => {
-            let addresObject = JSON.parse(barcodeData.text);
-            this.rawRecipient = addresObject.data.addr;
-            this.amount = addresObject.data.amount;
-            this.message = addresObject.data.msg;
-        }, (err) => {
-            console.log("Error on scan");
-        });
+    private throwError(error: any) {
+        if (error.toString().indexOf('FAILURE_INSUFFICIENT_BALANCE') >= 0) {
+            this.alert.showDoesNotHaveEnoughFunds();
+        } else if (error.toString().indexOf('FAILURE_MESSAGE_TOO_LARGE') >= 0) {
+            this.alert.showMessageTooLarge();
+        } else if (error.toString().indexOf('FAILURE_MOSAIC_NOT_TRANSFERABLE') >= 0){
+            this.alert.showMosaicNotTransferable();
+        } else if (error.statusCode == 404) {
+            this.alert.showAlertDoesNotBelongToNetwork();
+        } else {
+            this.alert.showError(error);
+        }
     }
 }

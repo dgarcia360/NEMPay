@@ -1,43 +1,58 @@
 <ion-content padding id="signup-simple-wallet">
     <div class="default-padding">
 
-    <form>
-        <ion-list>
+        <form [formGroup]="signupForm">
             <ion-item>
                 <ion-label>
                     {{'WALLET_NAME' | translate}}
                 </ion-label>
-                <ion-input [(ngModel)]="newAccount.name" name="name" type="text" placeholder=""></ion-input>
+                <ion-input formControlName="name" name="name" type="text" placeholder=""
+                           [class.invalid]="!signupForm.controls.name.valid &&
+                        (signupForm.controls.name.dirty)">
+                </ion-input>
             </ion-item>
+            <ion-item  *ngIf="!signupForm.controls.name.valid && (signupForm.controls.name.dirty)">
+                <span>{{'ALERT_REQUIRED_FIELD' | translate}}</span>
+            </ion-item>
+
             <ion-item>
                 <ion-label>
                     {{'PASSWORD' | translate}}
-
                 </ion-label>
-                <ion-input type="password" [(ngModel)]="newAccount.password" name="password"></ion-input>
+                <ion-input formControlName="password" name="password" type="password"
+                           [class.invalid]="!signupForm.controls.password.valid &&
+                        (signupForm.controls.password.dirty)"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!signupForm.controls.password.valid &&
+                        (signupForm.controls.password.dirty)">
+                <span>{{'ALERT_WEAK_PASSWORD' | translate}}</span>
             </ion-item>
             <ion-item>
                 <ion-label>
                     {{'REPEAT_PASSWORD' | translate}}
                 </ion-label>
-                <ion-input type="password" [(ngModel)]="newAccount.repeat_password"
-                           name="repeat_password"></ion-input>
+                <ion-input formControlName="repeatPassword" name="repeatPassword" type="password"
+                           [class.invalid]="!signupForm.controls.repeatPassword.valid &&
+                        (signupForm.controls.repeatPassword.dirty)"></ion-input>
             </ion-item>
-        </ion-list>
-        <div class="spacer xs"></div>
+            <ion-item  *ngIf="!signupForm.controls.repeatPassword.valid
+            && (signupForm.controls.repeatPassword.dirty)
+            && (signupForm.controls.repeatPassword.value.length > 7)">
+                <span>{{'ALERT_PASSWORDS_DO_NOT_MATCH' | translate}}</span>
+            </ion-item>
+            <div class="spacer xs"></div>
 
-        <div>
-            <p class="black-color">
-                {{'SIMPLE_WALLET_WARNING' | translate}}
-            </p>
-        </div>
+            <div>
+                <p class="black-color">
+                    {{'SIMPLE_WALLET_WARNING' | translate}}
+                </p>
+            </div>
 
-        <div class="spacer xs"></div>
-
-        <button ion-button color="stable" block on-click="createSimpleWallet()"
-                [disabled]="!newAccount.password || !newAccount.repeat_password || !newAccount.name">
-            {{'SIGNUP' | translate}}
-        </button>
-    </form>
+            <div class="spacer xs"></div>
+            <button ion-button color="stable" block on-click="createSimpleWallet()"
+                    [disabled]="!signupForm.valid">
+                {{'SIGNUP' | translate}}
+            </button>
+        </form>
     </div>
 </ion-content>

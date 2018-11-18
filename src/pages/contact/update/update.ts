@@ -1,115 +1,134 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 David Garcia <dgarcia360@outlook.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 import {Component} from '@angular/core';
-import {NavController, NavParams, LoadingController} from 'ionic-angular';
+import {LoadingController, NavController, NavParams} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
 import {SocialSharing} from '@ionic-native/social-sharing';
-
 import {ToastProvider} from '../../../providers/toast/toast.provider';
 import {WalletProvider} from '../../../providers/wallet/wallet.provider';
 import {ContactProvider} from '../../../providers/contact/contact.provider';
 import {AlertProvider} from '../../../providers/alert/alert.provider';
-import {NemProvider} from '../../../providers/nem/nem.provider';
-
-import {Address} from 'nem-library';
-
+import {NemUtils} from '../../../providers/nem/nem.utils';
 import {ContactListPage} from '../list/list';
 import {BalancePage} from '../../balance/balance';
-
-import 'rxjs/add/operator/toPromise';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {NemValidator} from "../../../validators/nem.validator";
+import {Address} from "nem-library";
 
 @Component({
     selector: 'update-contact-page',
     templateUrl: 'update.html'
 })
 export class UpdateContactPage {
-    owner: string;
-    name: string;
-    address: string;
-    previousAddress:string;
-    id : number;
+    private owner: string;
+    private previousAddress: string;
+    private id : number;
+    private contactForm : FormGroup;
 
-    constructor(public navCtrl: NavController, private navParams: NavParams, private nem: NemProvider, private wallet: WalletProvider, private toast: ToastProvider, private contact: ContactProvider, private loading: LoadingController, public translate: TranslateService, private alert: AlertProvider, private socialSharing:SocialSharing) {
+    constructor(public navCtrl: NavController, private navParams: NavParams, private nemUtils: NemUtils,
+                private wallet: WalletProvider, private toast: ToastProvider, private contact: ContactProvider,
+                private loading: LoadingController, public translate: TranslateService, private alert: AlertProvider,
+                private socialSharing:SocialSharing) {
+
         this.owner = navParams.get('owner');
-        this.name = navParams.get('name');
-        this.address = navParams.get('address') || '';
         this.id = navParams.get('id');
 
-        if (this.id) this.previousAddress = this.address.toUpperCase().replace('-', '');
-
-    }
-
-    /**
-     * creates a new contact
-     *@param address address to assign
-     */
-    private _createContact(address:string){
-        this.contact.searchContactName(this.owner, address).then(contacts =>{
-            if(contacts.length > 0) this.alert.showContactAlreadyExists();
-            else{
-                this.contact.create(this.owner, this.name, address).then(_=>{
-                    this.toast.showContactCreated();
-                    this.navCtrl.push(ContactListPage, {});
-                });
-            }
-        }).catch(err => {
-            console.log(err)
+        this.contactForm = new FormGroup ({
+            name: new FormControl(navParams.get('name') || '', Validators.required),
+            address: new FormControl(navParams.get('address') || '', NemValidator.isValidAddress),
         });
+
+        if (this.id) {
+            this.previousAddress = navParams.get('address');
+        }
     }
 
     /**
-     * updates existing contact
-     * @param address address to assign
-     */
-    private _updateContact(address:string){
-
-        this.contact.searchContactName(this.owner, address).then(contacts =>{
-
-            if(contacts.length > 0 && address != this.previousAddress) this.alert.showContactAlreadyExists();
-            else{
-                this.contact.update(this.id, this.name, address).then(_=>{
-                    this.toast.showContactUpdated();
-                    this.navCtrl.push(ContactListPage, {});
-                })
-            }
-        }).catch(err => {
-            console.log(err)
-        });
-    }
-
-
-    /**
-     * updates contact or creates it
+     * Updates contact or creates it
      */
     public saveContact(){
-        let _rawAddress = this.address.toUpperCase().replace('-', '');
-        try{
-            if (!this.nem.isValidAddress(new Address(_rawAddress))){
-                this.alert.showAlertDoesNotBelongToNetwork();
-            }
-            else{
-                if (this.id) this._updateContact(_rawAddress);
-                else this._createContact(_rawAddress);
-            }
-        }
-        catch (err) {
-            this.alert.showAlertDoesNotBelongToNetwork();
+        const address = new Address(this.contactForm.value.address).plain();
+        const name = this.contactForm.value.name;
+        if (this.id) {
+            this.updateContact(address, name);
+        } else {
+            this.createContact(address, name);
         }
     }
 
     /**
-     * moves to balance
-     * @param address address to send asset
+     * Moves to balance page
      */
     public goToBalance() {
         this.navCtrl.push(BalancePage, {'address': this.previousAddress});
     };
 
     /**
-     * Share current account through apps installed on the phone
+     * Share account's address using installed apps
      */
     public shareAddress() {
-        this.socialSharing.share(this.previousAddress, this.name + " Address", null, null).then(_ => {
-
-        });
+        this.socialSharing
+            .share(this.previousAddress, this.navParams.get('name') || '' + " Address", null, null)
+            .then(ignored => {})
+            .catch( err => console.log(err));
     }
 
+    /**
+     * Creates a new contact
+     * @param address address to assign
+     * @param name wallet name
+     */
+    private createContact(address: string, name: string){
+        this.contact.searchContactName(this.owner, address).then(contacts =>{
+            if(contacts.length > 0) {
+                this.alert.showContactAlreadyExists();
+            } else {
+                this.contact.create(this.owner, name, address).then(ignored => {
+                    this.toast.showContactCreated();
+                    this.navCtrl.push(ContactListPage, {});
+                });
+            }
+        }).catch(err => console.log(err));
+    }
+
+    /**
+     * Updates existing contact
+     * @param address address to assign
+     * @param name wallet name
+
+     */
+    private updateContact(address: string, name: string){
+
+        this.contact.searchContactName(this.owner, address).then(contacts =>{
+            if(contacts.length > 0 && address !== this.previousAddress) {
+                this.alert.showContactAlreadyExists();
+            } else {
+                this.contact.update(this.id, name, address).then(ignored=> {
+                    this.toast.showContactUpdated();
+                    this.navCtrl.push(ContactListPage, {});
+                });
+            }
+        }).catch(err => console.log(err));
+    }
 }

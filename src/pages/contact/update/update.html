@@ -8,49 +8,59 @@
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content id="contact-update" padding >
+
+<ion-content id="contact-update" padding>
     <div class="default-padding">
 
-        <form (ngSubmit)="saveContact()">
-            <ion-item id="name-input">
+        <form [formGroup]="contactForm" (ngSubmit)="saveContact()">
+            <ion-item>
                 <ion-label stacked>
-                    {{'NAME' | translate}}
+                    {{'WALLET_NAME' | translate}}
                 </ion-label>
-                <ion-input type="text" name="name" placeholder="" [(ngModel)]="name"></ion-input>
+                <ion-input formControlName="name" name="name" type="text" placeholder=""
+                           [class.invalid]="!contactForm.controls.name.valid &&
+                        (contactForm.controls.name.dirty)">
+                </ion-input>
+            </ion-item>
+            <ion-item *ngIf="!contactForm.controls.name.valid && (contactForm.controls.name.dirty)">
+                <span>{{'ALERT_REQUIRED_FIELD' | translate}}</span>
             </ion-item>
 
-            <ion-item id="contact-input">
+
+            <ion-item>
                 <ion-label stacked>
                     {{'CONTACT_ADDRESS' | translate}}
                 </ion-label>
-                <ion-input type="text" name="address" placeholder="" [(ngModel)]="address"></ion-input>
+                <ion-input type="text" name="address" placeholder="" formControlName="address"
+                           [class.invalid]="!contactForm.controls.address.valid &&
+                        (contactForm.controls.address.dirty)">
+                </ion-input>
+            </ion-item>
+            <ion-item *ngIf="!contactForm.controls.address.valid &&
+                        (contactForm.controls.address.dirty)">
+                <span>{{'ALERT_WALLET_IS_NOT_VALID_FOR_THIS_NETWORK' | translate}}</span>
             </ion-item>
 
             <div class="spacer"></div>
-
-            <button ion-button color="positive" block  [disabled]="!name || !address">
+            <button ion-button color="positive" block [disabled]="!contactForm.valid">
                 <span *ngIf='id'> {{'UPDATE_CONTACT' | translate}}</span>
                 <span *ngIf='!id'> {{'ADD_CONTACT' | translate}}</span>
             </button>
         </form>
-
     </div>
-
 </ion-content>
 
 <ion-footer no-shadow *ngIf='id'>
     <ion-toolbar position="bottom" class="background-white">
-        <div class="row" >
-
+        <div class="row">
             <div class="col col-50">
-                <button ion-button  block color="positive"
+                <button ion-button block color="positive"
                         (click)="goToBalance()">
                     {{'TRANSFER_BUTTON' | translate}}
                 </button>
             </div>
-
             <div class="col col-50">
-                <button ion-button  block color="positive"
+                <button ion-button block color="positive"
                         (click)="shareAddress()">
                     {{'SHARE_ADDRESS' | translate}}
                 </button>

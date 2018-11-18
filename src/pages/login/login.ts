@@ -1,14 +1,33 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 David Garcia <dgarcia360@outlook.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 import {Component} from '@angular/core';
-import {MenuController, NavController, LoadingController} from 'ionic-angular';
+import {LoadingController, MenuController, NavController} from 'ionic-angular';
 import {TranslateService} from '@ngx-translate/core';
-
-import {NemProvider} from '../../providers/nem/nem.provider';
 import {AlertProvider} from '../../providers/alert/alert.provider';
 import {WalletProvider} from '../../providers/wallet/wallet.provider';
-
 import {BalancePage} from '../balance/balance';
 import {SignupPage} from '../signup/signup';
-
 import {SimpleWallet} from 'nem-library';
 
 @Component({
@@ -17,27 +36,23 @@ import {SimpleWallet} from 'nem-library';
 })
 export class LoginPage {
 
-    wallets: SimpleWallet[];
-    selectedWallet: SimpleWallet;
-    common: any;
+    private wallets: SimpleWallet[];
+    private selectedWallet: SimpleWallet;
+    private password: string;
 
-
-    constructor(public navCtrl: NavController, private nem: NemProvider, private wallet: WalletProvider,  private alert: AlertProvider, private loading: LoadingController, private menu: MenuController, public translate: TranslateService) {
+    constructor(public navCtrl: NavController, private wallet: WalletProvider, private alert: AlertProvider,
+                private loading: LoadingController, private menu: MenuController,
+                public translate: TranslateService) {
 
         this.wallets = [];
         this.selectedWallet = null;
+        this.password = '';
 
-        // Object to contain our password & private key data.
-        this.common = {
-            'password': '',
-            'privateKey': ''
-        };
-
-        this.wallet.getWallets().then(value => {
-            this.wallets = value;
-
-            //select first loaded wallet by default
-            if(this.wallets.length > 0) this.selectedWallet = this.wallets[0];
+        this.wallet.getWallets().then(wallets => {
+            this.wallets = wallets;
+            if(this.wallets.length > 0) {
+                this.selectedWallet = this.wallets[0];
+            }
         });
 
     }
@@ -57,35 +72,29 @@ export class LoginPage {
     }
 
     /**
-     * Enters into the app with the selected wallet
+     * Login the app with the selected wallet
      */
     public login() {
 
-        this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
-            let loader = this.loading.create({
-                content: res
-            });
+        this.translate
+            .get('PLEASE_WAIT', {})
+            .subscribe((res: string) => {
 
-            loader.present().then(_ => {
-                if (!this.selectedWallet) {
-                    loader.dismiss();
-                    this.alert.showWalletNotSelectedAlert();
-                }
+                let loader = this.loading.create({content: res});
 
-                // Decrypt/generate private key and check it. Returned private key is contained into this.common
-                try {
-                    this.common.privateKey = this.nem.passwordToPrivateKey(this.common.password, this.selectedWallet);
-                    this.wallet.setSelectedWallet(this.selectedWallet);
+                loader.present().then(_ => {
+                    if (!this.selectedWallet) {
+                        this.alert.showWalletNotSelectedAlert();
+                    } else if(this.wallet.passwordMatchesWallet(this.password, this.selectedWallet)){
+                        this.wallet.setSelectedWallet(this.selectedWallet);
+                        this.navCtrl.setRoot(BalancePage);
+                    }
+                    else{
+                        this.alert.showInvalidPasswordAlert();
+                    }
                     loader.dismiss();
-                    this.navCtrl.setRoot(BalancePage);
-                } catch (err) {
-                    console.log(err);
-                    this.common.privateKey = '';
-                    loader.dismiss();
-                    this.alert.showInvalidPasswordAlert();
-                }
-            });
-        });
+                });
+            }, err => console.log(err));
     }
 
     /**

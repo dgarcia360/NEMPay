@@ -1,12 +1,31 @@
-//"type": 4100
-
-import { Component, Input } from '@angular/core';
-
-import 'rxjs/add/operator/toPromise';
-import {NemProvider} from '../../../../providers/nem/nem.provider';
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 David Garcia <dgarcia360@outlook.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+import {Component, Input} from '@angular/core';
 import {WalletProvider} from '../../../../providers/wallet/wallet.provider'
-
+import {NemUtils} from '../../../../providers/nem/nem.utils';
 import {Address, CosignatoryModification, MosaicTransferable, TransferTransaction} from "nem-library";
+
 @Component({
     selector: 'multisig-transaction',
     templateUrl: 'multisig-transaction.html'
@@ -15,14 +34,26 @@ import {Address, CosignatoryModification, MosaicTransferable, TransferTransactio
 export class MultisigTransactionComponent {
     @Input() tx: any;
 
-    owner: Address;
-    amount: number;
-    mosaics: MosaicTransferable[];
-    hasLevy:boolean;
-    modifications: CosignatoryModification[];
+    private owner: Address;
+    private amount: number;
+    private mosaics: MosaicTransferable[];
+    private hasLevy:boolean;
+    private modifications: CosignatoryModification[];
 
-    private _getAmount(){
+    constructor(private wallet: WalletProvider, private nemUtils: NemUtils) {
+        this.amount = 0;
+        this.mosaics = [];
+        this.hasLevy = false;
+    }
 
+    ngOnInit() {
+        this.getMosaics();
+        this.setOwner();
+        this.getAmount();
+        this.getCosignatoryModification();
+    }
+
+    private getAmount(){
         try {
             this.amount = (<TransferTransaction>this.tx.otherTransaction).xem().amount;
         }
@@ -31,9 +62,9 @@ export class MultisigTransactionComponent {
         }
     }
 
-    private _getMosaics(){
+    private getMosaics(){
         try {
-            this.nem.getMosaicsDefinition((<TransferTransaction>this.tx.otherTransaction).mosaics()).subscribe(mosaics => {
+            this.nemUtils.getMosaicsDefinition((<TransferTransaction>this.tx.otherTransaction).mosaics()).subscribe(mosaics => {
                 this.mosaics = mosaics;
                 this.hasLevy =  this.mosaics.filter(mosaic => mosaic.levy).length ? true : false;
             });
@@ -43,7 +74,7 @@ export class MultisigTransactionComponent {
         }
     }
 
-    private _getCosignatoryModification(){
+    private getCosignatoryModification(){
         try {
             this.modifications = this.tx.otherTransaction.modifications;
         }
@@ -52,24 +83,8 @@ export class MultisigTransactionComponent {
         }
     }
 
-    private _setOwner(){
-        this.wallet.getSelectedWallet().then(wallet =>{
-            this.owner = wallet.address;
-        })
+    private setOwner(){
+        this.owner = this.wallet.getSelectedWallet().address;
     }
-
-    constructor(private nem: NemProvider, private wallet: WalletProvider) {
-        this.amount = 0;
-        this.mosaics = [];
-        this.hasLevy = false;
-    }
-
-    ngOnInit() {
-        this._getMosaics();
-        this._setOwner();
-        this._getAmount();
-        this._getCosignatoryModification();
-    }
-
 
 }

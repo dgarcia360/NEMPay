@@ -83,3 +83,7 @@ Then sit back and wait. There will probably be discussion about the pull request
 
 *CONTRIBUTING.md is based on [CONTRIBUTING-template.md](https://github.com/nayafia/contributing-template/blob/master/CONTRIBUTING-template.md)* 
 and [elasticsearch/CONTRIGUTING](https://github.com/elastic/elasticsearch/blob/master/CONTRIBUTING.md)
+
+[pull-request]:https://help.github.com/articles/about-pull-requests/
+[telegram-group]:https://t.me/nemprojects
+[github-issues]:https://github.com/dgarcia360/NEMPay/issues

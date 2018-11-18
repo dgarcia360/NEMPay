@@ -2,22 +2,23 @@
     <ion-header>
         <ion-toolbar color="light">
             <ion-title>
-              <img src="assets/img/logo.png" style="max-height:16px;"/> <span [innerHTML]="'APP_TITLE' | translate"></span>
+                <img src="assets/img/logo.png" style="max-height:16px;"/> <span
+                    [innerHTML]="'APP_TITLE' | translate"></span>
             </ion-title>
         </ion-toolbar>
     </ion-header>
-    <ion-content id="side-menu21" style="background-color:Default;">
-        <ion-list id="menu-list1">
-            <button  ion-item color="none" menuClose="" on-click="goToBalance()" id="menu-list-item1">
+    <ion-content id="side-menu">
+        <ion-list id="menu-list">
+            <button ion-item color="none" menuClose="" on-click="goToBalance()">
                 {{"BALANCE" | translate}}
             </button>
-            <button ion-item color="none" menuClose="" on-click="goToContactList()" id="menu-list-item3">
+            <button ion-item color="none" menuClose="" on-click="goToContactList()">
                 {{"CONTACT_LIST" | translate}}
             </button>
-            <button ion-item color="none" menuClose="" on-click="goToTransactions()" id="menu-list-item4">
+            <button ion-item color="none" menuClose="" on-click="goToTransactions()">
                 {{"TRANSACTIONS" | translate}}
             </button>
-            <button ion-item color="none" menuClose="" on-click="goToAccount()" id="menu-list-item5">
+            <button ion-item color="none" menuClose="" on-click="goToAccount()">
                 {{"ACCOUNT" | translate}}
             </button>
         </ion-list>

@@ -1,43 +1,62 @@
 <ion-content padding id="signup-private-key">
     <div class="default-padding">
-
         <ion-row>
             <ion-col>
-            <span class="pull-right"  on-click="scanWalletQR()">
+            <span class="pull-right" on-click="scanWalletQR()">
                 <ion-icon name="qr-scanner"></ion-icon> {{'SCAN_QR' | translate}}
             </span>
             </ion-col>
         </ion-row>
-        <form>
-            <ion-list>
-                <ion-item>
-                    <ion-label>
-                        {{'WALLET_NAME' | translate}}
-                    </ion-label>
-                    <ion-input [(ngModel)]="newAccount.name" name="name" type="text" placeholder=""></ion-input>
-                </ion-item>
-                <ion-item type="text" [(ngModel)]="newAccount.private_key" name="private_key">
-                    <ion-label>
-                        {{'PRIVATE_KEY' | translate}}
-                    </ion-label>
-                    <ion-input type="text" placeholder=""></ion-input>
-                </ion-item>
-
-                <ion-item>
-                    <ion-label>
-                        {{'PASSWORD' | translate}}
-                    </ion-label>
-                    <ion-input type="password" [(ngModel)]="newAccount.password" name="password"></ion-input>
-                </ion-item>
-
-                <ion-item >
-                    <ion-label>
-                        {{'REPEAT_PASSWORD' | translate}}
-                    </ion-label>
-                    <ion-input type="password" [(ngModel)]="newAccount.repeat_password"
-                               name="repeat_password"></ion-input>
-                </ion-item>
-            </ion-list>
+        <form [formGroup]="signupForm">
+            <ion-item>
+                <ion-label>
+                    {{'WALLET_NAME' | translate}}
+                </ion-label>
+                <ion-input formControlName="name" name="name" type="text" placeholder=""
+                           [class.invalid]="!signupForm.controls.name.valid &&
+                        (signupForm.controls.name.dirty)">
+                </ion-input>
+            </ion-item>
+            <ion-item  *ngIf="!signupForm.controls.name.valid && (signupForm.controls.name.dirty)">
+                <span>{{'ALERT_REQUIRED_FIELD' | translate}}</span>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    {{'PRIVATE_KEY' | translate}}
+                </ion-label>
+                <ion-input formControlName="privateKey" name="privateKey" type="password"
+                           [class.invalid]="!signupForm.controls.privateKey.valid &&
+                        (signupForm.controls.privateKey.dirty)"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!signupForm.controls.privateKey.valid &&
+                        (signupForm.controls.privateKey.dirty)">
+                <span>{{'ALERT_INVALID_PRIVATE_KEY' | translate}}</span>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    {{'PASSWORD' | translate}}
+                </ion-label>
+                <ion-input formControlName="password" name="password" type="password"
+                           [class.invalid]="!signupForm.controls.password.valid &&
+                        (signupForm.controls.password.dirty)"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!signupForm.controls.password.valid &&
+                        (signupForm.controls.password.dirty)">
+                <span>{{'ALERT_WEAK_PASSWORD' | translate}}</span>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    {{'REPEAT_PASSWORD' | translate}}
+                </ion-label>
+                <ion-input formControlName="repeatPassword" name="repeatPassword" type="password"
+                           [class.invalid]="!signupForm.controls.repeatPassword.valid &&
+                        (signupForm.controls.repeatPassword.dirty)"></ion-input>
+            </ion-item>
+            <ion-item  *ngIf="!signupForm.controls.repeatPassword.valid
+            && (signupForm.controls.repeatPassword.dirty)
+            && (signupForm.controls.repeatPassword.value.length > 7)">
+                <span>{{'ALERT_PASSWORDS_DO_NOT_MATCH' | translate}}</span>
+            </ion-item>
             <div class="spacer xs"></div>
 
             <div>
@@ -48,7 +67,7 @@
             <div class="spacer xs"></div>
 
             <button ion-button color="stable" block on-click="createPrivateKeyWallet()"
-                    [disabled]="!newAccount.password || !newAccount.repeat_password || !newAccount.name">
+                    [disabled]="!signupForm.valid">
                 {{'IMPORT' | translate}}
             </button>
         </form>

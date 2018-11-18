@@ -1,12 +1,31 @@
-//"type": 257
-
-import { Component, Input } from '@angular/core';
-
-import 'rxjs/add/operator/toPromise';
-import {NemProvider} from '../../../../providers/nem/nem.provider';
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 David Garcia <dgarcia360@outlook.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+import {Component, Input} from '@angular/core';
+import {NemUtils} from '../../../../providers/nem/nem.utils';
 import {WalletProvider} from '../../../../providers/wallet/wallet.provider'
-
 import {Address, MosaicTransferable} from "nem-library";
+
 @Component({
     selector: 'transfer-transaction',
     templateUrl: 'transfer-transaction.html'
@@ -15,13 +34,24 @@ import {Address, MosaicTransferable} from "nem-library";
 export class TransferTransactionComponent {
     @Input() tx: any;
 
-    owner: Address;
-    amount: number;
-    mosaics: MosaicTransferable[];
-    hasLevy:boolean;
+    private owner: Address;
+    private amount: number;
+    private mosaics: MosaicTransferable[];
+    private hasLevy:boolean;
 
+    constructor(private nemUtils: NemUtils, private wallet: WalletProvider) {
+        this.hasLevy = false;
+        this.amount = 0;
+        this.mosaics = [];
+    }
 
-    private _getAmount(){
+    ngOnInit() {
+        this.getAmount();
+        this.getMosaics();
+        this.setOwner();
+    }
+
+    private getAmount(){
 
         try {
             this.amount = this.tx.xem().amount;
@@ -31,9 +61,9 @@ export class TransferTransactionComponent {
         }
     }
 
-    private _getMosaics(){
+    private getMosaics(){
         try {
-            this.nem.getMosaicsDefinition(this.tx.mosaics()).subscribe(mosaics => {
+            this.nemUtils.getMosaicsDefinition(this.tx.mosaics()).subscribe(mosaics => {
                 this.mosaics = mosaics;
                 this.hasLevy =  this.mosaics.filter(mosaic => mosaic.levy).length ? true : false;
             });
@@ -43,22 +73,8 @@ export class TransferTransactionComponent {
         }
     }
 
-    private _setOwner(){
-        this.wallet.getSelectedWallet().then(wallet =>{
-            this.owner = wallet.address;
-        })
-    }
-
-    constructor(private nem: NemProvider, private wallet: WalletProvider) {
-        this.hasLevy = false;
-        this.amount = 0;
-        this.mosaics = [];
-    }
-
-    ngOnInit() {
-        this._getAmount();
-        this._getMosaics();
-        this._setOwner();
+    private setOwner(){
+        this.owner = this.wallet.getSelectedWallet().address;
     }
 
 }

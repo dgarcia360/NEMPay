@@ -1,154 +1,140 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 David Garcia <dgarcia360@outlook.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 import {Component} from '@angular/core';
-import {App, LoadingController, AlertController, Keyboard} from 'ionic-angular';
+import {AlertController, App, Keyboard, LoadingController} from 'ionic-angular';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
-
 import {TranslateService} from '@ngx-translate/core';
-
 import {AlertProvider} from '../../providers/alert/alert.provider';
-import {NemProvider} from '../../providers/nem/nem.provider';
 import {WalletProvider} from '../../providers/wallet/wallet.provider';
-
 import {LoginPage} from '../login/login';
+import {Password, QRService, SimpleWallet} from "nem-library";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {PasswordValidation} from "../../validators/password.validator";
+import {NemValidator} from "../../validators/nem.validator";
 
 @Component({
     selector: 'page-signup-privatekey',
     templateUrl: 'signup.html'
 })
 export class SignupPrivateKeyPage {
-    newAccount: any;
+    private signupForm : FormGroup;
+    private qrService: QRService;
+    constructor(public app: App, private wallet: WalletProvider,
+                private loading: LoadingController, private alertCtrl: AlertController,
+                private alert: AlertProvider, public translate: TranslateService,
+                private barcodeScanner: BarcodeScanner, private keyboard: Keyboard) {
 
-    constructor(public app: App, private nem: NemProvider, private wallet: WalletProvider, private loading: LoadingController, private alertCtrl: AlertController, private alert: AlertProvider, public translate: TranslateService, private barcodeScanner: BarcodeScanner, private keyboard: Keyboard) {
-        //sensitive data
-        this.newAccount = null;
-
-        //initialize senstivie data
-        this._clearNewAccount();
+        this.signupForm = new FormGroup ({
+            name: new FormControl('', Validators.required),
+            password: new FormControl('', Validators.minLength(8)),
+            repeatPassword: new FormControl(''),
+            privateKey: new FormControl('', NemValidator.isValidPrivateKey)
+        }, PasswordValidation.EqualPasswords);
+        this.qrService = new QRService();
     }
 
     /**
-     * Clears sensitive data
-     */
-    private _clearNewAccount() {
-        this.newAccount = {
-            'name': '',
-            'password': '',
-            'private_key': '',
-            'repeat_password': ''
-        };
-    }
-
-
-    /**
-     * Scans wallet QR and stores its private key in newAccount.privateKey
+     * Scans and decrypt QR wallet
      */
     public scanWalletQR() {
         this.barcodeScanner.scan().then(barcode => {
 
             let walletInfo = JSON.parse(barcode.text);
 
-            this.translate.get(['IMPORT_ACCOUNT_QR_WARNING', 'PASSWORD', 'CANCEL', 'CONFIRM', 'PLEASE_WAIT'], {}).subscribe((res) => {
+            this.translate
+                .get(['IMPORT_ACCOUNT_QR_WARNING', 'PASSWORD', 'CANCEL', 'CONFIRM', 'PLEASE_WAIT'], {})
+                .subscribe((res) => {
 
-                let alert = this.alertCtrl.create({
-                    title: res['PASSWORD'],
-                    subTitle: res['IMPORT_ACCOUNT_QR_WARNING'],
-                    inputs: [
-                        {
-                            name: 'password',
-                            placeholder: res['PASSWORD'],
-                            type: 'password'
-                        },
-                    ],
-                    buttons: [
-                        {
-                            text: res['CANCEL'],
-                            role: 'cancel'
-                        },
-                        {
-                            text: res['CONFIRM'],
-                            handler: data => {
+                    let alert = this.alertCtrl.create({
+                        title: res['PASSWORD'],
+                        subTitle: res['IMPORT_ACCOUNT_QR_WARNING'],
+                        inputs: [{name: 'password', placeholder: res['PASSWORD'], type: 'password'}],
+                        buttons: [{text: res['CANCEL'], role: 'cancel'}, { text: res['CONFIRM'], handler: data => {
+
                                 this.keyboard.close();
-                                let loader = this.loading.create({
-                                    content: res['PLEASE_WAIT']
-                                });
+                                let loader = this.loading.create({content: res['PLEASE_WAIT']});
 
-                                loader.present().then(_ => {
-                                    if (data.password < 8) {
+                                loader.present().then(ignored => {
+                                    if (data.password.length < 8) {
                                         this.alert.showWeakPassword();
                                         loader.dismiss();
-                                    }
-                                    else {
+                                    } else {
                                         try {
-                                            this.newAccount.private_key = this.nem.decryptPrivateKey(data.password, walletInfo);
+                                            const privateKey =  this.qrService
+                                                .decryptWalletQRText(new Password(data.password), walletInfo);
+                                            this.signupForm.patchValue({'privateKey': privateKey});
                                             loader.dismiss();
                                         } catch (err) {
                                             this.alert.showInvalidPasswordAlert();
                                             loader.dismiss();
                                         }
                                     }
-                                });
+                                }).catch(err => console.log(err));
                             }
-                        }
-                    ]
-                });
-                alert.onDidDismiss(() => {
-                    this.keyboard.close();
-                });
+                        }]
+                    });
+                    alert.onDidDismiss(() => {
+                        this.keyboard.close();
+                    });
 
-                alert.present();
-            });
+                    alert.present();
+                }, err => console.log(err));
 
-        }).catch(err => {
-            console.log("Error on scan");
-        });
+        }).catch(err => console.log("Error on scan"));
     };
 
     /**
-     * Creates Wallet from this.newAccount.private_key
+     * Creates a private key wallet
      */
     public createPrivateKeyWallet() {
-        if (this.newAccount.password != this.newAccount.repeat_password) {
-            this.alert.showPasswordDoNotMatch();
-        }
-        else if (!(this.newAccount.private_key.length != 64 || this.newAccount.private_key.length != 66)) {
-            this.alert.showInvalidPrivateKey();
-        }
-        else if (this.newAccount.password.length < 8) {
-            this.alert.showWeakPassword();
-        }
-        else {
+        const form = this.signupForm.value;
+        this.translate
+            .get('PLEASE_WAIT', {})
+            .subscribe((res: string) => {
 
-            this.translate.get('PLEASE_WAIT', {}).subscribe((res: string) => {
-                let loader = this.loading.create({
-                    content: res
-                });
+                let loader = this.loading.create({content: res});
+                loader.present().then(ignored => {
 
-                loader.present().then(_ => {
-                    let createdWallet;
-                    try {
-                        createdWallet = this.nem.createPrivateKeyWallet(this.newAccount.name, this.newAccount.password, this.newAccount.private_key);
-                    }
-                    catch (e) {
-                        loader.dismiss();
-                        this.alert.showInvalidPrivateKey();
-                    }
-
-                    if (createdWallet) {
-                        this.wallet.checkIfWalletNameExists(createdWallet.name).then(value => {
-                            if (value) {
-                                loader.dismiss();
-                                this.alert.showWalletNameAlreadyExists();
-                            }
-                            else {
-                                this.wallet.storeWallet(createdWallet).then(value => {
+                    this.wallet.checkIfWalletNameExists(form.name).then(exists => {
+                        if (exists) {
+                            loader.dismiss();
+                            this.alert.showWalletNameAlreadyExists();
+                        } else {
+                            try {
+                                const createdWallet = SimpleWallet
+                                    .createWithPrivateKey(form.name, new Password(form.password), form.privateKey);
+                                this.wallet.storeWallet(createdWallet).then(ignored => {
                                     loader.dismiss();
-                                    this._clearNewAccount();
                                     this.app.getRootNav().push(LoginPage);
                                 });
+                            } catch (e) {
+                                loader.dismiss();
+                                this.alert.showInvalidPrivateKey();
                             }
-                        });
-                    }
+                        }
+                    });
                 });
-            });
-        }
+            }, err => console.log(err));
     }
 }
